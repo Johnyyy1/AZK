@@ -33,6 +33,9 @@ export default function TopNav() {
     return pathname.startsWith(href);
   };
 
+  const isHome = pathname === "/";
+  const isDarkNav = isHome && !scrolled;
+
   return (
     <>
       <motion.nav
@@ -40,7 +43,7 @@ export default function TopNav() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         className={`fixed top-0 w-full z-50 flex justify-between items-center px-8 py-3 transition-all duration-500 ${
-          scrolled
+          !isDarkNav
             ? "bg-white/80 backdrop-blur-2xl shadow-[0_1px_20px_rgba(0,0,0,0.06)] border-b border-white/50"
             : "bg-transparent"
         }`}
@@ -55,13 +58,13 @@ export default function TopNav() {
               water_drop
             </span>
           </div>
-          <span className={`text-xl font-black tracking-tighter font-headline transition-colors ${scrolled ? 'text-primary' : 'text-white'}`}>
-            Aqua<span className={scrolled ? 'text-secondary' : 'text-secondary-fixed-dim'}>Smart</span>
+          <span className={`text-xl font-black tracking-tighter font-headline transition-colors ${!isDarkNav ? 'text-primary' : 'text-white'}`}>
+            Aqua<span className={!isDarkNav ? 'text-secondary' : 'text-secondary-fixed-dim'}>Smart</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className={`hidden md:flex items-center gap-1 rounded-full px-2 py-1.5 transition-colors ${scrolled ? 'bg-surface-container/60 backdrop-blur-md' : 'bg-white/10 backdrop-blur-md border border-white/10 shadow-lg'}`}>
+        <div className={`hidden md:flex items-center gap-1 rounded-full px-2 py-1.5 transition-colors ${!isDarkNav ? 'bg-surface-container/60 backdrop-blur-md' : 'bg-white/10 backdrop-blur-md border border-white/10 shadow-lg'}`}>
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -71,15 +74,15 @@ export default function TopNav() {
               {isActive(link.href) && (
                 <motion.span
                   layoutId="nav-pill"
-                  className={`absolute inset-0 rounded-full shadow-sm ${scrolled ? 'bg-white' : 'bg-white/20 backdrop-blur-md border border-white/20'}`}
+                  className={`absolute inset-0 rounded-full shadow-sm ${!isDarkNav ? 'bg-white' : 'bg-white/20 backdrop-blur-md border border-white/20'}`}
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
               <span
                 className={`relative z-10 transition-all ${
                   isActive(link.href)
-                    ? (scrolled ? "text-primary font-bold" : "text-white font-bold")
-                    : (scrolled ? "text-on-surface-variant hover:text-primary" : "text-white opacity-80 hover:opacity-100")
+                    ? (!isDarkNav ? "text-primary font-bold" : "text-white font-bold")
+                    : (!isDarkNav ? "text-on-surface-variant hover:text-primary" : "text-white opacity-80 hover:opacity-100")
                 }`}
               >
                 {link.label}
@@ -92,13 +95,13 @@ export default function TopNav() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             href="/auth"
-            className={`font-medium text-sm px-5 py-2.5 transition-all rounded-xl ${scrolled ? 'text-on-surface-variant hover:text-primary hover:bg-primary-fixed/30' : 'text-white opacity-90 hover:opacity-100 hover:bg-white/20'}`}
+            className={`font-medium text-sm px-5 py-2.5 transition-all rounded-xl ${!isDarkNav ? 'text-on-surface-variant hover:text-primary hover:bg-primary-fixed/30' : 'text-white opacity-90 hover:opacity-100 hover:bg-white/20'}`}
           >
             Sign In
           </Link>
           <Link
             href="/auth"
-            className={`technical-gradient text-white px-6 py-2.5 rounded-xl text-sm font-bold btn-magnetic ${!scrolled ? 'shadow-lg border border-white/20' : ''}`}
+            className={`technical-gradient text-white px-6 py-2.5 rounded-xl text-sm font-bold btn-magnetic ${isDarkNav ? 'shadow-lg border border-white/20' : ''}`}
           >
             Get Started
           </Link>
@@ -107,21 +110,21 @@ export default function TopNav() {
         {/* Mobile Hamburger */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className={`md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl transition-colors ${scrolled ? 'hover:bg-surface-container' : 'hover:bg-white/20'}`}
+          className={`md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl transition-colors ${!isDarkNav ? 'hover:bg-surface-container' : 'hover:bg-white/20'}`}
           aria-label="Toggle menu"
         >
           <div className="flex flex-col gap-1.5 w-5">
             <motion.span
               animate={mobileOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-              className={`block h-[2px] rounded-full origin-center transition-colors ${scrolled ? 'bg-primary' : 'bg-white'}`}
+              className={`block h-[2px] rounded-full origin-center transition-colors ${!isDarkNav ? 'bg-primary' : 'bg-white'}`}
             />
             <motion.span
               animate={mobileOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
-              className={`block h-[2px] rounded-full transition-colors ${scrolled ? 'bg-primary' : 'bg-white'}`}
+              className={`block h-[2px] rounded-full transition-colors ${!isDarkNav ? 'bg-primary' : 'bg-white'}`}
             />
             <motion.span
               animate={mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
-              className={`block h-[2px] rounded-full origin-center transition-colors ${scrolled ? 'bg-primary' : 'bg-white'}`}
+              className={`block h-[2px] rounded-full origin-center transition-colors ${!isDarkNav ? 'bg-primary' : 'bg-white'}`}
             />
           </div>
         </button>
