@@ -50,18 +50,18 @@ export default function TopNav() {
           href="/"
           className="flex items-center gap-2 group"
         >
-          <div className="w-9 h-9 rounded-xl technical-gradient flex items-center justify-center group-hover:scale-105 transition-transform">
+          <div className="w-9 h-9 rounded-xl technical-gradient flex items-center justify-center group-hover:scale-105 transition-transform border border-white/10 shadow-lg">
             <span className="material-symbols-outlined text-white text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
               water_drop
             </span>
           </div>
-          <span className="text-xl font-black text-primary tracking-tighter font-headline">
-            Aqua<span className="text-secondary">Smart</span>
+          <span className={`text-xl font-black tracking-tighter font-headline transition-colors ${scrolled ? 'text-primary' : 'text-white'}`}>
+            Aqua<span className={scrolled ? 'text-secondary' : 'text-secondary-fixed-dim'}>Smart</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-1 bg-surface-container/60 backdrop-blur-md rounded-full px-2 py-1.5">
+        <div className={`hidden md:flex items-center gap-1 rounded-full px-2 py-1.5 transition-colors ${scrolled ? 'bg-surface-container/60 backdrop-blur-md' : 'bg-white/10 backdrop-blur-md border border-white/10 shadow-lg'}`}>
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -71,15 +71,15 @@ export default function TopNav() {
               {isActive(link.href) && (
                 <motion.span
                   layoutId="nav-pill"
-                  className="absolute inset-0 bg-white rounded-full shadow-sm"
+                  className={`absolute inset-0 rounded-full shadow-sm ${scrolled ? 'bg-white' : 'bg-white/20 backdrop-blur-md border border-white/20'}`}
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
               <span
-                className={`relative z-10 ${
+                className={`relative z-10 transition-all ${
                   isActive(link.href)
-                    ? "text-primary font-bold"
-                    : "text-on-surface-variant hover:text-primary"
+                    ? (scrolled ? "text-primary font-bold" : "text-white font-bold")
+                    : (scrolled ? "text-on-surface-variant hover:text-primary" : "text-white opacity-80 hover:opacity-100")
                 }`}
               >
                 {link.label}
@@ -92,13 +92,13 @@ export default function TopNav() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             href="/auth"
-            className="text-on-surface-variant font-medium text-sm px-5 py-2.5 hover:text-primary hover:bg-primary-fixed/30 transition-all rounded-xl"
+            className={`font-medium text-sm px-5 py-2.5 transition-all rounded-xl ${scrolled ? 'text-on-surface-variant hover:text-primary hover:bg-primary-fixed/30' : 'text-white opacity-90 hover:opacity-100 hover:bg-white/20'}`}
           >
             Sign In
           </Link>
           <Link
             href="/auth"
-            className="technical-gradient text-on-primary px-6 py-2.5 rounded-xl text-sm font-bold btn-magnetic"
+            className={`technical-gradient text-white px-6 py-2.5 rounded-xl text-sm font-bold btn-magnetic ${!scrolled ? 'shadow-lg border border-white/20' : ''}`}
           >
             Get Started
           </Link>
@@ -107,21 +107,21 @@ export default function TopNav() {
         {/* Mobile Hamburger */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl hover:bg-surface-container transition-colors"
+          className={`md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl transition-colors ${scrolled ? 'hover:bg-surface-container' : 'hover:bg-white/20'}`}
           aria-label="Toggle menu"
         >
           <div className="flex flex-col gap-1.5 w-5">
             <motion.span
               animate={mobileOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-              className="block h-[2px] bg-primary rounded-full origin-center"
+              className={`block h-[2px] rounded-full origin-center transition-colors ${scrolled ? 'bg-primary' : 'bg-white'}`}
             />
             <motion.span
               animate={mobileOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
-              className="block h-[2px] bg-primary rounded-full"
+              className={`block h-[2px] rounded-full transition-colors ${scrolled ? 'bg-primary' : 'bg-white'}`}
             />
             <motion.span
               animate={mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
-              className="block h-[2px] bg-primary rounded-full origin-center"
+              className={`block h-[2px] rounded-full origin-center transition-colors ${scrolled ? 'bg-primary' : 'bg-white'}`}
             />
           </div>
         </button>
@@ -134,7 +134,7 @@ export default function TopNav() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
             onClick={() => setMobileOpen(false)}
           />
         )}
