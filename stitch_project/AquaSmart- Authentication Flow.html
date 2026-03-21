@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#414846",
+              "on-secondary-container": "#007439",
+              "secondary-fixed-dim": "#4de082",
+              "tertiary-fixed-dim": "#adc6ff",
+              "outline": "#717976",
+              "surface-variant": "#d5e3fc",
+              "background": "#f8f9ff",
+              "surface-container-highest": "#d5e3fc",
+              "on-error": "#ffffff",
+              "surface-bright": "#f8f9ff",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed": "#001a42",
+              "tertiary": "#001f4d",
+              "primary-fixed": "#c5eadf",
+              "on-error-container": "#93000a",
+              "outline-variant": "#c1c8c4",
+              "tertiary-container": "#003476",
+              "on-primary-container": "#83a69c",
+              "on-secondary": "#ffffff",
+              "error": "#ba1a1a",
+              "primary-container": "#1a3c34",
+              "on-primary-fixed": "#00201a",
+              "surface-container-low": "#eff4ff",
+              "surface-container-high": "#dce9ff",
+              "on-background": "#0d1c2e",
+              "tertiary-fixed": "#d8e2ff",
+              "surface-container": "#e6eeff",
+              "primary-fixed-dim": "#aacec3",
+              "surface-tint": "#43655c",
+              "surface": "#f8f9ff",
+              "on-secondary-fixed": "#00210c",
+              "error-container": "#ffdad6",
+              "secondary-fixed": "#6dfe9c",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-fixed-variant": "#005227",
+              "inverse-primary": "#aacec3",
+              "on-primary-fixed-variant": "#2b4d44",
+              "primary": "#01261f",
+              "secondary-container": "#6dfe9c",
+              "on-tertiary-fixed-variant": "#004395",
+              "on-primary": "#ffffff",
+              "on-tertiary-container": "#6c9eff",
+              "inverse-on-surface": "#eaf1ff",
+              "secondary": "#006d36",
+              "on-surface": "#0d1c2e",
+              "surface-dim": "#ccdbf3",
+              "inverse-surface": "#233144"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .organic-gradient {
+            background: linear-gradient(135deg, #01261f 0%, #1a3c34 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-background min-h-screen">
+<main class="flex min-h-screen">
+<!-- Left Side: Visual Anchor (Hidden on Mobile) -->
+<section class="hidden lg:flex w-1/2 organic-gradient relative overflow-hidden items-center justify-center p-16">
+<!-- Decorative Elements -->
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<svg class="w-full h-full fill-secondary-fixed-dim/20" viewbox="0 0 100 100">
+<circle cx="20" cy="20" r="15"></circle>
+<circle cx="80" cy="70" r="25"></circle>
+<path d="M0,50 Q25,30 50,50 T100,50" fill="none" stroke="currentColor" stroke-width="0.5"></path>
+</svg>
+</div>
+<div class="relative z-10 max-w-lg">
+<div class="mb-12">
+<span class="text-secondary-fixed font-headline font-bold tracking-widest uppercase text-xs mb-4 block">The Living Laboratory</span>
+<h1 class="text-white font-headline text-6xl font-bold tracking-tighter leading-none mb-6">AquaSmart</h1>
+<p class="text-primary-fixed text-xl font-light leading-relaxed">Precision irrigation meets natural intelligence. Monitor, automate, and sustain your ecosystem with bioluminescent data clarity.</p>
+</div>
+<!-- Featured Metric (Technical Organic Component) -->
+<div class="glass-panel rounded-xl p-8 border-l-4 border-secondary shadow-xl">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl">water_drop</span>
+<div>
+<p class="text-on-surface-variant font-label text-[10px] uppercase tracking-widest">Global Hydration</p>
+<h3 class="text-primary font-headline text-2xl font-bold">84.2% Optimal</h3>
+</div>
+</div>
+<div class="w-full h-1.5 bg-primary/10 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed-dim w-[84%]"></div>
+</div>
+</div>
+</div>
+<!-- Absolute Image Overlay -->
+<div class="absolute bottom-[-10%] right-[-5%] w-2/3 h-2/3 opacity-30">
+<img alt="Close up of vibrant green plant leaf with water droplets" class="w-full h-full object-cover rounded-full" data-alt="Vibrant green plant leaves with crystal water drops" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAou88SoxQzsg3Lt2dc-NFxMlPuL8hAvrW4UbLvK4t1e38SIHSrleKpdCFgoKIdrZa3jW54330vKiJVHD_Be3A7RwN14rmN2n8XKSKU06hDjy7Lh5tR9eA83vEQbkrhFXVkayRIdNi7n3i8Qt_4lyab0vaf0L9ghx9jRKzzVNgC-uQXcZ4TwiUsJb6jmUH0aerYSda5L56ewl50Ym7PJmI1jYiPZQOPfUpWXK2J83ZJluK1ezDN5XL630Yzu5tMu3JTe-vbiemnCqQ"/>
+</div>
+</section>
+<!-- Right Side: Interaction Canvas -->
+<section class="w-full lg:w-1/2 flex flex-col bg-surface-bright p-8 md:p-16 lg:p-24 justify-center">
+<!-- Logo for Mobile -->
+<div class="lg:hidden mb-12 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-4xl">energy_savings_leaf</span>
+<span class="font-headline font-black text-2xl tracking-tighter text-primary">AquaSmart</span>
+</div>
+<!-- State: Login (Default) -->
+<div class="w-full max-w-md mx-auto" id="login-state">
+<header class="mb-10">
+<h2 class="font-headline text-4xl font-bold text-primary mb-2">Welcome Back</h2>
+<p class="text-on-surface-variant">Enter your credentials to access the laboratory.</p>
+</header>
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1" for="email">Laboratory Email</label>
+<input class="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-4 text-on-surface placeholder-outline-variant transition-all outline-none" id="email" placeholder="name@domain.com" type="email"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold" for="password">Security Key</label>
+<a class="text-[10px] uppercase tracking-widest font-bold text-secondary hover:text-on-secondary-container transition-colors" href="#">Lost Access?</a>
+</div>
+<input class="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-4 text-on-surface placeholder-outline-variant transition-all outline-none" id="password" placeholder="••••••••" type="password"/>
+</div>
+<div class="flex items-center gap-3 px-1">
+<input class="w-5 h-5 rounded-lg border-outline-variant text-secondary focus:ring-secondary-fixed-dim bg-surface-container-low" id="remember" type="checkbox"/>
+<label class="text-sm text-on-surface-variant font-medium" for="remember">Keep session active</label>
+</div>
+<button class="w-full bg-primary py-5 rounded-xl text-white font-headline font-bold text-lg tracking-tight hover:opacity-90 active:scale-[0.98] transition-all organic-gradient shadow-lg" type="submit">
+                        Initiate Session
+                    </button>
+<div class="pt-6 text-center">
+<p class="text-on-surface-variant text-sm">
+                            New to the system? 
+                            <a class="text-secondary font-bold hover:underline underline-offset-4 ml-1" href="#">Create Account</a>
+</p>
+</div>
+</form>
+</div>
+<!-- State: Register (Hidden Placeholder) -->
+<div class="hidden w-full max-w-md mx-auto" id="register-state">
+<header class="mb-10">
+<h2 class="font-headline text-4xl font-bold text-primary mb-2">Join Lab</h2>
+<p class="text-on-surface-variant">Start monitoring your irrigation ecosystem today.</p>
+</header>
+<form class="space-y-4">
+<div class="space-y-2">
+<label class="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1" for="reg-name">Full Name</label>
+<input class="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-3" id="reg-name" placeholder="Dr. Jane Smith" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1" for="reg-email">Email Address</label>
+<input class="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-3" id="reg-email" placeholder="jane@aquasmart.io" type="email"/>
+</div>
+<div class="space-y-2">
+<label class="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1" for="reg-pass">Secure Password</label>
+<input class="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-3" id="reg-pass" placeholder="••••••••" type="password"/>
+</div>
+<div class="space-y-2">
+<label class="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1" for="reg-confirm">Confirm Password</label>
+<input class="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-3" id="reg-confirm" placeholder="••••••••" type="password"/>
+</div>
+<button class="w-full bg-primary mt-4 py-5 rounded-xl text-white font-headline font-bold text-lg tracking-tight organic-gradient shadow-lg" type="submit">
+                        Register Ecosystem
+                    </button>
+<div class="pt-6 text-center">
+<p class="text-on-surface-variant text-sm">
+                            Already registered? 
+                            <a class="text-secondary font-bold hover:underline ml-1" href="#">Log in here</a>
+</p>
+</div>
+</form>
+</div>
+<!-- State: Error Feedback Illustration -->
+<div class="hidden w-full max-w-md mx-auto" id="error-state">
+<div class="bg-error-container p-6 rounded-xl border border-error/20 flex items-start gap-4 mb-8">
+<span class="material-symbols-outlined text-on-error-container text-2xl">warning</span>
+<div>
+<h4 class="text-on-error-container font-bold text-sm">Authentication Failed</h4>
+<p class="text-on-error-container/80 text-xs">The security key provided does not match our laboratory records. Please retry.</p>
+</div>
+</div>
+<!-- Login form would repeat here with red input borders -->
+</div>
+<!-- State: Success / Password Reset -->
+<div class="hidden w-full max-w-md mx-auto" id="reset-state">
+<div class="bg-secondary-container/20 p-8 rounded-xl flex flex-col items-center text-center mb-10">
+<div class="w-16 h-16 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="font-headline text-2xl font-bold text-primary">Instructions Sent</h3>
+<p class="text-on-surface-variant mt-2">Verification link has been dispatched to your laboratory email address.</p>
+</div>
+<button class="w-full bg-surface-container-highest py-4 rounded-xl text-primary font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+                    Back to Login
+                </button>
+</div>
+<!-- Reset Initial State -->
+<div class="hidden w-full max-w-md mx-auto" id="password-reset-request">
+<header class="mb-10">
+<h2 class="font-headline text-4xl font-bold text-primary mb-2">Reset Key</h2>
+<p class="text-on-surface-variant">Recover access to your AquaSmart dashboard.</p>
+</header>
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1" for="reset-email">Verified Email</label>
+<input class="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-4 text-on-surface placeholder-outline-variant" id="reset-email" placeholder="name@domain.com" type="email"/>
+</div>
+<button class="w-full bg-primary py-5 rounded-xl text-white font-headline font-bold text-lg tracking-tight organic-gradient shadow-lg" type="submit">
+                        Send Recovery Link
+                    </button>
+<div class="pt-6 text-center">
+<a class="text-on-surface-variant text-sm font-medium hover:text-primary transition-colors flex items-center justify-center gap-1" href="#">
+<span class="material-symbols-outlined text-base">chevron_left</span>
+                            Return to security gate
+                        </a>
+</div>
+</form>
+</div>
+</section>
+</main>
+<!-- Global Footer -->
+<footer class="fixed bottom-0 left-0 w-full p-8 hidden lg:block pointer-events-none">
+<div class="max-w-7xl mx-auto flex justify-between items-end">
+<div class="pointer-events-auto">
+<p class="text-white/40 text-[10px] uppercase tracking-[0.2em] font-label">© 2024 AquaSmart Systems / Living Laboratory v2.4.1</p>
+</div>
+<div class="flex gap-6 pointer-events-auto">
+<a class="text-white/60 hover:text-white text-xs font-medium transition-colors" href="#">Privacy Architecture</a>
+<a class="text-white/60 hover:text-white text-xs font-medium transition-colors" href="#">System Protocols</a>
+</div>
+</div>
+</footer>
+</body></html>

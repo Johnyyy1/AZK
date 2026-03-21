@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-tertiary-container": "#6c9eff",
+            "on-surface": "#0d1c2e",
+            "secondary-container": "#6dfe9c",
+            "on-tertiary": "#ffffff",
+            "error-container": "#ffdad6",
+            "primary-container": "#1a3c34",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed": "#001a42",
+            "primary-fixed": "#c5eadf",
+            "tertiary-fixed": "#d8e2ff",
+            "primary": "#01261f",
+            "inverse-on-surface": "#eaf1ff",
+            "tertiary-container": "#003476",
+            "surface-tint": "#43655c",
+            "on-primary-container": "#83a69c",
+            "inverse-surface": "#233144",
+            "inverse-primary": "#aacec3",
+            "tertiary": "#001f4d",
+            "secondary": "#006d36",
+            "on-primary-fixed": "#00201a",
+            "surface": "#f8f9ff",
+            "secondary-fixed-dim": "#4de082",
+            "on-primary-fixed-variant": "#2b4d44",
+            "surface-variant": "#d5e3fc",
+            "surface-container-high": "#dce9ff",
+            "surface-bright": "#f8f9ff",
+            "primary-fixed-dim": "#aacec3",
+            "on-secondary-container": "#007439",
+            "on-surface-variant": "#414846",
+            "on-tertiary-fixed-variant": "#004395",
+            "surface-dim": "#ccdbf3",
+            "outline": "#717976",
+            "background": "#f8f9ff",
+            "outline-variant": "#c1c8c4",
+            "on-background": "#0d1c2e",
+            "on-secondary-fixed-variant": "#005227",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#6dfe9c",
+            "tertiary-fixed-dim": "#adc6ff",
+            "surface-container-low": "#eff4ff",
+            "surface-container-highest": "#d5e3fc",
+            "on-error-container": "#93000a",
+            "error": "#ba1a1a",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#e6eeff",
+            "on-secondary-fixed": "#00210c"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Manrope"],
+            "label": ["Manrope"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d5e3fc; border-radius: 10px; }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- SideNavBar Anchor -->
+<aside class="h-screen w-64 fixed left-0 top-0 overflow-y-auto z-50 bg-[#eff4ff] dark:bg-slate-900 flex flex-col p-4 gap-2">
+<div class="mb-8 px-4 py-2">
+<h1 class="text-xl font-['Space_Grotesk'] font-extrabold text-emerald-950 dark:text-emerald-50 tracking-tight">AquaSmart</h1>
+<p class="text-xs font-['Manrope'] font-medium text-emerald-800 dark:text-emerald-400 uppercase tracking-wider mt-1">Precision Irrigation</p>
+</div>
+<nav class="flex flex-col gap-1 flex-grow">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-emerald-50/50 dark:hover:bg-emerald-800/10 transition-colors active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Manrope'] font-medium text-sm uppercase tracking-wider">Zones</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-emerald-50/50 dark:hover:bg-emerald-800/10 transition-colors active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-['Manrope'] font-medium text-sm uppercase tracking-wider">Controls</span>
+</a>
+<a class="flex items-center gap-3 bg-white dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-300 rounded-xl px-4 py-3 font-bold shadow-sm active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Manrope'] font-medium text-sm uppercase tracking-wider">Scheduling</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-emerald-50/50 dark:hover:bg-emerald-800/10 transition-colors active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-['Manrope'] font-medium text-sm uppercase tracking-wider">Analytics</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-1 border-t border-emerald-100/20 pt-4">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-emerald-50/50 transition-colors" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-['Manrope'] font-medium text-sm uppercase tracking-wider">Support</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-emerald-50/50 transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Manrope'] font-medium text-sm uppercase tracking-wider">Account</span>
+</a>
+<button class="mt-4 mx-2 bg-error text-white py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-widest active:scale-95 transition-transform">
+        Emergency Stop
+      </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen p-8 lg:p-12">
+<!-- Top Bar Navigation (Contextual) -->
+<header class="flex items-center justify-between mb-12">
+<div>
+<h2 class="text-4xl font-headline font-bold text-primary tracking-tight">Scheduling</h2>
+<p class="text-on-surface-variant font-body mt-2">Manage your automated hydration cycles and logic.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex bg-surface-container-low p-1 rounded-full">
+<button class="px-6 py-2 rounded-full text-sm font-bold bg-white shadow-sm text-primary">Normal</button>
+<button class="px-6 py-2 rounded-full text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Eco</button>
+<button class="px-6 py-2 rounded-full text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Vacation</button>
+<button class="px-6 py-2 rounded-full text-sm font-bold text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+            Smart
+          </button>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Primary Scheduler View -->
+<section class="col-span-12 lg:col-span-8 space-y-8">
+<!-- Timeline Chart Card -->
+<div class="bg-surface-container-lowest rounded-3xl p-8 relative overflow-hidden">
+<div class="flex items-center justify-between mb-10">
+<h3 class="text-xl font-headline font-bold text-primary">Weekly Timeline</h3>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-low text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-low text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="relative h-64 w-full">
+<!-- Time Markers -->
+<div class="absolute inset-0 flex justify-between text-[10px] font-bold text-outline-variant uppercase tracking-tighter opacity-50 border-b border-surface-container-low pb-2 items-end">
+<span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span>
+</div>
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex justify-between px-1">
+<div class="w-px h-full bg-surface-container-low"></div>
+<div class="w-px h-full bg-surface-container-low"></div>
+<div class="w-px h-full bg-surface-container-low"></div>
+<div class="w-px h-full bg-surface-container-low"></div>
+<div class="w-px h-full bg-surface-container-low"></div>
+<div class="w-px h-full bg-surface-container-low"></div>
+</div>
+<!-- Timeline Bars (Faked Data) -->
+<div class="absolute inset-0 pt-8 space-y-6">
+<div class="flex items-center gap-4">
+<span class="w-20 text-xs font-bold text-on-surface-variant">North Lawn</span>
+<div class="flex-grow h-4 bg-surface-container-low rounded-full relative">
+<div class="absolute left-[15%] w-[10%] h-full bg-secondary rounded-full opacity-80" title="04:00 - 06:30"></div>
+<div class="absolute left-[70%] w-[5%] h-full bg-secondary rounded-full opacity-80" title="18:00 - 19:15"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="w-20 text-xs font-bold text-on-surface-variant">Rose Bed</span>
+<div class="flex-grow h-4 bg-surface-container-low rounded-full relative">
+<div class="absolute left-[25%] w-[15%] h-full bg-tertiary-fixed-dim rounded-full" title="06:00 - 09:45"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="w-20 text-xs font-bold text-on-surface-variant">Vegetables</span>
+<div class="flex-grow h-4 bg-surface-container-low rounded-full relative">
+<div class="absolute left-[10%] w-[5%] h-full bg-secondary-fixed-dim rounded-full" title="02:30 - 03:45"></div>
+<div class="absolute left-[45%] w-[8%] h-full bg-secondary-fixed-dim rounded-full" title="11:00 - 13:00"></div>
+<div class="absolute left-[85%] w-[5%] h-full bg-secondary-fixed-dim rounded-full" title="21:00 - 22:15"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Organic Overlay Detail -->
+<div class="absolute -right-12 -bottom-12 w-48 h-48 bg-secondary-container/10 rounded-full blur-3xl"></div>
+</div>
+<!-- Automation Builder (If/Then Rules) -->
+<div class="bg-surface-container-low rounded-3xl p-8">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="text-xl font-headline font-bold text-primary italic">Smart Logic Engine</h3>
+<p class="text-sm text-on-surface-variant mt-1">Conditional rules for adaptive irrigation.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-2xl font-bold text-sm hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+              New Rule
+            </button>
+</div>
+<div class="space-y-4">
+<!-- Rule Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl flex items-center gap-6 group hover:translate-x-1 transition-transform">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div class="flex-grow flex items-center gap-4 font-headline text-lg">
+<span class="text-on-surface-variant">IF</span>
+<span class="bg-surface-container px-3 py-1 rounded-lg text-primary font-bold">Soil Moisture</span>
+<span class="text-on-surface-variant">&lt;</span>
+<span class="bg-surface-container px-3 py-1 rounded-lg text-primary font-bold">35%</span>
+<span class="text-on-surface-variant">THEN</span>
+<span class="bg-secondary-container px-3 py-1 rounded-lg text-on-secondary-container font-bold">Irrigate Zone 01</span>
+</div>
+<div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-outline hover:text-primary"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-outline hover:text-error"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+<!-- Rule Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl flex items-center gap-6 group hover:translate-x-1 transition-transform">
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined">umbrella</span>
+</div>
+<div class="flex-grow flex items-center gap-4 font-headline text-lg">
+<span class="text-on-surface-variant">IF</span>
+<span class="bg-surface-container px-3 py-1 rounded-lg text-primary font-bold">Rain Forecast</span>
+<span class="text-on-surface-variant">&gt;</span>
+<span class="bg-surface-container px-3 py-1 rounded-lg text-primary font-bold">2.5mm</span>
+<span class="text-on-surface-variant">THEN</span>
+<span class="bg-error-container px-3 py-1 rounded-lg text-on-error-container font-bold">Skip All Cycles</span>
+</div>
+<div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-outline hover:text-primary"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-outline hover:text-error"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contextual Controls Sidebar -->
+<aside class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Quick Configure Card -->
+<div class="bg-primary text-on-primary rounded-3xl p-8 relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="text-2xl font-headline font-bold mb-6">Zone Config</h3>
+<div class="space-y-6">
+<div>
+<label class="block text-xs font-bold uppercase tracking-widest text-on-primary-container mb-3">Select Zone</label>
+<select class="w-full bg-primary-container border-none rounded-xl text-on-primary p-4 focus:ring-2 focus:ring-secondary-fixed">
+<option>North Lawn (Primary)</option>
+<option>South Garden</option>
+<option>Rose Bed</option>
+</select>
+</div>
+<div class="grid grid-cols-7 gap-1">
+<label class="col-span-7 text-xs font-bold uppercase tracking-widest text-on-primary-container mb-2">Repeat Days</label>
+<button class="w-full aspect-square flex items-center justify-center rounded-lg bg-secondary-fixed text-on-secondary-fixed font-bold">M</button>
+<button class="w-full aspect-square flex items-center justify-center rounded-lg bg-primary-container text-on-primary">T</button>
+<button class="w-full aspect-square flex items-center justify-center rounded-lg bg-secondary-fixed text-on-secondary-fixed font-bold">W</button>
+<button class="w-full aspect-square flex items-center justify-center rounded-lg bg-primary-container text-on-primary">T</button>
+<button class="w-full aspect-square flex items-center justify-center rounded-lg bg-secondary-fixed text-on-secondary-fixed font-bold">F</button>
+<button class="w-full aspect-square flex items-center justify-center rounded-lg bg-primary-container text-on-primary">S</button>
+<button class="w-full aspect-square flex items-center justify-center rounded-lg bg-primary-container text-on-primary">S</button>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-widest text-on-primary-container mb-3">Duration (Minutes)</label>
+<div class="flex items-center gap-4">
+<input class="flex-grow accent-secondary-fixed" max="60" min="1" type="range" value="15"/>
+<span class="text-2xl font-headline font-bold">15m</span>
+</div>
+</div>
+<button class="w-full bg-secondary-fixed text-on-secondary-fixed py-4 rounded-2xl font-extrabold shadow-lg hover:shadow-secondary/20 transition-all active:scale-95">
+                Update Schedule
+              </button>
+</div>
+</div>
+<!-- Visual Depth Gradient -->
+<div class="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-transparent via-transparent to-secondary/20 pointer-events-none"></div>
+</div>
+<!-- Hydration Gauge (Custom Component) -->
+<div class="glass-panel rounded-3xl p-8 flex flex-col items-center text-center">
+<h3 class="text-lg font-headline font-bold text-primary mb-6">Hydration Target</h3>
+<div class="relative w-48 h-48 flex items-center justify-center mb-6">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-high" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-secondary" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-dasharray="502.4" stroke-dashoffset="150" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-5xl font-headline font-extrabold text-primary">72%</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Efficiency</span>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant px-4 italic">"Current schedule is optimized for the forecasted 28°C heatwave."</p>
+</div>
+<!-- System Stats Card -->
+<div class="bg-surface-container rounded-3xl p-6">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Water Saved</p>
+<h4 class="text-2xl font-headline font-bold text-primary">1,240 L</h4>
+</div>
+</div>
+<div class="w-full h-2 bg-surface-container-low rounded-full overflow-hidden">
+<div class="w-[65%] h-full bg-secondary-fixed-dim rounded-full"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-2 font-medium">Monthly Target: 2,000 L</p>
+</div>
+</aside>
+</div>
+</main>
+<!-- Global FAB - Contextual for Scheduling Page -->
+<button class="fixed bottom-10 right-10 w-16 h-16 rounded-full bg-primary-container text-secondary-fixed shadow-2xl flex items-center justify-center active:scale-90 transition-transform z-50">
+<span class="material-symbols-outlined text-3xl">play_arrow</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-error text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-background">1</div>
+</button>
+</body></html>

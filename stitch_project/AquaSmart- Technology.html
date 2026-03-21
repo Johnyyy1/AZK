@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Technology | AquaSmart</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "on-secondary-fixed-variant": "#005227",
+              "on-primary": "#ffffff",
+              "on-tertiary-container": "#6c9eff",
+              "primary": "#01261f",
+              "tertiary-fixed-dim": "#adc6ff",
+              "secondary-fixed": "#6dfe9c",
+              "tertiary": "#001f4d",
+              "primary-fixed": "#c5eadf",
+              "surface": "#f8f9ff",
+              "inverse-surface": "#233144",
+              "on-tertiary-fixed": "#001a42",
+              "on-surface-variant": "#414846",
+              "secondary-container": "#6dfe9c",
+              "on-background": "#0d1c2e",
+              "surface-dim": "#ccdbf3",
+              "on-error-container": "#93000a",
+              "surface-bright": "#f8f9ff",
+              "tertiary-fixed": "#d8e2ff",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed-dim": "#4de082",
+              "surface-container-low": "#eff4ff",
+              "inverse-on-surface": "#eaf1ff",
+              "on-tertiary-fixed-variant": "#004395",
+              "on-primary-container": "#83a69c",
+              "secondary": "#006d36",
+              "surface-container-high": "#dce9ff",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed": "#00210c",
+              "primary-fixed-dim": "#aacec3",
+              "surface-container-highest": "#d5e3fc",
+              "surface-variant": "#d5e3fc",
+              "on-secondary-container": "#007439",
+              "outline-variant": "#c1c8c4",
+              "inverse-primary": "#aacec3",
+              "tertiary-container": "#003476",
+              "background": "#f8f9ff",
+              "on-primary-fixed-variant": "#2b4d44",
+              "error": "#ba1a1a",
+              "surface-container": "#e6eeff",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed": "#00201a",
+              "error-container": "#ffdad6",
+              "primary-container": "#1a3c34",
+              "outline": "#717976",
+              "on-surface": "#0d1c2e",
+              "surface-tint": "#43655c"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .technical-gradient {
+            background: linear-gradient(135deg, #01261f 0%, #1a3c34 100%);
+        }
+        .mesh-pattern {
+            background-image: radial-gradient(#d5e3fc 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-background mesh-pattern">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl shadow-sm">
+<div class="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
+<div class="text-2xl font-black text-emerald-900 tracking-tighter font-headline">
+                AquaSmart
+            </div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-slate-600 hover:text-emerald-800 transition-colors font-medium text-sm" href="#">Solutions</a>
+<a class="text-emerald-700 font-bold border-b-2 border-emerald-600 pb-1 font-medium text-sm" href="#">Technology</a>
+<a class="text-slate-600 hover:text-emerald-800 transition-colors font-medium text-sm" href="#">Case Studies</a>
+<a class="text-slate-600 hover:text-emerald-800 transition-colors font-medium text-sm" href="#">Pricing</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-emerald-900 font-medium text-sm px-4 py-2 hover:bg-emerald-50/50 rounded-xl transition-all">Sign In</button>
+<button class="technical-gradient text-on-primary font-bold text-sm px-6 py-2.5 rounded-xl shadow-lg active:opacity-80 transition-all duration-200">Get Started</button>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-20">
+<!-- Hero Section -->
+<section class="px-8 max-w-7xl mx-auto mb-32">
+<div class="flex flex-col lg:flex-row items-center gap-16">
+<div class="lg:w-1/2">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold tracking-widest uppercase mb-6">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Technical organic
+                    </div>
+<h1 class="font-headline text-6xl md:text-7xl font-bold tracking-tight text-primary mb-8 leading-[1.1]">
+                        The Intelligence Behind the <span class="text-secondary">Drop.</span>
+</h1>
+<p class="text-on-surface-variant text-xl max-w-xl mb-10 leading-relaxed">
+                        Precision irrigation isn't just about water; it's about data. We've built an ecosystem that senses, analyzes, and acts in real-time.
+                    </p>
+<div class="flex items-center gap-6">
+<div class="flex -space-x-3">
+<img class="w-12 h-12 rounded-full border-2 border-white object-cover" data-alt="Female user profile headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB90UXZJ9kkSh4bZlN3AyRa23ZqxctJ-YtTks4ZQ4fWpOE7zkl50zoXG__Xi7K2SpdRSZZ9Dy_ZGsFAH7gmnqGQ_uIxa0dy18Y4oLfCYVJMyJcne4DUK8TeKdQVL0badCIdBM7uU2tXQnRys0oIJ27i_rIQDTSa0eDI0Da8dcZySg81ojwbiWOWS-6DymWATOsIaHmFPuCODARRSzqUv4obGKF2MdevddFRaWIcHBDBGSEYLYLijndO79vzzfm6O_oJUVPnkN5vl4"/>
+<img class="w-12 h-12 rounded-full border-2 border-white object-cover" data-alt="Male user profile headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdzaCE6OpDuNJvZ2axvyzaMIhm_MEYa5MfKby4KPU7E14uIwUMUNwvI0uPzRyXMGsJLxGpoJYymErFrfF5T4IRB_HcVYI-9O_XBKr71l_3XlBVD4GIgDKn4ed0yxsaEfFUjFdSx85QlGMRoygcaqEYF48eVex9nHPNhGAZl7R_oNUvsfM6t31i4di9ndsnKRpNCrYni0aDqixxjNpqjU0BWCKyvztailkrAyNHZ_M5OLQll18zeEqIlPu8_LJt57-h-NeCFiGrBA8"/>
+<div class="w-12 h-12 rounded-full border-2 border-white bg-surface-container-highest flex items-center justify-center text-xs font-bold">+12k</div>
+</div>
+<span class="text-sm font-medium text-slate-500">Trusted by modern growers worldwide</span>
+</div>
+</div>
+<div class="lg:w-1/2 relative">
+<div class="absolute -top-12 -left-12 w-64 h-64 bg-secondary-fixed/20 rounded-full blur-3xl"></div>
+<div class="glass-panel p-8 rounded-3xl relative z-10 border border-white/50">
+<div class="aspect-square bg-surface-container-low rounded-2xl overflow-hidden relative">
+<!-- Abstract SVG Diagram for Sensor -->
+<svg class="w-full h-full p-12 text-emerald-900/10" viewbox="0 0 400 400">
+<circle cx="200" cy="200" fill="none" r="150" stroke="currentColor" stroke-dasharray="10 5" stroke-width="0.5"></circle>
+<circle cx="200" cy="200" fill="none" r="100" stroke="currentColor" stroke-width="1"></circle>
+<path d="M200 50 L200 350 M50 200 L350 200" stroke="currentColor" stroke-width="0.5"></path>
+<circle class="text-emerald-600" cx="200" cy="200" fill="currentColor" r="8"></circle>
+<path class="text-emerald-500" d="M150 150 Q200 100 250 150 T350 150" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+<div class="absolute bottom-6 left-6 right-6 p-4 glass-panel rounded-xl flex justify-between items-center">
+<div>
+<div class="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Moisture Accuracy</div>
+<div class="text-2xl font-headline font-bold text-primary">99.8%</div>
+</div>
+<div class="h-10 w-24 bg-secondary-container/30 rounded-lg relative overflow-hidden">
+<div class="absolute inset-y-0 left-0 bg-secondary w-3/4 rounded-r-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sensor Ecosystem -->
+<section class="bg-surface-container-low py-32">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-20">
+<h2 class="font-headline text-4xl font-bold text-primary mb-4">The Sensor Ecosystem</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto">Hardware designed to vanish into the landscape while delivering laboratory-grade precision.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl transition-all hover:translate-y-[-8px]">
+<div class="w-14 h-14 bg-secondary-container rounded-xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-secondary text-3xl">sensors</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Mesh Networking</h3>
+<p class="text-on-surface-variant leading-relaxed mb-6">Every sensor acts as a node, creating a self-healing network that covers thousands of acres without dead zones.</p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-sm font-medium text-primary">
+<span class="material-symbols-outlined text-secondary text-lg" data-weight="fill">check_circle</span>
+                                Low-Latency Sub-GHz Signal
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium text-primary">
+<span class="material-symbols-outlined text-secondary text-lg" data-weight="fill">check_circle</span>
+                                Auto-Relay Topology
+                            </li>
+</ul>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl transition-all hover:translate-y-[-8px]">
+<div class="w-14 h-14 bg-tertiary-fixed rounded-xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant text-3xl">battery_charging_full</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Energy Harvesting</h3>
+<p class="text-on-surface-variant leading-relaxed mb-6">Equipped with ultra-efficient photovoltaic cells, our sensors run indefinitely on ambient light and ground heat.</p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-sm font-medium text-primary">
+<span class="material-symbols-outlined text-secondary text-lg" data-weight="fill">check_circle</span>
+                                10-Year Lifecycle
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium text-primary">
+<span class="material-symbols-outlined text-secondary text-lg" data-weight="fill">check_circle</span>
+                                Zero-Maintenance Design
+                            </li>
+</ul>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-2xl transition-all hover:translate-y-[-8px]">
+<div class="w-14 h-14 bg-primary-fixed rounded-xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">precision_manufacturing</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Hardened Build</h3>
+<p class="text-on-surface-variant leading-relaxed mb-6">IP68-rated enclosures made from recycled ocean plastics, engineered to withstand extreme temperatures and UV.</p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-sm font-medium text-primary">
+<span class="material-symbols-outlined text-secondary text-lg" data-weight="fill">check_circle</span>
+                                High-Pressure Resistant
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium text-primary">
+<span class="material-symbols-outlined text-secondary text-lg" data-weight="fill">check_circle</span>
+                                Bio-inert Casing
+                            </li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- AI & Smart Logic -->
+<section class="py-32 overflow-hidden">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex flex-col lg:flex-row gap-20 items-center">
+<div class="lg:w-1/2">
+<div class="text-[10px] uppercase tracking-widest font-bold text-secondary mb-4">Autonomous Decisions</div>
+<h2 class="font-headline text-5xl font-bold text-primary mb-8 leading-tight">AI &amp; Smart Logic: The Brain of Irrigation</h2>
+<div class="space-y-12">
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-primary font-bold">01</div>
+<div>
+<h4 class="font-headline text-xl font-bold mb-2">Rain Skip™ Algorithm</h4>
+<p class="text-on-surface-variant">Integrating hyper-local weather forecasting with soil saturation levels to automatically cancel irrigation sessions before the clouds even arrive.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-primary font-bold">02</div>
+<div>
+<h4 class="font-headline text-xl font-bold mb-2">Moisture-Based Triggers</h4>
+<p class="text-on-surface-variant">Moves away from static timers. Irrigation only activates when root-zone moisture drops below the precise threshold for that specific plant species.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-primary font-bold">03</div>
+<div>
+<h4 class="font-headline text-xl font-bold mb-2">Evapotranspiration Tracking</h4>
+<p class="text-on-surface-variant">Real-time tracking of water loss through plant transpiration and soil evaporation ensures you replace exactly what was lost.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:w-1/2 w-full">
+<div class="relative">
+<div class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-emerald-100 rounded-full blur-[120px] opacity-40"></div>
+<!-- Bento Grid Style Stats -->
+<div class="grid grid-cols-2 gap-4">
+<div class="glass-panel p-6 rounded-3xl border border-white/40 col-span-2">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Real-time Analysis</span>
+<span class="text-emerald-500 flex items-center gap-1 text-xs font-bold">LIVE <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span></span>
+</div>
+<div class="h-40 flex items-end gap-2">
+<div class="bg-secondary/40 w-full rounded-t-lg" style="height: 40%"></div>
+<div class="bg-secondary/60 w-full rounded-t-lg" style="height: 65%"></div>
+<div class="bg-secondary w-full rounded-t-lg" style="height: 45%"></div>
+<div class="bg-secondary/30 w-full rounded-t-lg" style="height: 85%"></div>
+<div class="bg-secondary/50 w-full rounded-t-lg" style="height: 60%"></div>
+<div class="bg-secondary w-full rounded-t-lg" style="height: 75%"></div>
+<div class="bg-secondary/20 w-full rounded-t-lg" style="height: 95%"></div>
+</div>
+</div>
+<div class="bg-primary p-6 rounded-3xl text-white">
+<div class="text-[10px] uppercase font-bold text-emerald-400 mb-2">Water Saved</div>
+<div class="text-3xl font-headline font-bold mb-1">42%</div>
+<div class="text-xs text-emerald-100/60 font-medium leading-tight">Average reduction in residential use</div>
+</div>
+<div class="glass-panel p-6 rounded-3xl border border-white/40">
+<div class="text-[10px] uppercase font-bold text-slate-500 mb-2">Response Time</div>
+<div class="text-3xl font-headline font-bold text-primary mb-1">0.4s</div>
+<div class="text-xs text-on-surface-variant font-medium leading-tight">Edge-computed decisions</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Connectivity & Infrastructure -->
+<section class="max-w-7xl mx-auto px-8 py-32 border-t border-slate-100">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+<div class="max-w-xl">
+<h2 class="font-headline text-4xl font-bold text-primary mb-4">Seamless Connectivity</h2>
+<p class="text-on-surface-variant">Our infrastructure is built on the same foundations as global financial systems, ensuring your data is always reachable and always secure.</p>
+</div>
+<button class="bg-surface-container-highest text-primary font-bold px-8 py-4 rounded-xl transition-all hover:bg-surface-dim">
+                    View API Documentation
+                </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="space-y-4">
+<div class="text-secondary mb-2">
+<span class="material-symbols-outlined text-4xl">cloud_sync</span>
+</div>
+<h5 class="font-headline font-bold text-lg">Cloud Syncing</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Instant synchronization across all your devices with 99.99% uptime guaranteed.</p>
+</div>
+<div class="space-y-4">
+<div class="text-secondary mb-2">
+<span class="material-symbols-outlined text-4xl">encrypted</span>
+</div>
+<h5 class="font-headline font-bold text-lg">E2E Encryption</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Your irrigation protocols and garden data are protected by AES-256 encryption.</p>
+</div>
+<div class="space-y-4">
+<div class="text-secondary mb-2">
+<span class="material-symbols-outlined text-4xl">hub</span>
+</div>
+<h5 class="font-headline font-bold text-lg">Smart Home Ready</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Native support for Matter, HomeKit, and Google Home ecosystems.</p>
+</div>
+<div class="space-y-4">
+<div class="text-secondary mb-2">
+<span class="material-symbols-outlined text-4xl">settings_input_antenna</span>
+</div>
+<h5 class="font-headline font-bold text-lg">LoRaWAN Support</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Extended range for large estates and commercial agricultural projects.</p>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="px-8 mb-20">
+<div class="max-w-7xl mx-auto technical-gradient rounded-[2rem] p-12 md:p-20 text-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1/2 h-full bg-emerald-400/5 blur-[100px] rounded-full"></div>
+<h2 class="font-headline text-4xl md:text-5xl font-bold text-white mb-6">Ready to evolve your landscape?</h2>
+<p class="text-emerald-100/70 text-lg mb-12 max-w-2xl mx-auto">Join the 15,000+ properties using Technical Organic intelligence to grow smarter.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-secondary-fixed text-on-secondary-fixed font-bold px-10 py-5 rounded-2xl text-lg hover:scale-105 transition-transform">Get Started Today</button>
+<button class="border border-emerald-800 text-white font-bold px-10 py-5 rounded-2xl text-lg hover:bg-emerald-900/50 transition-colors">Request a Demo</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white border-t border-slate-100 py-20 px-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline font-bold text-2xl text-emerald-900 mb-6">AquaSmart</div>
+<p class="text-slate-500 text-sm leading-relaxed max-w-xs">Pioneering the Technical Organic movement through laboratory-grade hydration systems.</p>
+</div>
+<div>
+<h6 class="font-bold text-primary mb-6">Product</h6>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Hardware Ecosystem</a></li>
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Smart Controller</a></li>
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Cloud Dashboard</a></li>
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Mobile App</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-bold text-primary mb-6">Resources</h6>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Documentation</a></li>
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">API Reference</a></li>
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Community Forum</a></li>
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Case Studies</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-bold text-primary mb-6">Legal</h6>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Privacy Policy</a></li>
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Terms of Service</a></li>
+<li><a class="text-slate-400 hover:text-emerald-600 transition-colors text-sm" href="#">Contact Support</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="font-manrope text-sm text-slate-500">© 2024 AquaSmart Systems. All rights reserved.</div>
+<div class="flex gap-6">
+<a class="text-slate-400 hover:text-primary transition-all" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-slate-400 hover:text-primary transition-all" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+<a class="text-slate-400 hover:text-primary transition-all" href="#"><span class="material-symbols-outlined">share</span></a>
+</div>
+</div>
+</footer>
+</body></html>
