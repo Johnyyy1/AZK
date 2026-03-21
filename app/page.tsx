@@ -24,7 +24,7 @@ export default function LandingPage() {
             muted
             loop
             playsInline
-            src="/assets/HeroBackground.mp4"
+            src="https://res.cloudinary.com/dxprtqtv9/video/upload/w_1920,q_auto/12860602_3840_2160_25fps_sapk6w.webm"
             className="absolute top-0 left-0 w-full h-full object-cover object-center z-0"
             style={{ filter: "brightness(0.75) saturate(0.9)" }}
           />

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 @theme inline {
   /* Primary */
   --color-primary: #01261f;
