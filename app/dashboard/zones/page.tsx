@@ -38,7 +38,7 @@ export default function ZonesPage() {
           { label: "Avg. Moisture", value: "60%" },
           { label: "Total Sensors", value: "42" },
         ].map((s) => (
-          <div key={s.label} className="glass-card p-6 rounded-xl hover-glow-dark cursor-default">
+          <div key={s.label} className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 p-6 rounded-xl hover-glow cursor-default">
             <p className="font-label uppercase tracking-widest text-[10px] text-on-surface-variant mb-2">{s.label}</p>
             <span className="text-3xl font-headline font-bold">{s.value}</span>
           </div>
@@ -52,7 +52,7 @@ export default function ZonesPage() {
             key={f}
             onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
-              filter === f ? "bg-primary-container text-secondary-fixed-dim" : "bg-dash-container text-on-surface-variant hover:bg-dash-container-high"
+              filter === f ? "bg-primary-container text-secondary-fixed-dim" : "bg-surface-container text-on-surface-variant hover:bg-surface-container-high"
             }`}
           >
             {f}
@@ -68,7 +68,7 @@ export default function ZonesPage() {
             {...fadeUp}
             transition={{ duration: 0.5, delay: 0.2 + i * 0.05 }}
             whileHover={{ y: -4 }}
-            className="glass-card rounded-xl p-6 relative overflow-hidden group hover:border-secondary-fixed-dim/20 hover-glow-dark cursor-default"
+            className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 rounded-xl p-6 relative overflow-hidden group hover:border-secondary-fixed-dim/20 hover-glow cursor-default"
           >
             <div className="flex justify-between items-start mb-4">
               <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${
@@ -76,7 +76,7 @@ export default function ZonesPage() {
                   ? "bg-secondary-container/20 text-secondary-fixed-dim"
                   : zone.status === "Needs Water"
                     ? "bg-error-container/20 text-error"
-                    : "bg-dash-container-high text-on-surface-variant"
+                    : "bg-surface-container-high text-on-surface-variant"
               }`}>
                 {zone.status}
               </span>
@@ -97,7 +97,7 @@ export default function ZonesPage() {
               </div>
             </div>
 
-            <div className="w-full bg-dash-container-high h-1.5 rounded-full mb-4">
+            <div className="w-full bg-surface-container-high h-1.5 rounded-full mb-4">
               <div
                 className={`h-full rounded-full transition-all ${
                   zone.moisture > 70 ? "bg-secondary-fixed-dim" : zone.moisture > 40 ? "bg-tertiary-fixed-dim" : "bg-error"

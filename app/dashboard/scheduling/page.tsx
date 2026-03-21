@@ -41,14 +41,14 @@ export default function SchedulingPage() {
       <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.1 }} className="flex gap-2 mb-8">
         <button
           onClick={() => setActiveTab("calendar")}
-          className={`px-6 py-3 rounded-xl text-sm font-bold font-headline transition-all ${activeTab === "calendar" ? "bg-primary-container text-secondary-fixed-dim" : "bg-dash-container text-on-surface-variant"}`}
+          className={`px-6 py-3 rounded-xl text-sm font-bold font-headline transition-all ${activeTab === "calendar" ? "bg-primary-container text-secondary-fixed-dim" : "bg-surface-container text-on-surface-variant"}`}
         >
           <span className="material-symbols-outlined text-sm mr-2 align-middle">calendar_month</span>
           Weekly Calendar
         </button>
         <button
           onClick={() => setActiveTab("rules")}
-          className={`px-6 py-3 rounded-xl text-sm font-bold font-headline transition-all ${activeTab === "rules" ? "bg-primary-container text-secondary-fixed-dim" : "bg-dash-container text-on-surface-variant"}`}
+          className={`px-6 py-3 rounded-xl text-sm font-bold font-headline transition-all ${activeTab === "rules" ? "bg-primary-container text-secondary-fixed-dim" : "bg-surface-container text-on-surface-variant"}`}
         >
           <span className="material-symbols-outlined text-sm mr-2 align-middle">rule</span>
           Smart Rules
@@ -58,7 +58,7 @@ export default function SchedulingPage() {
       {activeTab === "calendar" && (
         <motion.div {...fadeUp} transition={{ duration: 0.4 }} className="space-y-8">
           {/* Schedule Grid */}
-          <div className="bg-dash-container-lowest rounded-xl p-8 overflow-x-auto">
+          <div className="bg-surface-container-lowest rounded-xl p-8 overflow-x-auto">
             <h3 className="font-headline text-xl font-bold mb-8">Weekly Watering Schedule</h3>
             <div className="min-w-[600px]">
               {/* Header row */}
@@ -76,7 +76,7 @@ export default function SchedulingPage() {
                     <div
                       key={j}
                       className={`h-10 rounded-lg flex items-center justify-center transition-all cursor-pointer hover:scale-105 ${
-                        val ? "bg-secondary-fixed-dim/20 border border-secondary-fixed-dim/40 hover:bg-secondary-fixed-dim/30 hover:shadow-[0_0_12px_rgba(77,224,130,0.15)]" : "bg-dash-container hover:bg-dash-container-high"
+                        val ? "bg-secondary-fixed-dim/20 border border-secondary-fixed-dim/40 hover:bg-secondary-fixed-dim/30 hover:shadow-[0_0_12px_rgba(77,224,130,0.15)]" : "bg-surface-container hover:bg-surface-container-high"
                       }`}
                     >
                       {val ? <span className="material-symbols-outlined text-secondary-fixed-dim text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>water_drop</span> : null}
@@ -88,7 +88,7 @@ export default function SchedulingPage() {
           </div>
 
           {/* Upcoming */}
-          <div className="bg-dash-container-lowest rounded-xl p-8">
+          <div className="bg-surface-container-lowest rounded-xl p-8">
             <h3 className="font-headline text-xl font-bold mb-6">Upcoming Cycles</h3>
             <div className="space-y-4">
               {[
@@ -96,7 +96,7 @@ export default function SchedulingPage() {
                 { zone: "Greenhouse", time: "Tomorrow, 6:00 AM", duration: "45 min", type: "Humidity-triggered" },
                 { zone: "North Orchard", time: "Wed, 6:00 AM", duration: "60 min", type: "Deep Soak" },
               ].map((c, i) => (
-                <div key={i} className="flex items-center justify-between glass-card p-4 rounded-xl hover-glow-dark cursor-default">
+                <div key={i} className="flex items-center justify-between bg-surface-container-lowest shadow-sm border border-outline-variant/30 p-4 rounded-xl hover-glow cursor-default">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-xl bg-secondary-fixed-dim/20 flex items-center justify-center">
                       <span className="material-symbols-outlined text-secondary-fixed-dim text-sm">schedule</span>
@@ -106,7 +106,7 @@ export default function SchedulingPage() {
                       <p className="text-[10px] text-on-surface-variant uppercase">{c.time} • {c.duration}</p>
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest bg-dash-container px-3 py-1 rounded-lg text-on-surface-variant">{c.type}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest bg-surface-container px-3 py-1 rounded-lg text-on-surface-variant">{c.type}</span>
                 </div>
               ))}
             </div>
@@ -122,10 +122,10 @@ export default function SchedulingPage() {
               {...fadeUp}
               transition={{ duration: 0.4, delay: i * 0.05 }}
               whileHover={{ y: -3 }}
-              className="bg-dash-container-lowest rounded-xl p-6 flex items-center justify-between hover-glow-dark"
+              className="bg-surface-container-lowest rounded-xl p-6 flex items-center justify-between hover-glow"
             >
               <div className="flex items-center gap-6">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${rule.active ? "bg-secondary-fixed-dim/20" : "bg-dash-container"}`}>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${rule.active ? "bg-secondary-fixed-dim/20" : "bg-surface-container"}`}>
                   <span className={`material-symbols-outlined text-2xl ${rule.active ? "text-secondary-fixed-dim" : "text-on-surface-variant"}`}>{rule.icon}</span>
                 </div>
                 <div>
@@ -137,7 +137,7 @@ export default function SchedulingPage() {
                   </p>
                 </div>
               </div>
-              <div className={`w-12 h-6 rounded-full relative cursor-pointer p-1 transition-colors ${rule.active ? "bg-secondary-fixed-dim" : "bg-dash-container-high"}`}>
+              <div className={`w-12 h-6 rounded-full relative cursor-pointer p-1 transition-colors ${rule.active ? "bg-secondary-fixed-dim" : "bg-surface-container-high"}`}>
                 <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${rule.active ? "translate-x-6" : ""}`} />
               </div>
             </motion.div>

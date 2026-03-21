@@ -64,16 +64,16 @@ export default function ControlsPage() {
             {...fadeUp}
             transition={{ duration: 0.5, delay: 0.15 + i * 0.05 }}
             whileHover={{ y: -3 }}
-            className={`rounded-xl p-6 relative overflow-hidden hover-glow-dark cursor-default ${
+            className={`rounded-xl p-6 relative overflow-hidden hover-glow cursor-default ${
               zone.isOn
                 ? "bg-secondary-fixed-dim/10 border border-secondary-fixed-dim/20"
-                : "glass-card"
+                : "bg-surface-container-lowest shadow-sm border border-outline-variant/30"
             }`}
           >
             {/* Header */}
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${zone.isOn ? "bg-secondary-fixed-dim/20" : "bg-dash-container"}`}>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${zone.isOn ? "bg-secondary-fixed-dim/20" : "bg-surface-container"}`}>
                   <span className={`material-symbols-outlined ${zone.isOn ? "text-secondary-fixed-dim" : "text-on-surface-variant"}`}>{zone.icon}</span>
                 </div>
                 <div>
@@ -92,7 +92,7 @@ export default function ControlsPage() {
               {/* Toggle */}
               <button
                 onClick={() => toggleZone(zone.id)}
-                className={`w-14 h-7 rounded-full p-1 transition-colors ${zone.isOn ? "bg-secondary-fixed-dim" : "bg-dash-container-high"}`}
+                className={`w-14 h-7 rounded-full p-1 transition-colors ${zone.isOn ? "bg-secondary-fixed-dim" : "bg-surface-container-high"}`}
               >
                 <div className={`w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${zone.isOn ? "translate-x-7" : ""}`} />
               </button>
@@ -126,7 +126,7 @@ export default function ControlsPage() {
                 max="120"
                 value={zone.duration}
                 onChange={(e) => setDuration(zone.id, Number(e.target.value))}
-                className="w-full h-2 bg-dash-container-high rounded-full appearance-none cursor-pointer accent-secondary-fixed-dim"
+                className="w-full h-2 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-secondary-fixed-dim"
               />
               <div className="flex justify-between text-[10px] font-label text-on-surface-variant/50">
                 <span>5m</span><span>120m</span>

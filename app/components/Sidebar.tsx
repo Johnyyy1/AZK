@@ -17,7 +17,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="h-screen w-64 fixed left-0 top-0 bg-dash-container-lowest flex flex-col p-6 z-40">
+    <aside className="h-screen w-64 fixed left-0 top-0 bg-surface-container-lowest flex flex-col p-6 z-40">
       {/* Brand */}
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-1">
@@ -60,13 +60,13 @@ export default function Sidebar() {
 
               {/* Hover background (only when not active) */}
               {!isActive && (
-                <span className="absolute inset-0 rounded-xl bg-dash-container-high opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="absolute inset-0 rounded-xl bg-surface-container-high opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               )}
 
               <span className={`relative z-10 flex items-center gap-3 ${
                 isActive
                   ? "text-secondary-fixed-dim font-bold"
-                  : "text-on-surface-variant group-hover:text-white"
+                  : "text-on-surface-variant group-hover:text-primary"
               }`}>
                 <span
                   className={`material-symbols-outlined text-xl transition-transform duration-300 ${
@@ -93,7 +93,7 @@ export default function Sidebar() {
           href="/dashboard/zones"
           className="group w-full bg-gradient-to-br from-secondary to-primary-container text-on-primary py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm shadow-xl btn-magnetic relative overflow-hidden"
         >
-          <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <span className="material-symbols-outlined text-sm relative z-10">add</span>
           <span className="relative z-10">Add New Zone</span>
         </Link>
