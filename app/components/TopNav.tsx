@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "motion/react";
 const navLinks = [
   { href: "/", label: "Solutions" },
   { href: "/technology", label: "Technology" },
-  { href: "/case-studies", label: "Case Studies" },
   { href: "#pricing", label: "Pricing" },
 ];
 
@@ -37,8 +36,8 @@ export default function TopNav() {
   return (
     <>
       <motion.nav
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         className={`fixed top-0 w-full z-50 flex justify-between items-center px-8 py-3 transition-all duration-500 ${
           scrolled

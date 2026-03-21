@@ -7,7 +7,6 @@ const footerLinks: Record<string, { label: string; href: string; isLink?: boolea
   Resources: [
     { label: "Documentation", href: "#" },
     { label: "API Reference", href: "#" },
-    { label: "Case Studies", href: "/case-studies", isLink: true },
   ],
   Company: [
     { label: "About Us", href: "#" },
