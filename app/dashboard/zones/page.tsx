@@ -38,7 +38,7 @@ export default function ZonesPage() {
           { label: "Avg. Moisture", value: "60%" },
           { label: "Total Sensors", value: "42" },
         ].map((s) => (
-          <div key={s.label} className="glass-card p-6 rounded-xl">
+          <div key={s.label} className="glass-card p-6 rounded-xl hover-glow-dark cursor-default">
             <p className="font-label uppercase tracking-widest text-[10px] text-on-surface-variant mb-2">{s.label}</p>
             <span className="text-3xl font-headline font-bold">{s.value}</span>
           </div>
@@ -67,7 +67,8 @@ export default function ZonesPage() {
             key={zone.id}
             {...fadeUp}
             transition={{ duration: 0.5, delay: 0.2 + i * 0.05 }}
-            className="glass-card rounded-xl p-6 relative overflow-hidden group hover:border-secondary-fixed-dim/20 transition-all"
+            whileHover={{ y: -4 }}
+            className="glass-card rounded-xl p-6 relative overflow-hidden group hover:border-secondary-fixed-dim/20 hover-glow-dark cursor-default"
           >
             <div className="flex justify-between items-start mb-4">
               <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${

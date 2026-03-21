@@ -62,7 +62,8 @@ export default function DashboardPage() {
                 key={sensor.label}
                 {...fadeUp}
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-                className="glass-card p-6 rounded-xl flex flex-col justify-between group overflow-hidden relative"
+                whileHover={{ y: -4 }}
+                className="glass-card p-6 rounded-xl flex flex-col justify-between group overflow-hidden relative hover-glow-dark cursor-default"
               >
                 <div className="absolute -right-4 -top-4 opacity-10 group-hover:opacity-20 transition-opacity">
                   <span className="material-symbols-outlined text-8xl">{sensor.icon}</span>
@@ -98,7 +99,8 @@ export default function DashboardPage() {
                   key={zone.name}
                   {...fadeUp}
                   transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-                  className="glass-card rounded-xl p-6 relative overflow-hidden flex items-center justify-between"
+                  whileHover={{ y: -3 }}
+                  className="glass-card rounded-xl p-6 relative overflow-hidden flex items-center justify-between hover-glow-dark cursor-default"
                 >
                   <div className="z-10">
                     <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full mb-3 inline-block ${
@@ -121,7 +123,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </div>
-                  <button className={`z-10 p-4 rounded-xl flex items-center justify-center hover:opacity-90 transition-opacity ${
+                  <button className={`z-10 p-4 rounded-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all ${
                     zone.status === "Watering"
                       ? "bg-error-container text-on-error-container"
                       : "bg-primary-container text-secondary-fixed-dim border border-secondary/20"
@@ -145,7 +147,7 @@ export default function DashboardPage() {
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-dash-container-low rounded-xl p-6 border border-white/5"
+            className="bg-dash-container-low rounded-xl p-6 border border-white/5 hover-glow-dark"
           >
             <div className="flex items-center justify-between mb-6">
               <h4 className="font-headline font-bold text-lg">System Alerts</h4>
@@ -177,7 +179,7 @@ export default function DashboardPage() {
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="glass-card rounded-xl p-8 flex flex-col items-center text-center"
+            className="glass-card rounded-xl p-8 flex flex-col items-center text-center hover-glow-dark"
           >
             <p className="font-label uppercase tracking-widest text-[10px] text-on-surface-variant mb-4">Daily Water Target</p>
             <div className="relative w-40 h-40 flex items-center justify-center">

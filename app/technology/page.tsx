@@ -30,15 +30,18 @@ export default function TechnologyPage() {
               </span>
               Under The Hood
             </div>
-            <h1 className="text-5xl lg:text-7xl font-black text-primary font-headline tracking-tighter leading-[1.1] mb-8">
+            <h1 className="text-5xl lg:text-7xl font-black text-primary font-headline tracking-tighter leading-[1.1] mb-4">
               The science behind <span className="text-secondary">precision</span> irrigation.
             </h1>
+            <p className="font-accent italic text-lg text-on-surface-variant/60 mb-4">
+              Multi-layered intelligence at scale
+            </p>
             <p className="text-on-surface-variant text-lg lg:text-xl max-w-2xl leading-relaxed">
               Our multi-layered approach combines edge-computing soil sensors, satellite weather data,
               and machine learning models to create the most intelligent irrigation platform on the market.
             </p>
           </motion.div>
-          <div className="absolute -top-10 -right-10 w-96 h-96 bg-tertiary-fixed-dim/20 rounded-full blur-[100px] -z-10" />
+          <div className="absolute -top-10 -right-10 w-96 h-96 bg-tertiary-fixed-dim/20 rounded-full blur-[100px] -z-10 animate-float" />
         </section>
 
         {/* Architecture Stack */}
@@ -79,19 +82,24 @@ export default function TechnologyPage() {
                   key={layer.title}
                   {...fadeUp}
                   transition={{ duration: 0.6, delay: i * 0.15 }}
-                  className={`${layer.color} p-8 rounded-[2rem] flex flex-col justify-between min-h-[400px]`}
+                  whileHover={{ y: -8, rotateZ: i === 1 ? 0 : (i === 0 ? -1 : 1) }}
+                  className={`${layer.color} p-8 rounded-[2rem] flex flex-col justify-between min-h-[400px] hover:shadow-2xl transition-shadow duration-500 group`}
                 >
                   <div>
-                    <span className="material-symbols-outlined text-4xl mb-6 block" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    <motion.span
+                      className="material-symbols-outlined text-4xl mb-6 block"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                      whileHover={{ rotate: 10, scale: 1.2 }}
+                    >
                       {layer.icon}
-                    </span>
+                    </motion.span>
                     <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2 font-headline">{layer.subtitle}</p>
                     <h4 className="text-2xl font-bold font-headline mb-4">{layer.title}</h4>
                     <p className="text-sm opacity-80 leading-relaxed">{layer.desc}</p>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-6">
                     {layer.tags.map((tag) => (
-                      <span key={tag} className="px-3 py-1 rounded-lg bg-white/15 text-[10px] font-bold uppercase">{tag}</span>
+                      <span key={tag} className="px-3 py-1 rounded-lg bg-white/15 text-[10px] font-bold uppercase group-hover:bg-white/25 transition-colors">{tag}</span>
                     ))}
                   </div>
                 </motion.div>
@@ -104,7 +112,8 @@ export default function TechnologyPage() {
         <section className="py-24 px-8 bg-white">
           <div className="max-w-7xl mx-auto">
             <motion.div {...fadeUp} className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-black font-headline text-primary mb-6">Performance metrics</h2>
+              <h2 className="text-4xl lg:text-5xl font-black font-headline text-primary mb-4">Performance metrics</h2>
+              <p className="font-accent italic text-on-surface-variant/60 mb-2">Numbers that speak for themselves</p>
               <p className="text-on-surface-variant max-w-2xl mx-auto">Battle-tested across 500+ commercial installations worldwide.</p>
             </motion.div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -118,7 +127,8 @@ export default function TechnologyPage() {
                   key={stat.label}
                   {...fadeUp}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="bg-surface-container-low p-8 rounded-[2rem] text-center"
+                  whileHover={{ y: -6, scale: 1.03 }}
+                  className="bg-surface-container-low p-8 rounded-[2rem] text-center hover:shadow-xl transition-shadow duration-500 cursor-default shimmer-border"
                 >
                   <div className="text-4xl lg:text-5xl font-black font-headline text-primary mb-4">{stat.value}</div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant font-label">{stat.label}</p>
@@ -146,9 +156,10 @@ export default function TechnologyPage() {
                   key={item.title}
                   {...fadeUp}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="bg-surface-container-lowest p-8 rounded-[2rem] flex gap-6 items-start group hover:shadow-lg transition-shadow"
+                  whileHover={{ y: -4 }}
+                  className="bg-surface-container-lowest p-8 rounded-[2rem] flex gap-6 items-start group hover:shadow-xl transition-shadow duration-500 shimmer-border"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
                     <span className="material-symbols-outlined text-primary text-2xl">{item.icon}</span>
                   </div>
                   <div>
@@ -169,13 +180,18 @@ export default function TechnologyPage() {
           >
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-tertiary-fixed-dim/20 rounded-full blur-[100px]" />
             <div className="relative z-10">
-              <h2 className="text-4xl lg:text-5xl font-black font-headline text-on-primary mb-8">See the technology in action.</h2>
+              <h2 className="text-4xl lg:text-5xl font-black font-headline text-on-primary mb-4">See the technology in action.</h2>
+              <p className="font-accent italic text-on-primary/50 mb-4">Experience precision irrigation firsthand</p>
               <p className="text-on-primary-container text-lg max-w-2xl mx-auto mb-10 opacity-80">
                 Book a personalized demo with our solutions engineering team.
               </p>
-              <button className="bg-secondary text-on-secondary px-10 py-5 rounded-2xl font-black text-xl organic-glow hover:scale-105 active:scale-95 transition-all">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-secondary text-on-secondary px-10 py-5 rounded-2xl font-black text-xl btn-magnetic"
+              >
                 Schedule Demo
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         </section>

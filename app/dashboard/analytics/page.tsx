@@ -24,7 +24,7 @@ export default function AnalyticsPage() {
       {/* KPI Grid */}
       <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.1 }} className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {/* Main KPI */}
-        <div className="md:col-span-2 bg-dash-container-lowest rounded-xl p-8 relative overflow-hidden group">
+        <div className="md:col-span-2 bg-dash-container-lowest rounded-xl p-8 relative overflow-hidden group hover-glow-dark cursor-default">
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
             <span className="material-symbols-outlined text-8xl" style={{ fontVariationSettings: "'FILL' 1" }}>water_drop</span>
           </div>
@@ -44,7 +44,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
         {/* Temp KPI */}
-        <div className="bg-dash-container-low rounded-xl p-6 flex flex-col justify-between">
+        <div className="bg-dash-container-low rounded-xl p-6 flex flex-col justify-between hover-glow-dark cursor-default">
           <div>
             <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-4">Avg. Root Temp</p>
             <span className="font-headline text-4xl font-bold">22.4°C</span>
@@ -56,7 +56,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
         {/* Usage KPI */}
-        <div className="bg-dash-container-high rounded-xl p-6 flex flex-col justify-between">
+        <div className="bg-dash-container-high rounded-xl p-6 flex flex-col justify-between hover-glow-dark cursor-default">
           <div>
             <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-4">Total Usage (Wk)</p>
             <span className="font-headline text-4xl font-bold">1,482L</span>
@@ -109,7 +109,7 @@ export default function AnalyticsPage() {
         </motion.div>
 
         {/* Zone Efficiency */}
-        <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.3 }} className="bg-dash-container rounded-xl p-8 space-y-8">
+        <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.3 }} className="bg-dash-container rounded-xl p-8 space-y-8 hover-glow-dark">
           <h3 className="font-headline text-xl font-bold">Zone Status</h3>
           <div className="space-y-6">
             {[
@@ -146,7 +146,7 @@ export default function AnalyticsPage() {
       <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.4 }} className="bg-dash-container-lowest rounded-xl overflow-hidden">
         <div className="p-8 flex justify-between items-center border-b border-dash-container-low">
           <h3 className="font-headline text-xl font-bold">Watering Logs</h3>
-          <button className="flex items-center gap-2 text-xs font-label font-bold text-on-surface-variant hover:text-white transition-colors">
+          <button className="flex items-center gap-2 text-xs font-label font-bold text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">
             <span className="material-symbols-outlined text-lg">download</span> EXPORT CSV
           </button>
         </div>

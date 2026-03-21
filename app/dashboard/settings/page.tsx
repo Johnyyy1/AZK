@@ -19,7 +19,7 @@ export default function SettingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Global Settings */}
         <motion.section {...fadeUp} transition={{ duration: 0.5, delay: 0.1 }} className="lg:col-span-7 space-y-8">
-          <div className="bg-dash-container-low rounded-[2rem] p-8 relative overflow-hidden">
+          <div className="bg-dash-container-low rounded-[2rem] p-8 relative overflow-hidden hover-glow-dark">
             <div className="absolute -top-12 -right-12 w-48 h-48 bg-secondary-fixed-dim/10 rounded-full blur-3xl" />
             <h3 className="text-xl font-headline font-bold flex items-center gap-2 mb-8">
               <span className="material-symbols-outlined text-secondary-fixed-dim">settings_suggest</span>
@@ -77,7 +77,7 @@ export default function SettingsPage() {
 
           {/* Notification Preferences */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-dash-container rounded-3xl p-6 flex flex-col justify-between">
+            <div className="bg-dash-container rounded-3xl p-6 flex flex-col justify-between hover-glow-dark cursor-default">
               <div className="flex justify-between items-start mb-6">
                 <span className="material-symbols-outlined text-tertiary-fixed-dim text-3xl">mail</span>
                 <div className="w-12 h-6 bg-dash-container-high rounded-full relative cursor-pointer p-1">
@@ -89,7 +89,7 @@ export default function SettingsPage() {
                 <p className="text-xs text-on-surface-variant leading-relaxed">Weekly hydration reports and nutrient analysis summaries.</p>
               </div>
             </div>
-            <div className="bg-primary-container rounded-3xl p-6 flex flex-col justify-between overflow-hidden relative">
+            <div className="bg-primary-container rounded-3xl p-6 flex flex-col justify-between overflow-hidden relative hover-glow-dark cursor-default">
               <div className="absolute -bottom-4 -right-4 opacity-10">
                 <span className="material-symbols-outlined text-8xl">bolt</span>
               </div>
@@ -110,7 +110,7 @@ export default function SettingsPage() {
         {/* Right: Account Management */}
         <motion.aside {...fadeUp} transition={{ duration: 0.5, delay: 0.2 }} className="lg:col-span-5 space-y-8">
           {/* Profile */}
-          <div className="bg-dash-container-lowest rounded-[2rem] p-8 relative border border-white/5">
+          <div className="bg-dash-container-lowest rounded-[2rem] p-8 relative border border-white/5 hover-glow-dark">
             <div className="flex items-center gap-6 mb-10">
               <div className="relative group">
                 <div className="w-24 h-24 rounded-3xl bg-dash-container overflow-hidden">
@@ -146,7 +146,7 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className="pt-4 flex flex-col gap-3">
-                <button className="w-full technical-gradient text-white py-4 rounded-xl font-headline font-bold shadow-xl active:scale-[0.98] transition-all">
+                <button className="w-full technical-gradient text-white py-4 rounded-xl font-headline font-bold shadow-xl btn-magnetic">
                   Update Account
                 </button>
                 <button className="w-full py-4 text-error font-headline font-bold text-sm hover:bg-error/10 rounded-xl transition-colors" type="button">
@@ -163,7 +163,7 @@ export default function SettingsPage() {
               Security Hygiene
             </h3>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-dash-container/50 rounded-2xl">
+              <div className="flex items-center justify-between p-4 bg-dash-container/50 rounded-2xl hover:bg-dash-container/70 transition-colors cursor-default">
                 <div className="flex items-center gap-4">
                   <span className="material-symbols-outlined text-on-surface-variant">phonelink_setup</span>
                   <div>

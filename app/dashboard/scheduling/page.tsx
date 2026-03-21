@@ -75,8 +75,8 @@ export default function SchedulingPage() {
                   {scheduleData[day].map((val, j) => (
                     <div
                       key={j}
-                      className={`h-10 rounded-lg flex items-center justify-center transition-all cursor-pointer ${
-                        val ? "bg-secondary-fixed-dim/20 border border-secondary-fixed-dim/40 hover:bg-secondary-fixed-dim/30" : "bg-dash-container hover:bg-dash-container-high"
+                      className={`h-10 rounded-lg flex items-center justify-center transition-all cursor-pointer hover:scale-105 ${
+                        val ? "bg-secondary-fixed-dim/20 border border-secondary-fixed-dim/40 hover:bg-secondary-fixed-dim/30 hover:shadow-[0_0_12px_rgba(77,224,130,0.15)]" : "bg-dash-container hover:bg-dash-container-high"
                       }`}
                     >
                       {val ? <span className="material-symbols-outlined text-secondary-fixed-dim text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>water_drop</span> : null}
@@ -96,7 +96,7 @@ export default function SchedulingPage() {
                 { zone: "Greenhouse", time: "Tomorrow, 6:00 AM", duration: "45 min", type: "Humidity-triggered" },
                 { zone: "North Orchard", time: "Wed, 6:00 AM", duration: "60 min", type: "Deep Soak" },
               ].map((c, i) => (
-                <div key={i} className="flex items-center justify-between glass-card p-4 rounded-xl">
+                <div key={i} className="flex items-center justify-between glass-card p-4 rounded-xl hover-glow-dark cursor-default">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-xl bg-secondary-fixed-dim/20 flex items-center justify-center">
                       <span className="material-symbols-outlined text-secondary-fixed-dim text-sm">schedule</span>
@@ -121,7 +121,8 @@ export default function SchedulingPage() {
               key={rule.id}
               {...fadeUp}
               transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="bg-dash-container-lowest rounded-xl p-6 flex items-center justify-between"
+              whileHover={{ y: -3 }}
+              className="bg-dash-container-lowest rounded-xl p-6 flex items-center justify-between hover-glow-dark"
             >
               <div className="flex items-center gap-6">
                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${rule.active ? "bg-secondary-fixed-dim/20" : "bg-dash-container"}`}>

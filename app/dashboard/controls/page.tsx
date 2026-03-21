@@ -48,10 +48,10 @@ export default function ControlsPage() {
 
       {/* Quick Actions */}
       <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.1 }} className="flex gap-4 mb-8">
-        <button className="bg-secondary text-on-secondary px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:opacity-90 transition-opacity">
+        <button className="bg-secondary text-on-secondary px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 btn-magnetic">
           <span className="material-symbols-outlined text-sm">play_arrow</span> Start All
         </button>
-        <button className="bg-error text-on-error px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:opacity-90 transition-opacity">
+        <button className="bg-error text-on-error px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform">
           <span className="material-symbols-outlined text-sm">stop</span> Emergency Stop
         </button>
       </motion.div>
@@ -63,7 +63,8 @@ export default function ControlsPage() {
             key={zone.id}
             {...fadeUp}
             transition={{ duration: 0.5, delay: 0.15 + i * 0.05 }}
-            className={`rounded-xl p-6 relative overflow-hidden transition-all ${
+            whileHover={{ y: -3 }}
+            className={`rounded-xl p-6 relative overflow-hidden hover-glow-dark cursor-default ${
               zone.isOn
                 ? "bg-secondary-fixed-dim/10 border border-secondary-fixed-dim/20"
                 : "glass-card"

@@ -74,6 +74,7 @@
   --font-headline: "Space Grotesk", sans-serif;
   --font-body: "Manrope", sans-serif;
   --font-label: "Manrope", sans-serif;
+  --font-accent: "Playfair Display", serif;
 }
 
 /* Base styles */
@@ -113,6 +114,78 @@ body {
   box-shadow: 0 20px 40px rgba(13, 28, 46, 0.06);
 }
 
+/* Hover glow for cards */
+.hover-glow {
+  transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-glow:hover {
+  box-shadow: 0 8px 32px rgba(0, 109, 54, 0.15), 0 2px 8px rgba(0, 0, 0, 0.06);
+  transform: translateY(-4px);
+}
+
+/* Dark card hover glow */
+.hover-glow-dark {
+  transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s;
+}
+.hover-glow-dark:hover {
+  box-shadow: 0 8px 32px rgba(77, 224, 130, 0.1), 0 0 0 1px rgba(77, 224, 130, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Animated underline for nav links */
+.nav-link-underline {
+  position: relative;
+}
+.nav-link-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #006d36, #4de082);
+  border-radius: 999px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-link-underline:hover::after {
+  width: 100%;
+}
+
+/* Magnetic button hover */
+.btn-magnetic {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-magnetic:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 109, 54, 0.25);
+}
+.btn-magnetic:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Shimmer border effect */
+.shimmer-border {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 40%, rgba(77, 224, 130, 0.4), transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.shimmer-border:hover::before {
+  opacity: 1;
+}
+
 /* Pulse animation for active watering indicators */
 @keyframes pulse-emerald {
   0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(77, 224, 130, 0.7); }
@@ -122,6 +195,16 @@ body {
 
 .pulse-emerald {
   animation: pulse-emerald 2s infinite;
+}
+
+/* Float animation for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }
 
 /* Material Symbols base */
