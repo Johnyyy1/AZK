@@ -16,20 +16,34 @@ export default function LandingPage() {
   return (
     <div className="bg-background font-body text-on-background">
       <TopNav />
-      <main className="pt-24 overflow-x-hidden">
+      <main className="overflow-x-hidden">
         {/* Hero Section */}
-        <section className="relative px-8 py-20 lg:py-32 max-w-7xl mx-auto flex flex-col items-center">
+        <section className="hero relative w-full h-screen overflow-hidden flex flex-col items-center justify-center">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            src="/assets/HeroBackground.mp4"
+            className="absolute top-0 left-0 w-full h-full object-cover object-center z-0"
+            style={{ filter: "brightness(0.75) saturate(0.9)" }}
+          />
+          <div 
+            className="absolute top-0 left-0 w-full h-full z-[1]"
+            style={{ background: "linear-gradient(to bottom, rgba(5, 10, 5, 0.35), rgba(5, 10, 5, 0.65))" }}
+          />
+
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-4xl text-center flex flex-col items-center"
+            className="w-full max-w-7xl px-4 md:px-12 text-center flex flex-col items-center relative z-[2]"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-widest mb-6 font-headline"
+              className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest mb-6 font-headline border border-white/20"
             >
               <span
                 className="material-symbols-outlined text-sm"
@@ -39,40 +53,37 @@ export default function LandingPage() {
               </span>
               The Future of Agriculture
             </motion.div>
-            <h1 className="text-5xl lg:text-8xl font-black text-primary font-headline tracking-tighter leading-[1.1] mb-4">
-              Precision watering for a{" "}
-              <span className="text-secondary">greener</span> world.
+            <h1 className="text-5xl lg:text-8xl font-black text-white font-headline tracking-tighter leading-[1.1] mb-6">
+              Precision watering for a <br className="hidden lg:block"/>
+              <span className="text-secondary-fixed-dim">greener</span> world.
             </h1>
-            <p className="font-accent italic text-lg lg:text-2xl text-on-surface-variant/70 mb-4">
+            <p className="font-accent italic text-xl lg:text-3xl text-white drop-shadow-lg mb-6">
               Where technology meets nature
             </p>
-            <p className="text-on-surface-variant text-lg lg:text-xl max-w-2xl mb-12 leading-relaxed">
+            <p className="text-white text-lg lg:text-2xl max-w-3xl mb-12 leading-relaxed drop-shadow-lg font-medium">
               Optimize your agricultural yields with AI-driven hydration.
               AquaSmart senses soil needs in real-time, delivering the exact
               drop required.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <div className="flex flex-wrap gap-6 justify-center w-full max-w-md mx-auto">
+              <motion.div className="flex-1" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/auth"
-                  className="inline-block technical-gradient text-on-primary px-10 py-5 rounded-2xl font-bold text-xl btn-magnetic"
+                  className="block w-full technical-gradient text-white px-8 py-5 rounded-2xl font-bold text-xl btn-magnetic border border-white/10"
                 >
                   Get Started
                 </Link>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div className="flex-1" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/auth"
-                  className="inline-block bg-surface-container-highest text-primary px-10 py-5 rounded-2xl font-bold text-xl hover:bg-surface-container-high transition-colors"
+                  className="block w-full bg-white/10 backdrop-blur-md text-white px-8 py-5 rounded-2xl font-bold text-xl hover:bg-white/20 transition-colors border border-white/20"
                 >
                   Login
                 </Link>
               </motion.div>
             </div>
           </motion.div>
-          {/* Background blurs */}
-          <div className="absolute -top-10 -left-10 w-96 h-96 bg-secondary-fixed-dim/20 rounded-full blur-[100px] -z-10 animate-float" />
-          <div className="absolute -bottom-20 -right-10 w-96 h-96 bg-tertiary-fixed-dim/20 rounded-full blur-[100px] -z-10" />
         </section>
 
         {/* Features Bento Grid */}
