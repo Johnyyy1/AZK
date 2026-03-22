@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 const navItems = [
   { icon: "dashboard", label: "Dashboard", href: "/dashboard" },
@@ -13,148 +13,109 @@ const navItems = [
   { icon: "settings", label: "Settings", href: "/dashboard/settings" },
 ];
 
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <>
-      {/* Mobile Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
-          />
-        )}
-      </AnimatePresence>
-
-      <aside 
-        className={`fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest flex flex-col p-6 z-50 transition-transform duration-300 md:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        {/* Brand */}
-        <div className="mb-10 flex items-center justify-between">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary to-secondary-fixed-dim flex items-center justify-center">
-              <span className="material-symbols-outlined text-white text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
-                water_drop
-              </span>
-            </div>
-            <h1 className="text-lg font-black text-secondary-fixed-dim tracking-tighter font-headline">
-              AquaSmart
-            </h1>
+    <aside className="h-screen w-64 fixed left-0 top-0 bg-surface-container-lowest flex flex-col p-6 z-40">
+      {/* Brand */}
+      <div className="mb-10">
+        <div className="flex items-center gap-2 mb-1">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary to-secondary-fixed-dim flex items-center justify-center">
+            <span className="material-symbols-outlined text-white text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
+              water_drop
+            </span>
           </div>
-          
-          {/* Mobile Close Button */}
-          <button 
-            onClick={onClose}
-            className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container transition-colors"
-          >
-            <span className="material-symbols-outlined text-on-surface-variant">close</span>
-          </button>
+          <h1 className="text-lg font-black text-secondary-fixed-dim tracking-tighter font-headline">
+            AquaSmart
+          </h1>
         </div>
-
-        <p className="font-accent italic text-[11px] text-on-surface-variant/50 pl-10 mb-10 -mt-8">
+        <p className="font-accent italic text-[11px] text-on-surface-variant/50 pl-10">
           Living Laboratory
         </p>
+      </div>
 
-        {/* Navigation */}
-        <nav className="flex-grow space-y-1">
-          {navItems.map((item) => {
-            const isActive =
-              item.href === "/dashboard"
-                ? pathname === "/dashboard"
-                : pathname.startsWith(item.href);
+      {/* Navigation */}
+      <nav className="flex-grow space-y-1">
+        {navItems.map((item) => {
+          const isActive =
+            item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname.startsWith(item.href);
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => {
-                  if (window.innerWidth < 768) onClose();
-                }}
-                className="relative block rounded-xl px-4 py-3 transition-all duration-300 group"
-              >
-                {/* Active background pill */}
-                {isActive && (
-                  <motion.div
-                    layoutId="sidebar-active"
-                    className="absolute inset-0 bg-primary-container rounded-xl"
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
-                )}
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="relative block rounded-xl px-4 py-3 transition-all duration-300 group"
+            >
+              {/* Active background pill */}
+              {isActive && (
+                <motion.div
+                  layoutId="sidebar-active"
+                  className="absolute inset-0 bg-primary-container rounded-xl"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
 
-                {/* Hover background (only when not active) */}
-                {!isActive && (
-                  <span className="absolute inset-0 rounded-xl bg-surface-container-high opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                )}
+              {/* Hover background (only when not active) */}
+              {!isActive && (
+                <span className="absolute inset-0 rounded-xl bg-surface-container-high opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              )}
 
-                <span className={`relative z-10 flex items-center gap-3 ${
-                  isActive
-                    ? "text-secondary-fixed-dim font-bold"
-                    : "text-on-surface-variant group-hover:text-primary"
-                }`}>
-                  <span
-                    className={`material-symbols-outlined text-xl transition-transform duration-300 ${
-                      isActive ? "" : "group-hover:scale-110"
-                    }`}
-                    style={
-                      isActive
-                        ? { fontVariationSettings: "'FILL' 1" }
-                        : undefined
-                    }
-                  >
-                    {item.icon}
-                  </span>
-                  <span className="font-headline text-sm">{item.label}</span>
+              <span className={`relative z-10 flex items-center gap-3 ${
+                isActive
+                  ? "text-secondary-fixed-dim font-bold"
+                  : "text-on-surface-variant group-hover:text-primary"
+              }`}>
+                <span
+                  className={`material-symbols-outlined text-xl transition-transform duration-300 ${
+                    isActive ? "" : "group-hover:scale-110"
+                  }`}
+                  style={
+                    isActive
+                      ? { fontVariationSettings: "'FILL' 1" }
+                      : undefined
+                  }
+                >
+                  {item.icon}
                 </span>
-              </Link>
-            );
-          })}
-        </nav>
+                <span className="font-headline text-sm">{item.label}</span>
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
 
-        {/* Bottom Section */}
-        <div className="mt-auto space-y-4">
-          <Link
-            href="/dashboard/zones"
-            onClick={() => {
-              if (window.innerWidth < 768) onClose();
-            }}
-            className="group w-full bg-gradient-to-br from-secondary to-primary-container text-on-primary py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm shadow-xl btn-magnetic relative overflow-hidden"
+      {/* Bottom Section */}
+      <div className="mt-auto space-y-4">
+        <Link
+          href="/dashboard/zones"
+          className="group w-full bg-gradient-to-br from-secondary to-primary-container text-on-primary py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm shadow-xl btn-magnetic relative overflow-hidden"
+        >
+          <span className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span className="material-symbols-outlined text-sm relative z-10">add</span>
+          <span className="relative z-10">Add New Zone</span>
+        </Link>
+        <div className="pt-6 border-t border-on-surface-variant/10 space-y-1">
+          <a
+            href="#"
+            className="text-on-surface-variant hover:text-secondary-fixed-dim text-[11px] font-label uppercase tracking-widest flex items-center gap-2 py-1.5 transition-colors"
           >
-            <span className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="material-symbols-outlined text-sm relative z-10">add</span>
-            <span className="relative z-10">Add New Zone</span>
-          </Link>
-          <div className="pt-6 border-t border-on-surface-variant/10 space-y-1">
-            <a
-              href="#"
-              className="text-on-surface-variant hover:text-secondary-fixed-dim text-[11px] font-label uppercase tracking-widest flex items-center gap-2 py-1.5 transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm">help</span>{" "}
-              Support
-            </a>
-            <a
-              href="#"
-              className="text-on-surface-variant hover:text-secondary-fixed-dim text-[11px] font-label uppercase tracking-widest flex items-center gap-2 py-1.5 transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm">
-                description
-              </span>{" "}
-              Docs
-            </a>
-          </div>
+            <span className="material-symbols-outlined text-sm">help</span>{" "}
+            Support
+          </a>
+          <a
+            href="#"
+            className="text-on-surface-variant hover:text-secondary-fixed-dim text-[11px] font-label uppercase tracking-widest flex items-center gap-2 py-1.5 transition-colors"
+          >
+            <span className="material-symbols-outlined text-sm">
+              description
+            </span>{" "}
+            Docs
+          </a>
         </div>
-      </aside>
-    </>
+      </div>
+    </aside>
   );
 }

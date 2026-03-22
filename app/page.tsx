@@ -53,7 +53,7 @@ export default function LandingPage() {
               </span>
               The Future of Agriculture
             </motion.div>
-            <h1 className="text-6xl md:text-8xl font-black text-white font-headline tracking-tighter leading-[1.1] mb-6">
+            <h1 className="text-5xl lg:text-8xl font-black text-white font-headline tracking-tighter leading-[1.1] mb-6">
               Precision watering for a <br className="hidden lg:block"/>
               <span className="text-secondary-fixed-dim">greener</span> world.
             </h1>
@@ -65,8 +65,8 @@ export default function LandingPage() {
               AquaSmart senses soil needs in real-time, delivering the exact
               drop required.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center w-full max-w-md mx-auto">
-              <motion.div className="w-full sm:flex-1" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <div className="flex flex-wrap gap-6 justify-center w-full max-w-md mx-auto">
+              <motion.div className="flex-1" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/auth"
                   className="block w-full technical-gradient text-white px-8 py-5 rounded-2xl font-bold text-xl btn-magnetic border border-white/10"
@@ -74,7 +74,7 @@ export default function LandingPage() {
                   Get Started
                 </Link>
               </motion.div>
-              <motion.div className="w-full sm:flex-1" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div className="flex-1" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/auth"
                   className="block w-full bg-white/10 backdrop-blur-md text-white px-8 py-5 rounded-2xl font-bold text-xl hover:bg-white/20 transition-colors border border-white/20"
