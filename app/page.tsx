@@ -321,15 +321,15 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-5 xl:pl-2">
                   {[
                     ["Zone pulse", "Northern berm is recovering faster than expected after last night’s cycle."],
                     ["Reservoir note", "Storage remains above the three-day threshold despite higher daytime evapotranspiration."],
                     ["Operator prompt", "Delay turf cycle 18 minutes to align with falling wind speed."],
                   ].map(([title, copy]) => (
-                    <div key={title} className="atlas-card rounded-[1.8rem] p-5">
+                    <div key={title} className="atlas-card rounded-[1.8rem] p-5 xl:min-h-[180px] xl:p-6">
                       <p className="eyebrow text-[8px] text-clay">{title}</p>
-                      <p className="mt-4 text-sm leading-7 text-ink-soft">{copy}</p>
+                      <p className="mt-5 max-w-sm text-base leading-8 text-ink-soft">{copy}</p>
                     </div>
                   ))}
                 </div>
