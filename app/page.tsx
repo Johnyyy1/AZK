@@ -198,7 +198,7 @@ export default function LandingPage() {
             <div className="section-frame contour-paper contour-map relative rounded-[2.25rem] p-7 md:p-10">
               <p className="eyebrow text-[10px] text-clay">Principle</p>
               <p className="mt-8 max-w-3xl font-display text-4xl leading-[1.02] text-forest md:text-6xl">
-                “When watering becomes visible as terrain, operators trust the system faster.”
+                &ldquo;When watering becomes visible as terrain, operators trust the system faster.&rdquo;
               </p>
               <div className="mt-10 grid gap-6 border-t border-ink/10 pt-6 md:grid-cols-3">
                 {[
@@ -218,7 +218,7 @@ export default function LandingPage() {
               <p className="eyebrow text-[10px] text-paper-soft/50">Atmosphere</p>
               <div className="mt-8 grid gap-7">
                 {[
-                  ["Mineral greens", "Deep forest greens ground the brand in landscape rather than tech cliché."],
+                  ["Mineral greens", "Deep forest greens ground the brand in landscape rather than tech cliche."],
                   ["Parchment light", "Warm paper tones make data feel editorial and human."],
                   ["Clay accents", "The call-to-action color carries warmth and earth without collapsing into rustic nostalgia."],
                 ].map(([title, copy]) => (
@@ -267,104 +267,13 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="preview" className="relative mx-auto max-w-7xl px-5 py-24 md:px-8 md:py-32">
-          <motion.div {...reveal} className="grid gap-8 xl:grid-cols-[1.18fr_0.82fr] xl:items-start">
-            <div className="section-frame rounded-[2.25rem] p-7 md:p-10">
-              <p className="eyebrow text-[10px] text-clay">Experience</p>
-              <h2 className="display-title mt-6 max-w-4xl text-5xl text-forest md:text-6xl xl:text-[5.4rem]">
-                The dashboard preview is treated like an atlas spread.
-              </h2>
-              <div className="mt-12 grid gap-6 xl:grid-cols-[1.22fr_0.78fr]">
-                <div className="rounded-[1.8rem] border border-ink/10 bg-paper p-6 xl:p-7">
-                  <div className="flex items-center justify-between border-b border-ink/10 pb-4">
-                    <div>
-                      <p className="eyebrow text-[8px] text-ink-soft/56">Current site</p>
-                      <h3 className="mt-2 font-display text-3xl text-forest">South terrace atlas</h3>
-                    </div>
-                    <div className="rounded-full border border-ink/10 px-3 py-1 text-[11px] text-ink-soft">
-                      09:42 local
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid gap-4 md:grid-cols-3">
-                    {[
-                      ["Soil saturation", "68%"],
-                      ["Valve pressure", "Stable"],
-                      ["Rain deferral", "03 hrs"],
-                    ].map(([label, value]) => (
-                      <div key={label} className="rounded-[1.5rem] bg-paper-soft p-4 xl:p-5">
-                        <p className="eyebrow text-[8px] text-ink-soft/56">{label}</p>
-                        <p className="mt-3 font-display text-3xl text-forest">{value}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-6 rounded-[1.8rem] border border-ink/10 bg-forest-deep p-5 text-paper-soft xl:p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="eyebrow text-[8px] text-paper-soft/46">Contour forecast</p>
-                        <h4 className="mt-2 font-display text-3xl">Irrigate after sunset</h4>
-                      </div>
-                      <span className="material-symbols-outlined text-[28px] text-gold">routine</span>
-                    </div>
-                    <div className="mt-6 h-28 rounded-[1.25rem] border border-paper/10 bg-paper-soft/6 p-4">
-                      <div className="flex h-full items-end gap-2">
-                        {[22, 34, 48, 60, 56, 72, 81, 62, 51].map((height) => (
-                          <div
-                            key={height}
-                            className="flex-1 rounded-t-full bg-gradient-to-t from-clay to-gold"
-                            style={{ height: `${height}%` }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-5 xl:pl-2">
-                  {[
-                    ["Zone pulse", "Northern berm is recovering faster than expected after last night’s cycle."],
-                    ["Reservoir note", "Storage remains above the three-day threshold despite higher daytime evapotranspiration."],
-                    ["Operator prompt", "Delay turf cycle 18 minutes to align with falling wind speed."],
-                  ].map(([title, copy]) => (
-                    <div key={title} className="atlas-card rounded-[1.8rem] p-5 xl:min-h-[180px] xl:p-6">
-                      <p className="eyebrow text-[8px] text-clay">{title}</p>
-                      <p className="mt-5 max-w-sm text-base leading-8 text-ink-soft">{copy}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <motion.div
-              {...reveal}
-              transition={{ ...reveal.transition, delay: 0.1 }}
-              className="dark-frame contour-map rounded-[2.25rem] p-7 text-paper-soft md:p-10"
-            >
-              <p className="eyebrow text-[10px] text-paper-soft/50">Why it works</p>
-              <div className="mt-8 space-y-8">
-                {[
-                  ["Editorial rhythm", "Large serif declarations are balanced by measured mono labels, so the interface feels authored."],
-                  ["Spatial contrast", "Wide calm sections alternate with dense instrumentation moments, creating a natural reading cadence."],
-                  ["Motion restraint", "Almost all animation is reveal-based or atmospheric, which keeps the site memorable without becoming flashy noise."],
-                ].map(([title, copy]) => (
-                  <div key={title}>
-                    <h3 className="font-display text-4xl">{title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-paper-soft/72">{copy}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-        </section>
-
         <section id="proof" className="bg-paper-soft py-24 md:py-32">
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <motion.div {...reveal} className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
               <div>
                 <p className="eyebrow text-[10px] text-clay">Proof</p>
                 <h2 className="display-title mt-5 text-5xl text-forest md:text-7xl">
-                  Beautiful doesn’t matter unless the decisions get sharper.
+                  Beautiful doesn&apos;t matter unless the decisions get sharper.
                 </h2>
               </div>
               <p className="max-w-2xl text-base leading-8 text-ink-soft md:text-lg">
