@@ -1,219 +1,138 @@
 "use client";
 
-import { motion } from "motion/react";
 import Link from "next/link";
+import { motion } from "motion/react";
 
-const fadeUp = {
-  initial: { opacity: 0, y: 20 },
+const reveal = {
+  initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
 };
 
 const zones = [
-  { name: "Front Lawn", moisture: 82, remaining: "12m", status: "Watering", icon: "grass" },
-  { name: "Back Garden", moisture: 45, remaining: "--", status: "Idle", icon: "local_florist" },
-  { name: "Veggie Patch", moisture: 31, remaining: "--", status: "Idle", icon: "eco" },
-  { name: "Greenhouse", moisture: 90, remaining: "04m", status: "Watering", icon: "home_work" },
+  { name: "Front Lawn", moisture: 82, remaining: "12m", status: "Watering" },
+  { name: "Back Garden", moisture: 45, remaining: "--", status: "Idle" },
+  { name: "Veggie Patch", moisture: 31, remaining: "--", status: "Needs water" },
+  { name: "Greenhouse", moisture: 90, remaining: "04m", status: "Watering" },
 ];
 
 export default function DashboardPage() {
   return (
-    <main className="p-8 min-h-screen">
-      {/* Header */}
+    <main className="px-5 py-6 md:px-8 md:py-8">
       <motion.header
-        {...fadeUp}
+        {...reveal}
         transition={{ duration: 0.5 }}
-        className="flex justify-between items-end mb-12"
+        className="mb-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-end"
       >
         <div>
-          <p className="font-label uppercase tracking-[0.2em] text-secondary-fixed-dim text-xs mb-2">
-            Technical Organic System
-          </p>
-          <h2 className="text-5xl font-bold font-headline tracking-tighter">
-            Ecosystem Overview
-          </h2>
+          <p className="eyebrow text-[9px] text-clay">Ecosystem overview</p>
+          <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">A calm operational read of the whole site.</h1>
         </div>
-        <div className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 p-4 rounded-xl flex items-center gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-3 h-3 bg-secondary-fixed-dim rounded-full pulse-emerald" />
-            <div>
-              <p className="font-headline font-bold text-lg leading-tight">Online</p>
-              <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-tighter">System Status</p>
-            </div>
-          </div>
-          <div className="h-8 w-px bg-on-surface-variant/20" />
-          <div>
-            <p className="font-headline font-medium text-sm">14:02:45</p>
-            <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-tighter">Last Sync</p>
+        <div className="section-frame rounded-[1.8rem] p-5 md:p-6">
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              ["System status", "Online"],
+              ["Active zones", "2 now"],
+              ["Last sync", "14:02:45"],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-[1.3rem] bg-white/60 p-4">
+                <p className="eyebrow text-[8px] text-ink-soft/58">{label}</p>
+                <p className="mt-3 font-display text-2xl text-forest">{value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </motion.header>
 
-      <div className="grid grid-cols-12 gap-8">
-        {/* Main Grid */}
-        <div className="col-span-12 lg:col-span-9 space-y-12">
-          {/* Sensor Gauges */}
-          <section className="grid grid-cols-3 gap-6">
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1.15fr)_0.85fr]">
+        <div className="space-y-8">
+          <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.1 }} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {[
-              { icon: "humidity_mid", label: "Air Humidity", value: "64", unit: "%", width: "64%" },
-              { icon: "thermostat", label: "Avg. Temperature", value: "24.8", unit: "°C", width: "72%" },
-              { icon: "water_drop", label: "Soil Moisture Avg.", value: "52", unit: "%", width: "52%" },
-            ].map((sensor, i) => (
-              <motion.div
-                key={sensor.label}
-                {...fadeUp}
-                transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-                whileHover={{ y: -4 }}
-                className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 p-6 rounded-xl flex flex-col justify-between group overflow-hidden relative hover-glow cursor-default"
-              >
-                <div className="absolute -right-4 -top-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <span className="material-symbols-outlined text-8xl">{sensor.icon}</span>
-                </div>
-                <p className="font-label uppercase tracking-widest text-[10px] text-on-surface-variant">{sensor.label}</p>
-                <div className="flex items-baseline gap-2 mt-4">
-                  <span className="text-4xl font-headline font-bold">{sensor.value}</span>
-                  <span className="text-xl font-headline text-on-surface-variant">{sensor.unit}</span>
-                </div>
-                <div className="w-full bg-surface-container-high h-1.5 rounded-full mt-4">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: sensor.width }}
-                    transition={{ duration: 1, delay: 0.5 + i * 0.15 }}
-                    className={`h-full rounded-full ${i === 1 ? "bg-secondary-fixed-dim" : "bg-tertiary-fixed-dim"}`}
-                  />
-                </div>
-              </motion.div>
+              ["Air humidity", "64%", "Stable"],
+              ["Avg. temperature", "24.8C", "Warm"],
+              ["Soil moisture", "52%", "Recovering"],
+            ].map(([label, value, note]) => (
+              <div key={label} className="atlas-card rounded-[1.8rem] p-5">
+                <p className="eyebrow text-[8px] text-clay">{label}</p>
+                <p className="mt-4 font-display text-5xl text-forest">{value}</p>
+                <p className="mt-3 text-sm text-ink-soft">{note}</p>
+              </div>
             ))}
-          </section>
+          </motion.section>
 
-          {/* Active Zones */}
-          <section>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-headline text-2xl font-bold tracking-tight">Active Zones</h3>
-              <Link href="/dashboard/zones" className="text-secondary-fixed-dim font-label text-xs uppercase tracking-widest hover:underline">
-                Manage All
+          <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.15 }} className="section-frame rounded-[2rem] p-6 md:p-7">
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <div>
+                <p className="eyebrow text-[8px] text-clay">Active zones</p>
+                <h2 className="mt-2 font-display text-3xl text-forest">What needs attention right now</h2>
+              </div>
+              <Link href="/dashboard/zones" className="text-sm text-forest transition hover:text-clay">
+                Manage all
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {zones.map((zone, i) => (
-                <motion.div
-                  key={zone.name}
-                  {...fadeUp}
-                  transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-                  whileHover={{ y: -3 }}
-                  className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 rounded-xl p-6 relative overflow-hidden flex items-center justify-between hover-glow cursor-default"
-                >
-                  <div className="z-10">
-                    <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full mb-3 inline-block ${
-                      zone.status === "Watering"
-                        ? "bg-secondary-container/20 text-secondary-fixed-dim"
-                        : "bg-surface-container-high text-on-surface-variant"
-                    }`}>
-                      {zone.status}
-                    </span>
-                    <h4 className="text-xl font-headline font-bold">{zone.name}</h4>
-                    <div className="flex items-center gap-4 mt-4">
-                      <div className="flex flex-col">
-                        <span className="text-2xl font-headline font-bold">{zone.moisture}%</span>
-                        <span className="text-[10px] font-label text-on-surface-variant uppercase">Moisture</span>
-                      </div>
-                      <div className="w-px h-8 bg-on-surface-variant/20" />
-                      <div className={`flex flex-col ${zone.remaining === "--" ? "text-on-surface-variant" : ""}`}>
-                        <span className="text-2xl font-headline font-bold">{zone.remaining}</span>
-                        <span className="text-[10px] font-label uppercase">Remaining</span>
-                      </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {zones.map((zone) => (
+                <div key={zone.name} className="rounded-[1.6rem] border border-ink/8 bg-white/70 p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-medium text-ink-soft">{zone.status}</p>
+                      <h3 className="mt-2 font-display text-3xl text-forest">{zone.name}</h3>
+                    </div>
+                    <button className="atlas-button rounded-full px-4 py-2 text-xs font-medium">
+                      {zone.status === "Watering" ? "Stop" : "Start"}
+                    </button>
+                  </div>
+                  <div className="mt-5 grid grid-cols-2 gap-4">
+                    <div className="rounded-[1.2rem] bg-paper p-4">
+                      <p className="eyebrow text-[7px] text-ink-soft/58">Moisture</p>
+                      <p className="mt-2 font-display text-3xl text-forest">{zone.moisture}%</p>
+                    </div>
+                    <div className="rounded-[1.2rem] bg-paper p-4">
+                      <p className="eyebrow text-[7px] text-ink-soft/58">Remaining</p>
+                      <p className="mt-2 font-display text-3xl text-forest">{zone.remaining}</p>
                     </div>
                   </div>
-                  <button className={`z-10 p-4 rounded-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all ${
-                    zone.status === "Watering"
-                      ? "bg-error-container text-on-error-container"
-                      : "bg-primary-container text-secondary-fixed-dim border border-secondary/20"
-                  }`}>
-                    <span className="material-symbols-outlined">
-                      {zone.status === "Watering" ? "stop_circle" : "play_circle"}
-                    </span>
-                  </button>
-                  <div className="absolute -bottom-10 -right-10 opacity-5">
-                    <span className="material-symbols-outlined text-[160px]">{zone.icon}</span>
-                  </div>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </section>
+          </motion.section>
         </div>
 
-        {/* Right Sidebar */}
-        <div className="col-span-12 lg:col-span-3 space-y-8">
-          {/* Alerts */}
-          <motion.div
-            {...fadeUp}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/30 hover-glow"
-          >
-            <div className="flex items-center justify-between mb-6">
-              <h4 className="font-headline font-bold text-lg">System Alerts</h4>
-              <span className="bg-error text-on-error text-[10px] px-2 py-0.5 rounded-full font-bold">2</span>
-            </div>
-            <div className="space-y-4">
-              <div className="bg-error-container/10 p-4 rounded-xl border-l-4 border-error">
-                <div className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-error text-lg">warning</span>
-                  <div>
-                    <p className="font-headline text-sm font-bold">Low Reservoir Level</p>
-                    <p className="font-body text-xs text-on-surface-variant mt-1">Water supply currently at 12%. Refill recommended.</p>
-                  </div>
+        <div className="space-y-8">
+          <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.2 }} className="dark-frame rounded-[2rem] p-6 md:p-7 text-paper-soft">
+            <p className="eyebrow text-[8px] text-paper-soft/46">Recommended action</p>
+            <h2 className="mt-4 font-display text-4xl">Shift the next turf cycle to dusk.</h2>
+            <p className="mt-4 text-sm leading-7 text-paper-soft/72">
+              Wind speed softens after sunset and moisture remains below target in the exposed lawn zones.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+              {[
+                ["Window", "20:10-22:00"],
+                ["Expected use", "120 L"],
+                ["Confidence", "92/100"],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-[1.2rem] border border-paper/10 bg-paper-soft/6 px-4 py-3">
+                  <p className="eyebrow text-[7px] text-paper-soft/44">{label}</p>
+                  <p className="mt-2 text-sm text-paper-soft">{value}</p>
                 </div>
-              </div>
-              <div className="bg-surface-container-high/30 p-4 rounded-xl border-l-4 border-outline">
-                <div className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-outline text-lg">signal_cellular_off</span>
-                  <div>
-                    <p className="font-headline text-sm font-bold">Sensor 04 Offline</p>
-                    <p className="font-body text-xs text-on-surface-variant mt-1">Zone: Back Garden. Last ping was 3 hours ago.</p>
-                  </div>
+              ))}
+            </div>
+          </motion.section>
+
+          <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.25 }} className="atlas-card rounded-[2rem] p-6 md:p-7">
+            <p className="eyebrow text-[8px] text-clay">Alerts</p>
+            <div className="mt-5 space-y-4">
+              {[
+                ["Low reservoir level", "Water supply currently at 12%. Refill recommended."],
+                ["Sensor 04 offline", "Back Garden has not reported in the last three hours."],
+              ].map(([title, copy]) => (
+                <div key={title} className="rounded-[1.3rem] bg-white/70 p-4">
+                  <h3 className="font-medium text-forest">{title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-ink-soft">{copy}</p>
                 </div>
-              </div>
+              ))}
             </div>
-          </motion.div>
-
-          {/* Hydration Gauge */}
-          <motion.div
-            {...fadeUp}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 rounded-xl p-8 flex flex-col items-center text-center hover-glow"
-          >
-            <p className="font-label uppercase tracking-widest text-[10px] text-on-surface-variant mb-4">Daily Water Target</p>
-            <div className="relative w-40 h-40 flex items-center justify-center">
-              <svg className="w-full h-full transform -rotate-90">
-                <circle className="text-surface-container-high" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" strokeWidth="8" />
-                <circle className="text-secondary-fixed" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" strokeDasharray="440" strokeDashoffset="110" strokeLinecap="round" strokeWidth="12" />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-4xl font-headline font-bold">75%</span>
-                <span className="text-[10px] font-label text-on-surface-variant uppercase">Complete</span>
-              </div>
-            </div>
-            <p className="mt-6 text-sm font-body text-on-surface-variant">Scheduled: 1,200L <br /> Delivered: 900L</p>
-          </motion.div>
-
-          {/* Map */}
-          <motion.div
-            {...fadeUp}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 rounded-xl overflow-hidden h-48 relative group"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-              alt="Top down satellite view of garden irrigation layout"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCITHsBXAsYUk3kW5TjTtjNxqK8BHhlFrwrzaTR8pAXAiMtVQtkkOknnItJSh400mg4xAcGn4bWXuNOxmoVsfIbJq_KzR7rSfrqXxPawAM9wHrRX4QSJSl35PEWqbeeBUdV_2xqS_3rwnj-pFFC1RpmOIhodpXIYGCYk6ZfKwMXRo5KEGn8jid233mCAvu3xKuJmYOJ2QNI9-1NfVJvG6eeOO-zzYRNb-S8f4zqkYJSUlTIebFBGWXLX9Lrd86y7Q7_0ATPKQMUSzk"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
-            <div className="absolute bottom-4 left-4">
-              <p className="font-headline font-bold text-sm">Property View</p>
-              <p className="text-[10px] font-label text-on-surface-variant uppercase">San Francisco, CA</p>
-            </div>
-            <span className="absolute top-4 right-4 bg-surface-container-lowest p-2 rounded-lg material-symbols-outlined text-sm">map</span>
-          </motion.div>
+          </motion.section>
         </div>
       </div>
     </main>

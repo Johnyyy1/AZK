@@ -3,120 +3,69 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 
-const fadeUp = {
-  initial: { opacity: 0, y: 20 },
+const reveal = {
+  initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
 };
 
 const allZones = [
-  { id: 1, name: "Front Lawn", type: "Grass", area: "450 sqft", sensors: 4, moisture: 82, status: "Active", icon: "grass", schedule: "Daily 6AM" },
-  { id: 2, name: "Back Garden", type: "Mixed Flora", area: "800 sqft", sensors: 6, moisture: 45, status: "Idle", icon: "local_florist", schedule: "Every 2 days" },
-  { id: 3, name: "Veggie Patch", type: "Vegetables", area: "200 sqft", sensors: 3, moisture: 31, status: "Needs Water", icon: "eco", schedule: "Twice daily" },
-  { id: 4, name: "Greenhouse", type: "Tropical", area: "1,200 sqft", sensors: 8, moisture: 90, status: "Active", icon: "home_work", schedule: "Humidity-based" },
-  { id: 5, name: "North Orchard", type: "Fruit Trees", area: "2,400 sqft", sensors: 12, moisture: 68, status: "Idle", icon: "park", schedule: "Weekly deep soak" },
-  { id: 6, name: "West Terrace", type: "Ornamental", area: "350 sqft", sensors: 3, moisture: 55, status: "Idle", icon: "deck", schedule: "Every 3 days" },
-  { id: 7, name: "South Lawn", type: "Grass", area: "600 sqft", sensors: 4, moisture: 72, status: "Active", icon: "yard", schedule: "Daily 7AM" },
-  { id: 8, name: "Herb Garden", type: "Herbs", area: "100 sqft", sensors: 2, moisture: 40, status: "Needs Water", icon: "spa", schedule: "Daily" },
+  { id: 1, name: "Front Lawn", type: "Grass", area: "450 sqft", sensors: 4, moisture: 82, status: "Active", schedule: "Daily 6AM" },
+  { id: 2, name: "Back Garden", type: "Mixed Flora", area: "800 sqft", sensors: 6, moisture: 45, status: "Idle", schedule: "Every 2 days" },
+  { id: 3, name: "Veggie Patch", type: "Vegetables", area: "200 sqft", sensors: 3, moisture: 31, status: "Needs Water", schedule: "Twice daily" },
+  { id: 4, name: "Greenhouse", type: "Tropical", area: "1,200 sqft", sensors: 8, moisture: 90, status: "Active", schedule: "Humidity-based" },
+  { id: 5, name: "North Orchard", type: "Fruit Trees", area: "2,400 sqft", sensors: 12, moisture: 68, status: "Idle", schedule: "Weekly deep soak" },
+  { id: 6, name: "Herb Garden", type: "Herbs", area: "100 sqft", sensors: 2, moisture: 40, status: "Needs Water", schedule: "Daily" },
 ];
 
 export default function ZonesPage() {
   const [filter, setFilter] = useState("all");
-  const filtered = filter === "all" ? allZones : allZones.filter((z) => z.status.toLowerCase().includes(filter));
+  const filtered = filter === "all" ? allZones : allZones.filter((zone) => zone.status.toLowerCase().includes(filter));
 
   return (
-    <main className="p-8 min-h-screen">
-      <motion.header {...fadeUp} transition={{ duration: 0.5 }} className="mb-12">
-        <p className="font-label uppercase tracking-[0.2em] text-secondary-fixed-dim text-xs mb-2">Zone Management</p>
-        <h2 className="text-5xl font-bold font-headline tracking-tighter">Irrigation Zones</h2>
+    <main className="px-5 py-6 md:px-8 md:py-8">
+      <motion.header {...reveal} transition={{ duration: 0.5 }} className="mb-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-end">
+        <div>
+          <p className="eyebrow text-[9px] text-clay">Zones</p>
+          <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">Every watering zone gets its own readable identity.</h1>
+        </div>
+        <div className="flex flex-wrap gap-3 xl:justify-end">
+          {["all", "active", "idle", "needs water"].map((value) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setFilter(value)}
+              className={`rounded-full px-5 py-3 text-sm ${
+                filter === value ? "atlas-button" : "border border-ink/10 bg-white/75 text-ink-soft"
+              }`}
+            >
+              {value}
+            </button>
+          ))}
+        </div>
       </motion.header>
 
-      {/* Stats Row */}
-      <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.1 }} className="grid grid-cols-4 gap-6 mb-8">
-        {[
-          { label: "Total Zones", value: "8" },
-          { label: "Active Now", value: "3" },
-          { label: "Avg. Moisture", value: "60%" },
-          { label: "Total Sensors", value: "42" },
-        ].map((s) => (
-          <div key={s.label} className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 p-6 rounded-xl hover-glow cursor-default">
-            <p className="font-label uppercase tracking-widest text-[10px] text-on-surface-variant mb-2">{s.label}</p>
-            <span className="text-3xl font-headline font-bold">{s.value}</span>
-          </div>
-        ))}
-      </motion.div>
-
-      {/* Filter Tabs */}
-      <motion.div {...fadeUp} transition={{ duration: 0.5, delay: 0.2 }} className="flex gap-2 mb-8">
-        {["all", "active", "idle", "needs water"].map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
-              filter === f ? "bg-primary-container text-secondary-fixed-dim" : "bg-surface-container text-on-surface-variant hover:bg-surface-container-high"
-            }`}
-          >
-            {f}
-          </button>
-        ))}
-      </motion.div>
-
-      {/* Zone Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filtered.map((zone, i) => (
-          <motion.div
-            key={zone.id}
-            {...fadeUp}
-            transition={{ duration: 0.5, delay: 0.2 + i * 0.05 }}
-            whileHover={{ y: -4 }}
-            className="bg-surface-container-lowest shadow-sm border border-outline-variant/30 rounded-xl p-6 relative overflow-hidden group hover:border-secondary-fixed-dim/20 hover-glow cursor-default"
-          >
-            <div className="flex justify-between items-start mb-4">
-              <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${
-                zone.status === "Active"
-                  ? "bg-secondary-container/20 text-secondary-fixed-dim"
-                  : zone.status === "Needs Water"
-                    ? "bg-error-container/20 text-error"
-                    : "bg-surface-container-high text-on-surface-variant"
-              }`}>
-                {zone.status}
-              </span>
-              <span className="material-symbols-outlined text-on-surface-variant text-sm opacity-50 group-hover:opacity-100 transition-opacity">more_vert</span>
-            </div>
-            <h4 className="text-xl font-headline font-bold mb-1">{zone.name}</h4>
-            <p className="text-xs text-on-surface-variant mb-4">{zone.type} • {zone.area}</p>
-
-            <div className="flex items-center gap-4 mb-4">
-              <div>
-                <span className="text-2xl font-headline font-bold">{zone.moisture}%</span>
-                <p className="text-[10px] font-label text-on-surface-variant uppercase">Moisture</p>
+      <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.1 }} className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {filtered.map((zone, index) => (
+          <article key={zone.id} className={`rounded-[2rem] p-6 ${index % 3 === 0 ? "dark-frame text-paper-soft" : "atlas-card text-ink"}`}>
+            <p className={`eyebrow text-[8px] ${index % 3 === 0 ? "text-paper-soft/44" : "text-clay"}`}>{zone.status}</p>
+            <h2 className={`mt-4 font-display text-4xl ${index % 3 === 0 ? "text-paper-soft" : "text-forest"}`}>{zone.name}</h2>
+            <p className={`mt-3 text-sm ${index % 3 === 0 ? "text-paper-soft/68" : "text-ink-soft"}`}>
+              {zone.type} • {zone.area}
+            </p>
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className={`rounded-[1.2rem] px-4 py-4 ${index % 3 === 0 ? "bg-paper-soft/8" : "bg-white/70"}`}>
+                <p className={`eyebrow text-[7px] ${index % 3 === 0 ? "text-paper-soft/44" : "text-ink-soft/58"}`}>Moisture</p>
+                <p className={`mt-2 font-display text-3xl ${index % 3 === 0 ? "text-paper-soft" : "text-forest"}`}>{zone.moisture}%</p>
               </div>
-              <div className="w-px h-10 bg-on-surface-variant/20" />
-              <div>
-                <span className="text-2xl font-headline font-bold">{zone.sensors}</span>
-                <p className="text-[10px] font-label text-on-surface-variant uppercase">Sensors</p>
+              <div className={`rounded-[1.2rem] px-4 py-4 ${index % 3 === 0 ? "bg-paper-soft/8" : "bg-white/70"}`}>
+                <p className={`eyebrow text-[7px] ${index % 3 === 0 ? "text-paper-soft/44" : "text-ink-soft/58"}`}>Sensors</p>
+                <p className={`mt-2 font-display text-3xl ${index % 3 === 0 ? "text-paper-soft" : "text-forest"}`}>{zone.sensors}</p>
               </div>
             </div>
-
-            <div className="w-full bg-surface-container-high h-1.5 rounded-full mb-4">
-              <div
-                className={`h-full rounded-full transition-all ${
-                  zone.moisture > 70 ? "bg-secondary-fixed-dim" : zone.moisture > 40 ? "bg-tertiary-fixed-dim" : "bg-error"
-                }`}
-                style={{ width: `${zone.moisture}%` }}
-              />
-            </div>
-
-            <div className="flex items-center gap-2 text-[10px] text-on-surface-variant uppercase">
-              <span className="material-symbols-outlined text-sm">schedule</span>
-              {zone.schedule}
-            </div>
-
-            <div className="absolute -bottom-8 -right-8 opacity-5 group-hover:opacity-10 transition-opacity">
-              <span className="material-symbols-outlined text-[120px]">{zone.icon}</span>
-            </div>
-          </motion.div>
+            <p className={`mt-5 text-sm ${index % 3 === 0 ? "text-paper-soft/68" : "text-ink-soft"}`}>{zone.schedule}</p>
+          </article>
         ))}
-      </div>
+      </motion.section>
     </main>
   );
 }
