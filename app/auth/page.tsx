@@ -6,350 +6,224 @@ import { useState } from "react";
 
 type AuthState = "login" | "register" | "reset" | "reset-sent";
 
+const panelCopy: Record<AuthState, { title: string; body: string; button: string }> = {
+  login: {
+    title: "Enter the field atlas",
+    body: "Sign in to schedules, alerts, zone logic, and operator notes shaped by the new AquaSmart system.",
+    button: "Enter dashboard",
+  },
+  register: {
+    title: "Create an operator account",
+    body: "Open a new workspace for estates, farms, gardens, or research plots that need calmer control surfaces.",
+    button: "Create account",
+  },
+  reset: {
+    title: "Recover client access",
+    body: "We will route a recovery link to the verified operator email attached to your site.",
+    button: "Send recovery link",
+  },
+  "reset-sent": {
+    title: "Recovery sent",
+    body: "Check your inbox for the recovery path. The link will return you to this atlas without losing context.",
+    button: "Back to login",
+  },
+};
+
+function AuthHeader({ state }: { state: AuthState }) {
+  return (
+    <header>
+      <p className="eyebrow text-[10px] text-clay">Client access</p>
+      <h1 className="display-title mt-5 text-5xl text-forest md:text-6xl">{panelCopy[state].title}</h1>
+      <p className="mt-5 max-w-lg text-base leading-8 text-ink-soft">{panelCopy[state].body}</p>
+    </header>
+  );
+}
+
 export default function AuthPage() {
   const [state, setState] = useState<AuthState>("login");
 
   return (
-    <div className="bg-background font-body text-on-background min-h-screen">
-      <main className="flex min-h-screen">
-        {/* Left Side: Visual Anchor */}
-        <section className="hidden lg:flex w-1/2 technical-gradient relative overflow-hidden items-center justify-center p-16">
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 opacity-20 pointer-events-none">
-            <svg className="w-full h-full fill-secondary-fixed-dim/20" viewBox="0 0 100 100">
-              <circle cx="20" cy="20" r="15" />
-              <circle cx="80" cy="70" r="25" />
-              <path d="M0,50 Q25,30 50,50 T100,50" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </svg>
-          </div>
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="relative z-10 max-w-lg"
-          >
-            <div className="mb-12">
-              <span className="text-secondary-fixed font-headline font-bold tracking-widest uppercase text-xs mb-4 block">
-                The Living Laboratory
-              </span>
-              <h1 className="text-white font-headline text-6xl font-bold tracking-tighter leading-none mb-6">
-                AquaSmart
-              </h1>
-              <p className="text-primary-fixed text-xl font-light leading-relaxed">
-                Precision irrigation meets natural intelligence. Monitor, automate,
-                and sustain your ecosystem with bioluminescent data clarity.
+    <main className="site-shell min-h-screen bg-paper text-ink">
+      <div className="grid min-h-screen lg:grid-cols-[1.05fr_0.95fr]">
+        <section className="contour-map grain relative hidden overflow-hidden bg-forest-deep text-paper-soft lg:flex">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            src="https://res.cloudinary.com/dxprtqtv9/video/upload/w_1920,q_auto/12860602_3840_2160_25fps_sapk6w.webm"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="video-mask absolute inset-0" />
+
+          <div className="relative z-10 flex w-full flex-col justify-between p-10 xl:p-14">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 bg-paper-soft/10">
+                <span className="material-symbols-outlined text-[20px]">water_lock</span>
+              </div>
+              <div className="leading-none">
+                <p className="eyebrow text-[9px] text-paper-soft/70">Field Atlas</p>
+                <p className="font-display text-[1.4rem] tracking-[-0.08em]">AquaSmart</p>
+              </div>
+            </Link>
+
+            <div className="max-w-2xl">
+              <p className="eyebrow text-[10px] text-paper-soft/52">Operator brief</p>
+              <h2 className="display-title mt-6 text-6xl xl:text-[6rem]">
+                Calm enough to trust. Precise enough to act on.
+              </h2>
+              <p className="mt-6 max-w-xl text-lg leading-8 text-paper-soft/74">
+                The same contour language from the landing experience continues here, so sign-in feels like entering the
+                product world instead of leaving the brand behind.
               </p>
             </div>
-            {/* Featured Metric */}
-            <div className="glass-panel rounded-xl p-8 border-l-4 border-secondary shadow-xl">
-              <div className="flex items-center gap-4 mb-4">
-                <span className="material-symbols-outlined text-secondary-fixed text-3xl">
-                  water_drop
-                </span>
-                <div>
-                  <p className="text-on-surface-variant font-label text-[10px] uppercase tracking-widest">
-                    Global Hydration
-                  </p>
-                  <h3 className="text-primary font-headline text-2xl font-bold">
-                    84.2% Optimal
-                  </h3>
-                </div>
-              </div>
-              <div className="w-full h-1.5 bg-primary/10 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: "84%" }}
-                  transition={{ duration: 1.5, delay: 0.5 }}
-                  className="h-full bg-secondary-fixed-dim"
-                />
+
+            <div className="dark-frame max-w-xl rounded-[2rem] p-6">
+              <p className="eyebrow text-[8px] text-paper-soft/48">Live atlas pulse</p>
+              <div className="mt-5 grid gap-4 sm:grid-cols-3">
+                {[
+                  ["Active sites", "18"],
+                  ["Alert priority", "Low"],
+                  ["Water saved", "61%"],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-[1.35rem] border border-paper/10 bg-paper-soft/6 p-4">
+                    <p className="eyebrow text-[8px] text-paper-soft/46">{label}</p>
+                    <p className="mt-3 font-display text-3xl">{value}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          </motion.div>
-          {/* Background image */}
-          <div className="absolute bottom-[-10%] right-[-5%] w-2/3 h-2/3 opacity-30">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              alt="Vibrant green plant leaves with water drops"
-              className="w-full h-full object-cover rounded-full"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAou88SoxQzsg3Lt2dc-NFxMlPuL8hAvrW4UbLvK4t1e38SIHSrleKpdCFgoKIdrZa3jW54330vKiJVHD_Be3A7RwN14rmN2n8XKSKU06hDjy7Lh5tR9eA83vEQbkrhFXVkayRIdNi7n3i8Qt_4lyab0vaf0L9ghx9jRKzzVNgC-uQXcZ4TwiUsJb6jmUH0aerYSda5L56ewl50Ym7PJmI1jYiPZQOPfUpWXK2J83ZJluK1ezDN5XL630Yzu5tMu3JTe-vbiemnCqQ"
-            />
           </div>
         </section>
 
-        {/* Right Side: Forms */}
-        <section className="w-full lg:w-1/2 flex flex-col bg-surface-bright p-8 md:p-16 lg:p-24 justify-center">
-          {/* Logo for Mobile */}
-          <div className="lg:hidden mb-12 flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-4xl">
-              energy_savings_leaf
-            </span>
-            <span className="font-headline font-black text-2xl tracking-tighter text-primary">
-              AquaSmart
-            </span>
-          </div>
+        <section className="flex min-h-screen items-center justify-center px-5 py-24 md:px-8">
+          <div className="w-full max-w-xl">
+            <Link href="/" className="mb-10 inline-flex items-center gap-2 lg:hidden">
+              <span className="material-symbols-outlined text-[20px] text-forest">west</span>
+              <span className="text-sm text-ink-soft">Back to site</span>
+            </Link>
 
-          {/* LOGIN STATE */}
-          {state === "login" && (
             <motion.div
-              key="login"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-              className="w-full max-w-md mx-auto"
+              key={state}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45 }}
+              className="section-frame rounded-[2.4rem] p-7 md:p-10"
             >
-              <header className="mb-10">
-                <h2 className="font-headline text-4xl font-bold text-primary mb-2">
-                  Welcome Back
-                </h2>
-                <p className="text-on-surface-variant">
-                  Enter your credentials to access the laboratory.
-                </p>
-              </header>
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                <div className="space-y-2">
-                  <label className="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1">
-                    Laboratory Email
-                  </label>
-                  <input
-                    className="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-4 text-on-surface placeholder-outline-variant transition-all outline-none"
-                    placeholder="name@domain.com"
-                    type="email"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center px-1">
-                    <label className="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">
-                      Security Key
+              <AuthHeader state={state} />
+
+              {state !== "reset-sent" ? (
+                <form className="mt-10 space-y-5" onSubmit={(event) => event.preventDefault()}>
+                  {state === "register" ? (
+                    <label className="block">
+                      <span className="eyebrow text-[8px] text-ink-soft/56">Site operator</span>
+                      <input
+                        type="text"
+                        placeholder="Avery Stone"
+                        className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
+                      />
                     </label>
-                    <button
-                      type="button"
-                      onClick={() => setState("reset")}
-                      className="text-[10px] uppercase tracking-widest font-bold text-secondary hover:text-on-secondary-container transition-colors"
-                    >
-                      Lost Access?
-                    </button>
-                  </div>
-                  <input
-                    className="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-4 text-on-surface placeholder-outline-variant transition-all outline-none"
-                    placeholder="••••••••"
-                    type="password"
-                  />
-                </div>
-                <div className="flex items-center gap-3 px-1">
-                  <input
-                    className="w-5 h-5 rounded-lg border-outline-variant text-secondary focus:ring-secondary-fixed-dim bg-surface-container-low"
-                    type="checkbox"
-                    id="remember"
-                  />
-                  <label className="text-sm text-on-surface-variant font-medium" htmlFor="remember">
-                    Keep session active
-                  </label>
-                </div>
-                <Link
-                  href="/dashboard"
-                  className="w-full block text-center bg-primary py-5 rounded-xl text-white font-headline font-bold text-lg tracking-tight hover:opacity-90 active:scale-[0.98] transition-all technical-gradient shadow-lg"
-                >
-                  Initiate Session
-                </Link>
-                <div className="pt-6 text-center">
-                  <p className="text-on-surface-variant text-sm">
-                    New to the system?{" "}
-                    <button
-                      type="button"
-                      onClick={() => setState("register")}
-                      className="text-secondary font-bold hover:underline underline-offset-4 ml-1"
-                    >
-                      Create Account
-                    </button>
-                  </p>
-                </div>
-              </form>
-            </motion.div>
-          )}
+                  ) : null}
 
-          {/* REGISTER STATE */}
-          {state === "register" && (
-            <motion.div
-              key="register"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-              className="w-full max-w-md mx-auto"
-            >
-              <header className="mb-10">
-                <h2 className="font-headline text-4xl font-bold text-primary mb-2">
-                  Join Lab
-                </h2>
-                <p className="text-on-surface-variant">
-                  Start monitoring your irrigation ecosystem today.
-                </p>
-              </header>
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                <div className="space-y-2">
-                  <label className="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1">
-                    Full Name
+                  <label className="block">
+                    <span className="eyebrow text-[8px] text-ink-soft/56">Email</span>
+                    <input
+                      type="email"
+                      placeholder="operator@aquasmart.io"
+                      className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
+                    />
                   </label>
-                  <input
-                    className="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-3 outline-none"
-                    placeholder="Dr. Jane Smith"
-                    type="text"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1">
-                    Email Address
-                  </label>
-                  <input
-                    className="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-3 outline-none"
-                    placeholder="jane@aquasmart.io"
-                    type="email"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1">
-                    Secure Password
-                  </label>
-                  <input
-                    className="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-3 outline-none"
-                    placeholder="••••••••"
-                    type="password"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1">
-                    Confirm Password
-                  </label>
-                  <input
-                    className="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-3 outline-none"
-                    placeholder="••••••••"
-                    type="password"
-                  />
-                </div>
-                <Link
-                  href="/dashboard"
-                  className="w-full block text-center bg-primary mt-4 py-5 rounded-xl text-white font-headline font-bold text-lg tracking-tight technical-gradient shadow-lg"
-                >
-                  Register Ecosystem
-                </Link>
-                <div className="pt-6 text-center">
-                  <p className="text-on-surface-variant text-sm">
-                    Already registered?{" "}
+
+                  {state !== "reset" ? (
+                    <label className="block">
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="eyebrow text-[8px] text-ink-soft/56">Password</span>
+                        {state === "login" ? (
+                          <button
+                            type="button"
+                            onClick={() => setState("reset")}
+                            className="text-xs text-clay transition hover:text-forest"
+                          >
+                            Forgot access?
+                          </button>
+                        ) : null}
+                      </div>
+                      <input
+                        type="password"
+                        placeholder="••••••••"
+                        className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
+                      />
+                    </label>
+                  ) : null}
+
+                  {state === "register" ? (
+                    <label className="block">
+                      <span className="eyebrow text-[8px] text-ink-soft/56">Confirm password</span>
+                      <input
+                        type="password"
+                        placeholder="••••••••"
+                        className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
+                      />
+                    </label>
+                  ) : null}
+
+                  {state === "reset" ? (
                     <button
                       type="button"
-                      onClick={() => setState("login")}
-                      className="text-secondary font-bold hover:underline ml-1"
+                      onClick={() => setState("reset-sent")}
+                      className="atlas-button mt-3 flex w-full rounded-full px-6 py-4 text-sm font-medium"
                     >
-                      Log in here
+                      {panelCopy[state].button}
                     </button>
+                  ) : (
+                    <Link
+                      href="/dashboard"
+                      className="atlas-button mt-3 flex w-full rounded-full px-6 py-4 text-sm font-medium"
+                    >
+                      {panelCopy[state].button}
+                    </Link>
+                  )}
+                </form>
+              ) : (
+                <div className="mt-10 rounded-[1.7rem] bg-forest-deep px-5 py-6 text-paper-soft">
+                  <p className="eyebrow text-[8px] text-paper-soft/48">Inbox status</p>
+                  <p className="mt-4 text-sm leading-7 text-paper-soft/76">
+                    Your recovery note is on the way. When you are ready, return to sign-in and continue where you left off.
                   </p>
-                </div>
-              </form>
-            </motion.div>
-          )}
-
-          {/* RESET STATE */}
-          {state === "reset" && (
-            <motion.div
-              key="reset"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-              className="w-full max-w-md mx-auto"
-            >
-              <header className="mb-10">
-                <h2 className="font-headline text-4xl font-bold text-primary mb-2">
-                  Reset Key
-                </h2>
-                <p className="text-on-surface-variant">
-                  Recover access to your AquaSmart dashboard.
-                </p>
-              </header>
-              <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); setState("reset-sent"); }}>
-                <div className="space-y-2">
-                  <label className="block font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold px-1">
-                    Verified Email
-                  </label>
-                  <input
-                    className="w-full bg-surface-container-low border-0 focus:ring-2 focus:ring-primary-fixed rounded-xl px-4 py-4 text-on-surface placeholder-outline-variant outline-none"
-                    placeholder="name@domain.com"
-                    type="email"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-primary py-5 rounded-xl text-white font-headline font-bold text-lg tracking-tight technical-gradient shadow-lg"
-                >
-                  Send Recovery Link
-                </button>
-                <div className="pt-6 text-center">
                   <button
                     type="button"
                     onClick={() => setState("login")}
-                    className="text-on-surface-variant text-sm font-medium hover:text-primary transition-colors flex items-center justify-center gap-1 mx-auto"
+                    className="atlas-button mt-6 rounded-full px-5 py-3 text-sm font-medium"
                   >
-                    <span className="material-symbols-outlined text-base">chevron_left</span>
-                    Return to security gate
+                    Back to login
                   </button>
                 </div>
-              </form>
-            </motion.div>
-          )}
+              )}
 
-          {/* RESET SENT STATE */}
-          {state === "reset-sent" && (
-            <motion.div
-              key="reset-sent"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-              className="w-full max-w-md mx-auto"
-            >
-              <div className="bg-secondary-container/20 p-8 rounded-xl flex flex-col items-center text-center mb-10">
-                <div className="w-16 h-16 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center mb-4">
-                  <span
-                    className="material-symbols-outlined text-4xl"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    check_circle
-                  </span>
-                </div>
-                <h3 className="font-headline text-2xl font-bold text-primary">
-                  Instructions Sent
-                </h3>
-                <p className="text-on-surface-variant mt-2">
-                  Verification link has been dispatched to your laboratory email address.
-                </p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-ink-soft">
+                {state === "login" ? (
+                  <button type="button" onClick={() => setState("register")} className="transition hover:text-forest">
+                    Need an account?
+                  </button>
+                ) : null}
+                {state === "register" ? (
+                  <button type="button" onClick={() => setState("login")} className="transition hover:text-forest">
+                    Already have access?
+                  </button>
+                ) : null}
+                {state === "reset" ? (
+                  <button type="button" onClick={() => setState("login")} className="transition hover:text-forest">
+                    Return to login
+                  </button>
+                ) : null}
+                <Link href="/technology" className="transition hover:text-forest">
+                  Read the technology notes
+                </Link>
               </div>
-              <button
-                onClick={() => setState("login")}
-                className="w-full bg-surface-container-highest py-4 rounded-xl text-primary font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors"
-              >
-                <span className="material-symbols-outlined text-lg">arrow_back</span>
-                Back to Login
-              </button>
             </motion.div>
-          )}
+          </div>
         </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 w-full p-8 hidden lg:block pointer-events-none">
-        <div className="max-w-7xl mx-auto flex justify-between items-end">
-          <div className="pointer-events-auto">
-            <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-label">
-              © 2024 AquaSmart Systems / Living Laboratory v2.4.1
-            </p>
-          </div>
-          <div className="flex gap-6 pointer-events-auto">
-            <a className="text-white/60 hover:text-white text-xs font-medium transition-colors" href="#">
-              Privacy Architecture
-            </a>
-            <a className="text-white/60 hover:text-white text-xs font-medium transition-colors" href="#">
-              System Protocols
-            </a>
-          </div>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </main>
   );
 }

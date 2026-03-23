@@ -1,212 +1,200 @@
 "use client";
 
-import TopNav from "../components/TopNav";
-import Footer from "../components/Footer";
+import Link from "next/link";
 import { motion } from "motion/react";
+import Footer from "../components/Footer";
+import TopNav from "../components/TopNav";
 
-const fadeUp = {
-  initial: { opacity: 0, y: 30 },
+const reveal = {
+  initial: { opacity: 0, y: 32 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6 },
+  viewport: { once: true, amount: 0.25 },
+  transition: { duration: 0.7 },
 };
+
+const layers = [
+  {
+    title: "Field layer",
+    metric: "IP67 sensor mesh",
+    text: "Moisture, pressure, light, and canopy temperature are collected directly where irrigation decisions matter.",
+  },
+  {
+    title: "Prediction layer",
+    metric: "72-hour horizon",
+    text: "Forecasts, evapotranspiration, and prior watering response are folded into a recommendation window that stays explainable.",
+  },
+  {
+    title: "Control layer",
+    metric: "Zone-first orchestration",
+    text: "Schedules, overrides, and safety checks remain visible so automation feels supervised rather than hidden.",
+  },
+];
+
+const specRows = [
+  ["Telemetry cadence", "30 seconds"],
+  ["Typical response latency", "< 200 ms"],
+  ["Supported landscape zones", "1 to 128"],
+  ["Offline continuity", "Local queue + replay"],
+  ["Control logging", "Full event history"],
+];
 
 export default function TechnologyPage() {
   return (
-    <div className="bg-background font-body text-on-background">
+    <div className="site-shell bg-paper text-ink">
       <TopNav />
-      <main className="overflow-x-hidden">
-        <section 
-          className="relative w-full border-b border-surface-variant min-h-[70vh]"
-          style={{
-            backgroundColor: "#f0f7f0",
-            backgroundImage: "radial-gradient(circle, rgba(34, 197, 94, 0.12) 1px, transparent 1px)",
-            backgroundSize: "32px 32px"
-          }}
-        >
-          <div 
-            className="relative w-full px-8 max-w-7xl mx-auto flex flex-col items-center text-center"
-            style={{ paddingTop: '220px', paddingBottom: '150px' }}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="max-w-5xl flex flex-col items-center"
-            >
-              <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white border border-outline-variant/20 shadow-sm text-primary text-[11px] font-bold uppercase tracking-[0.25em] mb-12 font-headline">
-                <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  science
-                </span>
-                Under The Hood
+
+      <main className="relative z-10">
+        <section className="contour-paper contour-map relative overflow-hidden bg-paper-soft pt-32 md:pt-40">
+          <div className="mx-auto max-w-7xl px-5 pb-20 md:px-8 md:pb-24">
+            <motion.div {...reveal} className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+              <div>
+                <p className="eyebrow text-[10px] text-clay">Technology</p>
+                <h1 className="display-title mt-6 text-5xl text-forest md:text-7xl xl:text-[6.2rem]">
+                  The stack is engineered like a survey instrument for water.
+                </h1>
               </div>
-              <h1 className="text-6xl md:text-7xl lg:text-9xl font-black text-primary font-headline tracking-tighter leading-[0.95] mb-12">
-                The science behind <br className="hidden md:block" /> <span className="text-secondary">precision</span> irrigation.
-              </h1>
-              <p className="font-accent italic text-2xl lg:text-3xl text-on-surface-variant/40 mb-12">
-                Multi-layered intelligence at scale
-              </p>
-              <p className="text-on-surface-variant/80 text-xl lg:text-3xl max-w-4xl leading-relaxed">
-                Our multi-layered approach combines edge-computing soil sensors, satellite weather data,
-                and machine learning models to create the most intelligent irrigation platform on the market.
-              </p>
+
+              <div className="section-frame rounded-[2rem] p-6 md:p-8">
+                <p className="eyebrow text-[9px] text-ink-soft/56">Operating idea</p>
+                <p className="mt-4 text-base leading-8 text-ink-soft md:text-lg">
+                  AquaSmart is not a black box. It turns sensing, prediction, and control into one readable chain, so
+                  users see why the system is suggesting a watering decision before they approve or automate it.
+                </p>
+              </div>
             </motion.div>
-            <div className="absolute -top-10 -right-10 w-96 h-96 bg-tertiary-fixed-dim/20 rounded-full blur-[100px] -z-10 animate-float" />
           </div>
         </section>
 
-        {/* Architecture Stack */}
-        <section className="bg-surface-container-low py-24">
-          <div className="max-w-7xl mx-auto px-8">
-            <motion.div {...fadeUp} className="mb-16">
-              <h2 className="text-xs uppercase tracking-[0.3em] font-headline font-bold text-secondary mb-4">Architecture</h2>
-              <h3 className="text-4xl font-black font-headline text-primary">Three-layer intelligence.</h3>
+        <section className="bg-forest-deep py-24 text-paper-soft md:py-28">
+          <div className="mx-auto max-w-7xl px-5 md:px-8">
+            <motion.div {...reveal} className="mb-12 max-w-3xl">
+              <p className="eyebrow text-[10px] text-paper-soft/52">Architecture</p>
+              <h2 className="display-title mt-5 text-5xl md:text-7xl">Three layers. One legible decision path.</h2>
             </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: "memory",
-                  title: "Edge Layer",
-                  subtitle: "Sensor Nodes",
-                  desc: "Low-power mesh-networked devices measure moisture, temperature, light, and soil pH every 30 seconds. Local processing eliminates cloud dependency for time-critical decisions.",
-                  tags: ["LoRaWAN", "Solar Powered", "IP67 Rated"],
-                  color: "bg-primary text-on-primary",
-                },
-                {
-                  icon: "cloud_sync",
-                  title: "Cloud Layer",
-                  subtitle: "Data Pipeline",
-                  desc: "AWS-hosted microservices ingest millions of data points, run anomaly detection, and feed our proprietary ML models in real-time. 99.99% uptime guaranteed.",
-                  tags: ["Real-time", "End-to-end Encrypted", "Multi-region"],
-                  color: "bg-tertiary-fixed-dim text-primary",
-                },
-                {
-                  icon: "psychology",
-                  title: "Intelligence Layer",
-                  subtitle: "Decision Engine",
-                  desc: "Our patent-pending HydroSense™ algorithm processes satellite imagery, hyperlocal weather, and historical crop data to predict irrigation needs 72 hours in advance.",
-                  tags: ["Predictive", "Self-Learning", "Species-Aware"],
-                  color: "bg-secondary-container text-on-secondary-container",
-                },
-              ].map((layer, i) => (
-                <motion.div
+
+            <div className="grid gap-6 lg:grid-cols-3">
+              {layers.map((layer, index) => (
+                <motion.article
                   key={layer.title}
-                  {...fadeUp}
-                  transition={{ duration: 0.6, delay: i * 0.15 }}
-                  whileHover={{ y: -8, rotateZ: i === 1 ? 0 : (i === 0 ? -1 : 1) }}
-                  className={`${layer.color} p-8 rounded-[2rem] flex flex-col justify-between min-h-[400px] hover:shadow-2xl transition-shadow duration-500 group`}
+                  {...reveal}
+                  transition={{ ...reveal.transition, delay: index * 0.08 }}
+                  className="dark-frame rounded-[2rem] p-6 md:p-7"
                 >
-                  <div>
-                    <motion.span
-                      className="material-symbols-outlined text-4xl mb-6 block"
-                      style={{ fontVariationSettings: "'FILL' 1" }}
-                      whileHover={{ rotate: 10, scale: 1.2 }}
-                    >
-                      {layer.icon}
-                    </motion.span>
-                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2 font-headline">{layer.subtitle}</p>
-                    <h4 className="text-2xl font-bold font-headline mb-4">{layer.title}</h4>
-                    <p className="text-sm opacity-80 leading-relaxed">{layer.desc}</p>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-6">
-                    {layer.tags.map((tag) => (
-                      <span key={tag} className="px-3 py-1 rounded-lg bg-white/15 text-[10px] font-bold uppercase group-hover:bg-white/25 transition-colors">{tag}</span>
-                    ))}
-                  </div>
-                </motion.div>
+                  <p className="eyebrow text-[9px] text-paper-soft/48">{layer.metric}</p>
+                  <h3 className="mt-6 font-display text-4xl">{layer.title}</h3>
+                  <p className="mt-5 text-sm leading-7 text-paper-soft/72">{layer.text}</p>
+                </motion.article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Key Specs */}
-        <section className="py-24 px-8 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <motion.div {...fadeUp} className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-black font-headline text-primary mb-4">Performance metrics</h2>
-              <p className="font-accent italic text-on-surface-variant/60 mb-2">Numbers that speak for themselves</p>
-              <p className="text-on-surface-variant max-w-2xl mx-auto">Battle-tested across 500+ commercial installations worldwide.</p>
+        <section className="mx-auto max-w-7xl px-5 py-24 md:px-8 md:py-28">
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            <motion.article {...reveal} className="section-frame rounded-[2.25rem] p-7 md:p-10">
+              <p className="eyebrow text-[10px] text-clay">Signal choreography</p>
+              <h2 className="display-title mt-6 text-5xl text-forest md:text-7xl">
+                Forecasts don’t float on top of telemetry. They bend around it.
+              </h2>
+              <div className="mt-10 rounded-[1.9rem] border border-ink/10 bg-paper p-5">
+                <div className="grid gap-4 md:grid-cols-3">
+                  {[
+                    ["Soil moisture", "68%", "Stable / rising"],
+                    ["Heat load", "31°C", "High exposure"],
+                    ["Wind speed", "9 km/h", "Dropping after dusk"],
+                  ].map(([label, value, note]) => (
+                    <div key={label} className="rounded-[1.6rem] bg-paper-soft p-4">
+                      <p className="eyebrow text-[8px] text-ink-soft/56">{label}</p>
+                      <p className="mt-3 font-display text-4xl text-forest">{value}</p>
+                      <p className="mt-2 text-xs text-ink-soft">{note}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-5 rounded-[1.8rem] bg-forest-deep p-5 text-paper-soft">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                    <div>
+                      <p className="eyebrow text-[8px] text-paper-soft/46">Decision window</p>
+                      <h3 className="mt-2 font-display text-4xl">20:10 to 22:00</h3>
+                    </div>
+                    <p className="max-w-sm text-sm leading-7 text-paper-soft/70">
+                      Recommended because wind drops, soil remains below target, and the next six hours show no rain risk.
+                    </p>
+                  </div>
+
+                  <div className="mt-6 h-28 rounded-[1.3rem] border border-paper/10 bg-paper-soft/6 p-4">
+                    <div className="flex h-full items-end gap-2">
+                      {[14, 28, 42, 54, 68, 74, 66, 52, 34, 18].map((height) => (
+                        <div
+                          key={height}
+                          className="flex-1 rounded-t-full bg-gradient-to-t from-moss to-gold"
+                          style={{ height: `${height}%` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.article>
+
+            <motion.aside
+              {...reveal}
+              transition={{ ...reveal.transition, delay: 0.1 }}
+              className="atlas-card rounded-[2.25rem] p-7 md:p-10"
+            >
+              <p className="eyebrow text-[10px] text-clay">Field specifications</p>
+              <div className="mt-8 space-y-4">
+                {specRows.map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="flex items-center justify-between gap-4 border-b border-ink/10 pb-4 text-sm"
+                  >
+                    <span className="text-ink-soft">{label}</span>
+                    <span className="font-mono text-[13px] text-forest">{value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 rounded-[1.7rem] bg-clay px-5 py-6 text-paper-soft">
+                <p className="eyebrow text-[8px] text-paper-soft/60">Practical outcome</p>
+                <p className="mt-4 font-display text-3xl">Fewer blind spots. Faster intervention.</p>
+                <p className="mt-4 text-sm leading-7 text-paper-soft/78">
+                  The platform surfaces when a recommendation is based on sensor confidence, weather confidence, or both.
+                </p>
+              </div>
+            </motion.aside>
+          </div>
+        </section>
+
+        <section className="bg-paper-soft py-24 md:py-28">
+          <div className="mx-auto max-w-7xl px-5 md:px-8">
+            <motion.div {...reveal} className="rounded-[2.4rem] bg-forest-deep px-6 py-8 text-paper-soft md:px-10 md:py-10">
+              <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+                <div>
+                  <p className="eyebrow text-[10px] text-paper-soft/48">Next step</p>
+                  <h2 className="display-title mt-5 text-5xl md:text-6xl">
+                    See the same logic translated into a working client experience.
+                  </h2>
+                  <p className="mt-5 max-w-2xl text-base leading-8 text-paper-soft/72">
+                    The public-facing redesign is now consistent from first impression to sign-in. Visitors can move from
+                    atmosphere into architecture without losing the thread.
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-4 sm:flex-row lg:flex-col">
+                  <Link href="/auth" className="atlas-button rounded-full px-6 py-4 text-sm font-medium">
+                    Open client access
+                  </Link>
+                  <Link href="/" className="atlas-button-secondary rounded-full px-6 py-4 text-sm font-medium">
+                    Back to landing page
+                  </Link>
+                </div>
+              </div>
             </motion.div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {[
-                { value: "< 200ms", label: "Sensor Response Time" },
-                { value: "99.99%", label: "System Uptime" },
-                { value: "60%", label: "Water Savings" },
-                { value: "500+", label: "Plant Species DB" },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  {...fadeUp}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  whileHover={{ y: -6, scale: 1.03 }}
-                  className="bg-surface-container-low p-8 rounded-[2rem] text-center hover:shadow-xl transition-shadow duration-500 cursor-default shimmer-border"
-                >
-                  <div className="text-4xl lg:text-5xl font-black font-headline text-primary mb-4">{stat.value}</div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant font-label">{stat.label}</p>
-                </motion.div>
-              ))}
-            </div>
           </div>
-        </section>
-
-        {/* Integration */}
-        <section className="py-24 px-8 bg-surface-container-low">
-          <div className="max-w-7xl mx-auto">
-            <motion.div {...fadeUp} className="text-center mb-16">
-              <h2 className="text-xs uppercase tracking-[0.3em] font-headline font-bold text-secondary mb-4">Ecosystem</h2>
-              <h3 className="text-4xl font-black font-headline text-primary">Seamlessly integrated.</h3>
-            </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { icon: "api", title: "REST & GraphQL API", desc: "Full programmatic access to all sensor data, zone controls, and analytics via our well-documented API." },
-                { icon: "webhook", title: "Webhooks & Events", desc: "Subscribe to real-time events — moisture thresholds, cycle completions, hardware alerts — pushed to your infrastructure." },
-                { icon: "hub", title: "Smart Home Integration", desc: "Works with Home Assistant, Google Home, and Apple HomeKit for consumer-grade installations." },
-                { icon: "satellite_alt", title: "Weather Services", desc: "Integrates with NWS, OpenWeatherMap, and proprietary satellite imagery for hyper-local forecasting." },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.title}
-                  {...fadeUp}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  whileHover={{ y: -4 }}
-                  className="bg-surface-container-lowest p-8 rounded-[2rem] flex gap-6 items-start group hover:shadow-xl transition-shadow duration-500 shimmer-border"
-                >
-                  <div className="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
-                    <span className="material-symbols-outlined text-primary text-2xl">{item.icon}</span>
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold font-headline mb-2 text-primary">{item.title}</h4>
-                    <p className="text-on-surface-variant text-sm leading-relaxed">{item.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="py-24 px-8">
-          <motion.div
-            {...fadeUp}
-            className="max-w-5xl mx-auto technical-gradient rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden"
-          >
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-tertiary-fixed-dim/20 rounded-full blur-[100px]" />
-            <div className="relative z-10">
-              <h2 className="text-4xl lg:text-5xl font-black font-headline text-on-primary mb-4">See the technology in action.</h2>
-              <p className="font-accent italic text-on-primary/50 mb-4">Experience precision irrigation firsthand</p>
-              <p className="text-on-primary-container text-lg max-w-2xl mx-auto mb-10 opacity-80">
-                Book a personalized demo with our solutions engineering team.
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-secondary text-on-secondary px-10 py-5 rounded-2xl font-black text-xl btn-magnetic"
-              >
-                Schedule Demo
-              </motion.button>
-            </div>
-          </motion.div>
         </section>
       </main>
+
       <Footer />
     </div>
   );

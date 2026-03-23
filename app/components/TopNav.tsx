@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
 
 const navLinks = [
-  { href: "/", label: "Solutions" },
+  { href: "/#manifesto", label: "Manifesto" },
+  { href: "/#system", label: "System" },
+  { href: "/#preview", label: "Preview" },
   { href: "/technology", label: "Technology" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "/#proof", label: "Proof" },
 ];
 
 export default function TopNav() {
@@ -17,190 +19,123 @@ export default function TopNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
-
-  const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    return pathname.startsWith(href);
-  };
-
-  const isHome = pathname === "/";
-  const isDarkNav = isHome && !scrolled;
+  const compact = scrolled || pathname !== "/";
 
   return (
     <>
-      <motion.nav
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed top-0 w-full z-50 flex justify-between items-center px-8 py-3 transition-all duration-500 ${
-          !isDarkNav
-            ? "bg-white/80 backdrop-blur-2xl shadow-[0_1px_20px_rgba(0,0,0,0.06)] border-b border-white/50"
-            : "bg-transparent"
-        }`}
+      <motion.header
+        animate={{
+          paddingTop: compact ? 16 : 24,
+          paddingBottom: compact ? 16 : 24,
+        }}
+        className="fixed inset-x-0 top-0 z-50"
       >
-        {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 group"
-        >
-          <div className="w-9 h-9 rounded-xl technical-gradient flex items-center justify-center group-hover:scale-105 transition-transform border border-white/10 shadow-lg">
-            <span className="material-symbols-outlined text-white text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
-              water_drop
-            </span>
-          </div>
-          <span className={`text-xl font-black tracking-tighter font-headline transition-colors ${!isDarkNav ? 'text-primary' : 'text-white'}`}>
-            Aqua<span className={!isDarkNav ? 'text-secondary' : 'text-secondary-fixed-dim'}>Smart</span>
-          </span>
-        </Link>
-
-        {/* Desktop Nav */}
-        <div className={`hidden md:flex items-center gap-1 rounded-full px-2 py-1.5 transition-colors ${!isDarkNav ? 'bg-surface-container/60 backdrop-blur-md' : 'bg-white/10 backdrop-blur-md border border-white/10 shadow-lg'}`}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300"
-            >
-              {isActive(link.href) && (
-                <motion.span
-                  layoutId="nav-pill"
-                  className={`absolute inset-0 rounded-full shadow-sm ${!isDarkNav ? 'bg-white' : 'bg-white/20 backdrop-blur-md border border-white/20'}`}
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-              <span
-                className={`relative z-10 transition-all ${
-                  isActive(link.href)
-                    ? (!isDarkNav ? "text-primary font-bold" : "text-white font-bold")
-                    : (!isDarkNav ? "text-on-surface-variant hover:text-primary" : "text-white opacity-80 hover:opacity-100")
-                }`}
-              >
-                {link.label}
-              </span>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 md:px-8">
+          <motion.div
+            layout
+            className={`flex w-full items-center justify-between rounded-full px-5 py-3 md:px-6 ${
+              compact
+                ? "border border-paper/20 bg-forest-deep/80 text-paper-soft shadow-[0_18px_60px_rgba(16,37,31,0.36)] backdrop-blur-xl"
+                : "border border-paper/15 bg-black/10 text-paper-soft backdrop-blur-md"
+            }`}
+          >
+            <Link href="/" className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 bg-paper-soft/10">
+                <span className="material-symbols-outlined text-[20px]">water_lock</span>
+              </div>
+              <div className="leading-none">
+                <p className="eyebrow text-[9px] text-paper-soft/70">Field Atlas</p>
+                <p className="font-display text-[1.35rem] tracking-[-0.08em]">AquaSmart</p>
+              </div>
             </Link>
-          ))}
-        </div>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/auth"
-            className={`font-medium text-sm px-5 py-2.5 transition-all rounded-xl ${!isDarkNav ? 'text-on-surface-variant hover:text-primary hover:bg-primary-fixed/30' : 'text-white opacity-90 hover:opacity-100 hover:bg-white/20'}`}
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/auth"
-            className={`technical-gradient text-white px-6 py-2.5 rounded-xl text-sm font-bold btn-magnetic ${isDarkNav ? 'shadow-lg border border-white/20' : ''}`}
-          >
-            Get Started
-          </Link>
-        </div>
+            <nav className="hidden items-center gap-1 lg:flex">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-full px-4 py-2 text-sm text-paper-soft/78 transition hover:bg-paper-soft/10 hover:text-paper-soft"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className={`md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl transition-colors ${!isDarkNav ? 'hover:bg-surface-container' : 'hover:bg-white/20'}`}
-          aria-label="Toggle menu"
-        >
-          <div className="flex flex-col gap-1.5 w-5">
-            <motion.span
-              animate={mobileOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-              className={`block h-[2px] rounded-full origin-center transition-colors ${!isDarkNav ? 'bg-primary' : 'bg-white'}`}
-            />
-            <motion.span
-              animate={mobileOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
-              className={`block h-[2px] rounded-full transition-colors ${!isDarkNav ? 'bg-primary' : 'bg-white'}`}
-            />
-            <motion.span
-              animate={mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
-              className={`block h-[2px] rounded-full origin-center transition-colors ${!isDarkNav ? 'bg-primary' : 'bg-white'}`}
-            />
-          </div>
-        </button>
-      </motion.nav>
+            <div className="hidden items-center gap-3 lg:flex">
+              <Link
+                href="/auth"
+                className="rounded-full border border-paper/18 px-4 py-2 text-sm text-paper-soft/82 transition hover:bg-paper-soft/10 hover:text-paper-soft"
+              >
+                Client Access
+              </Link>
+              <Link href="/auth" className="atlas-button rounded-full px-5 py-3 text-sm font-medium">
+                Book a Demo
+              </Link>
+            </div>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
-            onClick={() => setMobileOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Mobile Menu Panel */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ x: "100%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: "100%", opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 w-80 h-full bg-white/95 backdrop-blur-2xl shadow-2xl z-50 md:hidden p-8 flex flex-col"
-          >
             <button
-              onClick={() => setMobileOpen(false)}
-              className="self-end w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center mb-8"
+              type="button"
+              onClick={() => setMobileOpen((open) => !open)}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/18 lg:hidden"
+              aria-label="Toggle navigation"
             >
-              <span className="material-symbols-outlined text-primary">close</span>
+              <motion.span
+                animate={{ rotate: mobileOpen ? 90 : 0 }}
+                className="material-symbols-outlined text-[20px]"
+              >
+                {mobileOpen ? "close" : "menu"}
+              </motion.span>
             </button>
+          </motion.div>
+        </div>
+      </motion.header>
 
-            <nav className="flex flex-col gap-2 flex-grow">
-              {navLinks.map((link, i) => (
+      <AnimatePresence>
+        {mobileOpen ? (
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            className="fixed inset-x-5 top-24 z-40 rounded-[2rem] border border-paper/18 bg-forest-deep/92 p-5 text-paper-soft shadow-[0_24px_80px_rgba(16,37,31,0.44)] backdrop-blur-xl lg:hidden"
+          >
+            <nav className="flex flex-col gap-2">
+              {navLinks.map((link, index) => (
                 <motion.div
                   key={link.href}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.08 }}
+                  transition={{ delay: index * 0.06 }}
                 >
                   <Link
                     href={link.href}
-                    className={`block px-5 py-4 rounded-2xl text-lg font-medium transition-all ${
-                      isActive(link.href)
-                        ? "bg-primary-fixed text-primary font-bold"
-                        : "text-on-surface-variant hover:bg-surface-container-low"
-                    }`}
-                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-between rounded-[1.4rem] border border-paper/10 px-4 py-4 text-sm"
                   >
-                    {link.label}
+                    <span>{link.label}</span>
+                    <span className="material-symbols-outlined text-[16px]">north_east</span>
                   </Link>
                 </motion.div>
               ))}
             </nav>
 
-            <div className="flex flex-col gap-3 pt-8 border-t border-outline-variant/30">
+            <div className="mt-5 grid grid-cols-1 gap-3">
               <Link
                 href="/auth"
-                className="text-center text-primary font-medium text-base py-3 rounded-xl hover:bg-surface-container-low transition-all"
-                onClick={() => setMobileOpen(false)}
+                className="rounded-[1.4rem] border border-paper/12 px-4 py-4 text-center text-sm"
               >
-                Sign In
+                Client Access
               </Link>
-              <Link
-                href="/auth"
-                className="text-center technical-gradient text-on-primary py-3.5 rounded-xl font-bold text-base"
-                onClick={() => setMobileOpen(false)}
-              >
-                Get Started
+              <Link href="/auth" className="atlas-button rounded-[1.4rem] px-4 py-4 text-sm font-medium">
+                Book a Demo
               </Link>
             </div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </>
   );

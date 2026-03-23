@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const ModbusRTU = require("modbus-serial");
 
 const client = new ModbusRTU();

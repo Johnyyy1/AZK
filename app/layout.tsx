@@ -1,30 +1,36 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Manrope, Lora } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-headline",
+const playfairDisplay = Playfair_Display({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+});
+
+const ibmPlexSans = IBM_Plex_Sans({
+  variable: "--font-display",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const manrope = Manrope({
+const ibmPlexSansBody = IBM_Plex_Sans({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const lora = Lora({
-  variable: "--font-accent",
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "AquaSmart | Precision Watering for a Greener World",
+  title: "AquaSmart | Field Atlas for Water",
   description:
-    "Optimize your agricultural yields with AI-driven irrigation. AquaSmart senses soil needs in real-time, delivering the exact drop required.",
+    "AquaSmart turns irrigation into a living field atlas with sensor-driven watering, predictive control, and cinematic clarity.",
 };
 
 export default function RootLayout({
@@ -35,15 +41,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${manrope.variable} ${lora.variable} h-full antialiased`}
+      className={`${playfairDisplay.variable} ${ibmPlexSans.variable} ${ibmPlexSansBody.variable} ${ibmPlexMono.variable}`}
     >
       <head>
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col font-body">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

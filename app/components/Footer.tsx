@@ -1,97 +1,73 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "motion/react";
 
-const footerLinks: Record<string, { label: string; href: string; isLink?: boolean }[]> = {
-  Resources: [
-    { label: "Documentation", href: "#" },
-    { label: "API Reference", href: "#" },
-  ],
-  Company: [
-    { label: "About Us", href: "#" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-  ],
-  Support: [
-    { label: "Contact Support", href: "#" },
-    { label: "Help Center", href: "#" },
-    { label: "Status", href: "#" },
-  ],
-};
-
-const socialIcons = [
-  { icon: "public", label: "Website" },
-  { icon: "terminal", label: "GitHub" },
-  { icon: "mail", label: "Email" },
+const footerGroups = [
+  {
+    title: "Explore",
+    links: [
+      { label: "Manifesto", href: "/#manifesto" },
+      { label: "System", href: "/#system" },
+      { label: "Technology", href: "/technology" },
+    ],
+  },
+  {
+    title: "Operate",
+    links: [
+      { label: "Client Access", href: "/auth" },
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "Zones", href: "/dashboard/zones" },
+    ],
+  },
+  {
+    title: "Contact",
+    links: [
+      { label: "Schedule a Demo", href: "/auth" },
+      { label: "Support Desk", href: "/auth" },
+      { label: "Field Notes", href: "/technology" },
+    ],
+  },
 ];
 
 export default function Footer() {
   return (
-    <footer className="w-full py-16 px-8 bg-white border-t border-slate-100">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
-        {/* Brand Column */}
-        <div className="col-span-1">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg technical-gradient flex items-center justify-center">
-              <span className="material-symbols-outlined text-white text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
-                water_drop
-              </span>
-            </div>
-            <span className="font-headline font-bold text-primary text-xl">
-              Aqua<span className="text-secondary">Smart</span>
-            </span>
+    <footer className="relative border-t border-ink/10 bg-forest-deep text-paper-soft">
+      <div className="contour-map grain absolute inset-0 opacity-70" />
+      <div className="relative mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="max-w-2xl">
+            <p className="eyebrow mb-5 text-[10px] text-paper-soft/60">AquaSmart / Field Atlas</p>
+            <h2 className="display-title text-5xl text-paper-soft md:text-7xl">
+              The irrigation platform people remember because it feels mapped, not marketed.
+            </h2>
+            <p className="mt-6 max-w-xl text-base leading-7 text-paper-soft/72 md:text-lg">
+              We turn every zone, valve, and forecast into one legible landscape. The contour lines are not decoration.
+              They are the visual promise of precision.
+            </p>
           </div>
-          <p className="font-accent italic text-sm text-slate-400 mb-6 leading-relaxed">
-            Sustainable precision for the modern laboratory of life.
-          </p>
-          <div className="flex gap-3">
-            {socialIcons.map((social) => (
-              <motion.a
-                key={social.icon}
-                href="#"
-                whileHover={{ scale: 1.15, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
-                className="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors duration-300"
-                aria-label={social.label}
-              >
-                <span className="material-symbols-outlined text-lg">{social.icon}</span>
-              </motion.a>
+
+          <div className="grid gap-8 sm:grid-cols-3">
+            {footerGroups.map((group) => (
+              <div key={group.title}>
+                <p className="eyebrow mb-4 text-[10px] text-paper-soft/50">{group.title}</p>
+                <div className="flex flex-col gap-3">
+                  {group.links.map((link) => (
+                    <Link
+                      key={link.href + link.label}
+                      href={link.href}
+                      className="text-sm text-paper-soft/76 transition hover:text-paper-soft"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
 
-        {/* Link Columns */}
-        {Object.entries(footerLinks).map(([category, links]) => (
-          <div key={category} className="col-span-1">
-            <h6 className="font-headline font-bold text-primary mb-5 text-sm tracking-wide">
-              {category}
-            </h6>
-            <ul className="space-y-3">
-              {links.map((link) => {
-                const LinkComponent = link.isLink ? Link : "a";
-                return (
-                  <li key={link.label}>
-                    <LinkComponent
-                      className="font-body text-sm text-slate-400 hover:text-secondary transition-colors duration-300 nav-link-underline inline-block"
-                      href={link.href}
-                    >
-                      {link.label}
-                    </LinkComponent>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div className="max-w-7xl mx-auto pt-12 mt-12 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="font-body text-xs text-slate-400">
-          © 2024 AquaSmart Systems. All rights reserved.
-        </p>
-        <p className="font-accent italic text-xs text-slate-300">
-          The Future of Agriculture
-        </p>
+        <div className="mt-14 flex flex-col gap-4 border-t border-paper/10 pt-6 text-xs text-paper-soft/46 md:flex-row md:items-center md:justify-between">
+          <p>2026 AquaSmart Systems. Precision watering for cultivated landscapes.</p>
+          <p className="eyebrow text-[9px]">Prague / Brezen / Remote Control Ready</p>
+        </div>
       </div>
     </footer>
   );
