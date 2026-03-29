@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useState } from "react";
+import PumpControlCard from "@/app/components/PumpControlCard";
 
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -44,6 +45,10 @@ export default function ControlsPage() {
           <button className="rounded-full border border-clay/30 bg-white/80 px-6 py-4 text-sm text-clay">Emergency stop</button>
         </div>
       </motion.header>
+
+      <motion.div {...reveal} transition={{ duration: 0.45, delay: 0.05 }} className="mb-8">
+        <PumpControlCard />
+      </motion.div>
 
       <div className="grid gap-5 lg:grid-cols-2">
         {zones.map((zone, index) => (
