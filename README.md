@@ -1,36 +1,245 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AquaSmart
 
-## Getting Started
+AquaSmart is a Next.js dashboard plus a small Node.js backend for communicating with a Siemens LOGO! PLC over Modbus TCP.
 
-First, run the development server:
+This project currently does two main things:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- reads moisture data from the LOGO!
+- lets the dashboard manually switch the pump (`Cerpadlo`) on and off
+
+## How the communication works
+
+There are three layers:
+
+1. `frontend` - Next.js app in `C:\Users\jonas\AZK`
+2. `backend` - Node.js Modbus bridge in `C:\Users\jonas\AZK\backend`
+3. `PLC` - Siemens LOGO! 8.4
+
+Flow:
+
+```text
+Dashboard button
+  -> Next.js route /api/logo/pump
+  -> local backend http://127.0.0.1:4001/api/pump
+  -> Modbus TCP write to LOGO!
+  -> LOGO! marker M1
+  -> OR block B007
+  -> output Q1 (Cerpadlo)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For reading moisture:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+LOGO! holding register
+  -> backend reads with Modbus TCP
+  -> backend exposes /api/moisture and /api/health
+  -> frontend can show the current state
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Current PLC logic
 
-## Learn More
+The pump output is controlled like this:
 
-To learn more about Next.js, take a look at the following resources:
+```text
+Automatic logic from B006 ----\
+                               B007 (>1 / OR) ---- Q1
+Manual command M1 -----------/
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+That means:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- the automatic logic can start the pump
+- the website can also start the pump by writing to `M1`
+- the website must also be able to write `M1 = 0`, otherwise the pump would stay on
 
-## Deploy on Vercel
+## Current Modbus mapping
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+From the LOGO! Modbus address space:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `M 1-64` maps to `Coil 8257-8320`
+- in practice, this project uses `PUMP_COIL_ADDRESS=8256`
+
+The working value for the website pump control is:
+
+```env
+PUMP_COIL_ADDRESS=8256
+```
+
+This is because the Node Modbus client uses addressing that ended up needing the `M1` coil offset by one in this setup.
+
+## Important files
+
+- `C:\Users\jonas\AZK\app\api\logo\pump\route.ts` - frontend API proxy to the local backend
+- `C:\Users\jonas\AZK\app\components\PumpControlCard.tsx` - dashboard pump control card
+- `C:\Users\jonas\AZK\backend\scripts\logoCommunication.js` - Modbus TCP connection, reading, and pump writes
+- `C:\Users\jonas\AZK\backend\.env` - backend runtime configuration
+- `C:\Users\jonas\AZK\.env.local` - frontend runtime configuration
+
+## Environment configuration
+
+### Backend
+
+Backend config is loaded automatically from `C:\Users\jonas\AZK\backend\.env`.
+
+Current values:
+
+```env
+LOGO_IP=192.168.0.3
+LOGO_PORT=502
+UNIT_ID=1
+API_PORT=4001
+REGISTER_OFFSET=0
+REGISTER_COUNT=1
+PUMP_COIL_ADDRESS=8256
+```
+
+### Frontend
+
+Frontend config is loaded from `C:\Users\jonas\AZK\.env.local`.
+
+Current value:
+
+```env
+LOGO_BACKEND_URL=http://127.0.0.1:4001
+```
+
+## How to start the project
+
+Open two terminals.
+
+### Terminal 1 - backend
+
+```powershell
+cd C:\Users\jonas\AZK\backend
+npm start
+```
+
+Expected output:
+
+- `HTTP API ready on port 4001`
+- `Connected to LOGO at 192.168.0.3:502`
+- periodic moisture read logs
+
+### Terminal 2 - frontend
+
+```powershell
+cd C:\Users\jonas\AZK
+npm run dev
+```
+
+Then open:
+
+- [http://localhost:3000/dashboard/controls](http://localhost:3000/dashboard/controls)
+
+## How to use the pump control
+
+On the dashboard controls page:
+
+- click `Turn pump on` to write `true` to the configured pump coil
+- click `Turn pump off` to write `false` to the configured pump coil
+
+The dashboard calls:
+
+- `GET /api/logo/pump` for status
+- `POST /api/logo/pump` for commands
+
+The backend then calls Modbus:
+
+- `writeCoil(8256, true)` for ON
+- `writeCoil(8256, false)` for OFF
+
+## Backend API
+
+The local backend exposes:
+
+- `GET /api/health` - connection state, latest error, latest reading
+- `GET /api/moisture` - full monitor state including moisture data
+- `GET /api/pump` - pump control configuration and last pump command
+- `POST /api/pump` - sends pump ON/OFF command
+
+Example:
+
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:4001/api/pump" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"enabled":true}'
+```
+
+## Common problems
+
+### Port already in use
+
+If backend start fails with:
+
+```text
+listen EADDRINUSE
+```
+
+then another process is already using that port.
+
+Find and stop it:
+
+```powershell
+Get-NetTCPConnection -LocalPort 4001
+Stop-Process -Id (Get-NetTCPConnection -LocalPort 4001).OwningProcess -Force
+```
+
+### Frontend does not load
+
+The project uses:
+
+```json
+"dev": "next dev --webpack"
+```
+
+This is intentional. Webpack mode is currently more stable here than Turbopack on this Windows setup.
+
+### Button says "command sent" but pump does not switch
+
+Check these in order:
+
+1. backend is running
+2. LOGO! is reachable at `192.168.0.3`
+3. `M1` is still wired into `B007`
+4. `PUMP_COIL_ADDRESS=8256`
+5. LOGO! project with the `M1 -> B007 -> Q1` logic is uploaded to the PLC
+
+### LOGO! connection fails
+
+Check:
+
+- PLC IP address
+- Modbus TCP enabled on the LOGO!
+- same network/subnet as the PC
+- port `502` reachable
+
+Helpful commands:
+
+```powershell
+ping 192.168.0.3
+Test-NetConnection 192.168.0.3 -Port 502
+```
+
+## Validation commands
+
+Frontend:
+
+```powershell
+cd C:\Users\jonas\AZK
+npm run lint
+```
+
+Backend syntax check:
+
+```powershell
+cd C:\Users\jonas\AZK\backend
+node --check scripts/logoCommunication.js
+```
+
+## Notes for future changes
+
+- If you change the manual override bit in LOGO! from `M1` to another marker, update `PUMP_COIL_ADDRESS` in `backend\.env`
+- If backend port changes, also update `LOGO_BACKEND_URL` in `.env.local`
+- If you move from coil control to holding register control, replace `PUMP_COIL_ADDRESS` with `PUMP_REGISTER_ADDRESS`
+
