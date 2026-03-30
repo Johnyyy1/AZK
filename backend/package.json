@@ -4,8 +4,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "start": "node scripts/logoCommunication.js",
-    "test:logo": "node scripts/logoCommunication.js"
+    "start": "node --env-file=.env scripts/logoCommunication.js",
+    "test:logo": "node --env-file=.env scripts/logoCommunication.js"
   },
   "dependencies": {
     "modbus-serial": "^8.0.23"
