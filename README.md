@@ -1,6 +1,6 @@
 # AquaSmart
 
-AquaSmart is a Next.js dashboard plus a small Node.js backend for communicating with a Siemens LOGO! PLC over Modbus TCP.
+AquaSmart is a Next.js dashboard plus a small Bun-powered TypeScript backend for communicating with a Siemens LOGO! PLC over Modbus TCP.
 
 This project currently does two main things:
 
@@ -12,7 +12,7 @@ This project currently does two main things:
 There are three layers:
 
 1. `frontend` - Next.js app in `C:\Users\jonas\AZK`
-2. `backend` - Node.js Modbus bridge in `C:\Users\jonas\AZK\backend`
+2. `backend` - Bun + TypeScript Modbus bridge in `C:\Users\jonas\AZK\backend`
 3. `PLC` - Siemens LOGO! 8.4
 
 Flow:
@@ -65,13 +65,13 @@ The working value for the website pump control is:
 PUMP_COIL_ADDRESS=8256
 ```
 
-This is because the Node Modbus client uses addressing that ended up needing the `M1` coil offset by one in this setup.
+This is because the Modbus client uses addressing that ended up needing the `M1` coil offset by one in this setup.
 
 ## Important files
 
 - `C:\Users\jonas\AZK\app\api\logo\pump\route.ts` - frontend API proxy to the local backend
 - `C:\Users\jonas\AZK\app\components\PumpControlCard.tsx` - dashboard pump control card
-- `C:\Users\jonas\AZK\backend\scripts\logoCommunication.js` - Modbus TCP connection, reading, and pump writes
+- `C:\Users\jonas\AZK\backend\scripts\logoCommunication.ts` - Modbus TCP connection, reading, and pump writes
 - `C:\Users\jonas\AZK\backend\.env` - backend runtime configuration
 - `C:\Users\jonas\AZK\.env.local` - frontend runtime configuration
 
@@ -105,13 +105,20 @@ LOGO_BACKEND_URL=http://127.0.0.1:4001
 
 ## How to start the project
 
+Install dependencies with Bun from the repo root:
+
+```powershell
+cd C:\Users\jonas\AZK
+bun install
+```
+
 Open two terminals.
 
 ### Terminal 1 - backend
 
 ```powershell
-cd C:\Users\jonas\AZK\backend
-npm start
+cd C:\Users\jonas\AZK
+bun run backend:start
 ```
 
 Expected output:
@@ -124,7 +131,7 @@ Expected output:
 
 ```powershell
 cd C:\Users\jonas\AZK
-npm run dev
+bun run dev
 ```
 
 Then open:
@@ -227,14 +234,21 @@ Frontend:
 
 ```powershell
 cd C:\Users\jonas\AZK
-npm run lint
+bun run lint
 ```
 
-Backend syntax check:
+Full workspace typecheck:
 
 ```powershell
-cd C:\Users\jonas\AZK\backend
-node --check scripts/logoCommunication.js
+cd C:\Users\jonas\AZK
+bun run typecheck
+```
+
+Backend runtime check:
+
+```powershell
+cd C:\Users\jonas\AZK
+bun run backend:test:logo
 ```
 
 ## Notes for future changes
@@ -242,4 +256,3 @@ node --check scripts/logoCommunication.js
 - If you change the manual override bit in LOGO! from `M1` to another marker, update `PUMP_COIL_ADDRESS` in `backend\.env`
 - If backend port changes, also update `LOGO_BACKEND_URL` in `.env.local`
 - If you move from coil control to holding register control, replace `PUMP_COIL_ADDRESS` with `PUMP_REGISTER_ADDRESS`
-

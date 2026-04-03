@@ -10,7 +10,7 @@ This project uses `next@16.2.1` with the App Router. APIs, conventions, and type
 
 - Product name: AquaSmart
 - Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS v4, Motion
-- Backend: standalone Node.js CommonJS script under `backend/` for Modbus / Logo communication
+- Backend: standalone Bun + TypeScript script under `backend/` for Modbus / Logo communication
 - Design assets and source exports live in `stitch_project/`
 
 ## Repository Layout
@@ -21,7 +21,7 @@ This project uses `next@16.2.1` with the App Router. APIs, conventions, and type
 - `app/layout.tsx`: root layout, global fonts, metadata, and Material Symbols stylesheet
 - `app/globals.css`: Tailwind import, theme tokens, shared utilities, and animation helpers
 - `public/`: static assets served by Next.js
-- `backend/scripts/logoCommunication.js`: local hardware communication script
+- `backend/scripts/logoCommunication.ts`: local hardware communication script
 - `stitch_project/`: HTML exports, screenshots, and planning artifacts used as design reference
 
 ## Working Rules
@@ -39,15 +39,18 @@ This project uses `next@16.2.1` with the App Router. APIs, conventions, and type
 
 From the repo root:
 
-- `npm run dev`: start the Next.js dev server
-- `npm run build`: production build
-- `npm run start`: run the production server
-- `npm run lint`: run ESLint
+- `bun run dev`: start the Next.js dev server
+- `bun run build`: production build
+- `bun run start`: run the production server
+- `bun run lint`: run ESLint
+- `bun run typecheck`: run the workspace TypeScript check
+- `bun run backend:start`: run the LOGO backend from the repo root
+- `bun run backend:test:logo`: same backend entrypoint, used as a manual connectivity check
 
 From `backend/`:
 
-- `npm start`: run the Modbus / Logo communication script
-- `npm run test:logo`: same script, used as a manual connectivity check
+- `bun run start`: run the Modbus / Logo communication script
+- `bun run test:logo`: same script, used as a manual connectivity check
 
 ## File-Specific Notes
 
@@ -58,8 +61,8 @@ From `backend/`:
 
 ## Validation Expectations
 
-- Run `npm run lint` after meaningful frontend edits.
-- Run `npm run build` for changes that affect routing, layout structure, or production behavior.
+- Run `bun run lint` after meaningful frontend edits.
+- Run `bun run build` for changes that affect routing, layout structure, or production behavior.
 - If you change `backend/`, validate from `backend/` with the relevant script only when the task calls for it and hardware assumptions are clear.
 
 ## Practical Defaults
