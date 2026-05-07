@@ -1,0 +1,35 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    environment:
+      NODE_ENV: production
+      LOGO_BACKEND_URL: ${LOGO_BACKEND_URL:-http://backend:4000}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      API_PORT: 4000
+      LOGO_IP: ${LOGO_IP:-192.168.0.3}
+      LOGO_PORT: ${LOGO_PORT:-502}
+      UNIT_ID: ${UNIT_ID:-1}
+      READ_INTERVAL_MS: ${READ_INTERVAL_MS:-2000}
+      REGISTER_OFFSET: ${REGISTER_OFFSET:-0}
+      REGISTER_COUNT: ${REGISTER_COUNT:-1}
+      PUMP_WRITE_MODE: ${PUMP_WRITE_MODE:-coil}
+      PUMP_COIL_ADDRESS: ${PUMP_COIL_ADDRESS:-8256}
+      PUMP_REGISTER_ADDRESS: ${PUMP_REGISTER_ADDRESS:-}
+      PUMP_REGISTER_ON_VALUE: ${PUMP_REGISTER_ON_VALUE:-1}
+      PUMP_REGISTER_OFF_VALUE: ${PUMP_REGISTER_OFF_VALUE:-0}
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
+    restart: unless-stopped

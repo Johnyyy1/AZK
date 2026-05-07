@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import Icon from "./Icon";
 
 const navLinks = [
   { href: "/#manifesto", label: "Manifesto" },
   { href: "/#system", label: "System" },
-  { href: "/technology", label: "Technology" },
   { href: "/#proof", label: "Proof" },
+  { href: "/technology", label: "Technology" },
 ];
 
 export default function TopNav() {
@@ -46,7 +47,7 @@ export default function TopNav() {
           >
             <Link href="/" className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 bg-paper-soft/10">
-                <span className="material-symbols-outlined text-[20px]">water_lock</span>
+                <Icon name="water_lock" className="text-[20px]" />
               </div>
               <div className="leading-none">
                 <p className="eyebrow text-[9px] text-paper-soft/70">Field Atlas</p>
@@ -86,9 +87,9 @@ export default function TopNav() {
             >
               <motion.span
                 animate={{ rotate: mobileOpen ? 90 : 0 }}
-                className="material-symbols-outlined text-[20px]"
+                className="inline-flex text-[20px]"
               >
-                {mobileOpen ? "close" : "menu"}
+                <Icon name={mobileOpen ? "close" : "menu"} />
               </motion.span>
             </button>
           </motion.div>
@@ -116,7 +117,7 @@ export default function TopNav() {
                     className="flex items-center justify-between rounded-[1.4rem] border border-paper/10 px-4 py-4 text-sm"
                   >
                     <span>{link.label}</span>
-                    <span className="material-symbols-outlined text-[16px]">north_east</span>
+                    <Icon name="north_east" className="text-[16px]" />
                   </Link>
                 </motion.div>
               ))}

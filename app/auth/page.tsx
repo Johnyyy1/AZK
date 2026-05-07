@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useState } from "react";
+import Icon from "../components/Icon";
 
 type AuthState = "login" | "register" | "reset" | "reset-sent";
 
@@ -59,7 +60,7 @@ export default function AuthPage() {
           <div className="relative z-10 flex w-full flex-col justify-between p-10 xl:p-14">
             <Link href="/" className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 bg-paper-soft/10">
-                <span className="material-symbols-outlined text-[20px]">water_lock</span>
+                <Icon name="water_lock" className="text-[20px]" />
               </div>
               <div className="leading-none">
                 <p className="eyebrow text-[9px] text-paper-soft/70">Field Atlas</p>
@@ -99,7 +100,7 @@ export default function AuthPage() {
         <section className="flex min-h-screen items-center justify-center px-5 py-24 md:px-8">
           <div className="w-full max-w-xl">
             <Link href="/" className="mb-10 inline-flex items-center gap-2 lg:hidden">
-              <span className="material-symbols-outlined text-[20px] text-forest">west</span>
+              <Icon name="west" className="text-[20px] text-forest" />
               <span className="text-sm text-ink-soft">Back to site</span>
             </Link>
 

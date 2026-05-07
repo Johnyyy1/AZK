@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import Footer from "./components/Footer";
+import Icon from "./components/Icon";
 import TopNav from "./components/TopNav";
 
 const reveal = {
@@ -108,14 +109,14 @@ export default function LandingPage() {
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                   <Link href="/auth" className="atlas-button rounded-full px-6 py-4 text-sm font-medium md:px-7">
                     Enter the Atlas
-                    <span className="material-symbols-outlined text-[18px]">north_east</span>
+                    <Icon name="north_east" className="text-[18px]" />
                   </Link>
                   <Link
                     href="/technology"
                     className="atlas-button-secondary rounded-full px-6 py-4 text-sm font-medium md:px-7"
                   >
                     See the technology
-                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    <Icon name="arrow_forward" className="text-[18px]" />
                   </Link>
                 </div>
               </motion.div>

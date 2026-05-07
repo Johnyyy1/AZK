@@ -7,6 +7,6 @@
     "test:logo": "bun run scripts/logoCommunication.ts"
   },
   "dependencies": {
-    "modbus-serial": "^8.0.23"
+    "modbus-serial": "8.0.25"
   }
 }

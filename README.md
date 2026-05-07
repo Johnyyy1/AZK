@@ -103,6 +103,66 @@ Current value:
 LOGO_BACKEND_URL=http://127.0.0.1:4001
 ```
 
+## Docker setup
+
+The repository now includes a full Docker setup for both services:
+
+- `Dockerfile` - production image for the Next.js frontend
+- `backend/Dockerfile` - Bun image for the Modbus bridge
+- `compose.yaml` - runs both containers together
+- `docker.env.example` - example Compose environment file
+
+Both containers install dependencies from lockfiles:
+
+- frontend uses `npm ci` with the root `package-lock.json`
+- backend uses `npm ci --omit=dev --omit=optional` with `backend/package-lock.json`, then runs with Bun
+
+### Docker environment
+
+Create a Compose env file from the example:
+
+```powershell
+cd C:\Users\jonas\AZK
+Copy-Item docker.env.example .env
+```
+
+Set at least the PLC connection values in `.env`:
+
+```env
+LOGO_IP=192.168.0.3
+LOGO_PORT=502
+UNIT_ID=1
+PUMP_COIL_ADDRESS=8256
+```
+
+Notes:
+
+- `LOGO_BACKEND_URL` should stay `http://backend:4000` when the frontend runs inside Compose
+- `BACKEND_PORT` only affects the host port mapping; inside the Docker network the backend still listens on `4000`
+
+### Start with Docker Compose
+
+```powershell
+cd C:\Users\jonas\AZK
+docker compose up --build
+```
+
+Then open:
+
+- [http://localhost:3000](http://localhost:3000)
+- [http://localhost:3000/dashboard/controls](http://localhost:3000/dashboard/controls)
+
+The backend will also be available on the host at:
+
+- [http://localhost:4000/api/health](http://localhost:4000/api/health)
+- [http://localhost:4000/api/pump](http://localhost:4000/api/pump)
+
+Stop everything with:
+
+```powershell
+docker compose down
+```
+
 ## How to start the project
 
 Install dependencies with Bun from the repo root:
@@ -202,6 +262,12 @@ The project uses:
 
 This is intentional. Webpack mode is currently more stable here than Turbopack on this Windows setup.
 
+The production build also uses webpack for the same reason:
+
+```json
+"build": "next build --webpack"
+```
+
 ### Button says "command sent" but pump does not switch
 
 Check these in order:
@@ -242,6 +308,13 @@ Full workspace typecheck:
 ```powershell
 cd C:\Users\jonas\AZK
 bun run typecheck
+```
+
+Docker Compose config check:
+
+```powershell
+cd C:\Users\jonas\AZK
+docker compose config
 ```
 
 Backend runtime check:

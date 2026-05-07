@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+import Icon, { type IconName } from "./Icon";
 
 const navItems = [
   { icon: "dashboard", label: "Dashboard", href: "/dashboard" },
@@ -12,13 +13,13 @@ const navItems = [
   { icon: "calendar_today", label: "Scheduling", href: "/dashboard/scheduling" },
   { icon: "tune", label: "Controls", href: "/dashboard/controls" },
   { icon: "settings", label: "Settings", href: "/dashboard/settings" },
-];
+] satisfies Array<{ icon: IconName; label: string; href: string }>;
 
 function Brand() {
   return (
     <Link href="/" className="flex items-center gap-3">
       <div className="nature-tech-gradient flex h-11 w-11 items-center justify-center rounded-full">
-        <span className="material-symbols-outlined text-[18px] text-forest-deep">water_lock</span>
+        <Icon name="water_lock" className="text-[18px] text-forest-deep" />
       </div>
       <div className="leading-none">
         <p className="eyebrow text-[8px] text-ink-soft/44">Dashboard</p>
@@ -53,10 +54,10 @@ function NavList({
             }`}
           >
             <span className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+              <Icon name={item.icon} className="text-[20px]" />
               <span className="text-sm font-medium">{item.label}</span>
             </span>
-            {isActive ? <span className="material-symbols-outlined text-[16px] text-moss">east</span> : null}
+            {isActive ? <Icon name="east" className="text-[16px] text-moss" /> : null}
           </Link>
         );
       })}
@@ -79,7 +80,7 @@ export default function Sidebar() {
             className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 text-forest"
             aria-label="Toggle dashboard navigation"
           >
-            <span className="material-symbols-outlined text-[20px]">{mobileOpen ? "close" : "menu"}</span>
+            <Icon name={mobileOpen ? "close" : "menu"} className="text-[20px]" />
           </button>
         </div>
       </div>

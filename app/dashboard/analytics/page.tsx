@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
     const domainMax = Math.min(100, maxValue + padding);
     const domain = Math.max(1, domainMax - domainMin);
 
-    const x = (index: number) => (points.length === 1 ? 450 : (index / (points.length - 1)) * 900);
+    const x = (index: number) => (index / (points.length - 1)) * 900;
     const y = (value: number) => 30 + (1 - (value - domainMin) / domain) * 150;
 
     const linePoints = points.map((point, index) => `${x(index)},${y(point.value)}`).join(" ");
@@ -160,7 +160,7 @@ export default function AnalyticsPage() {
               <polyline points={chart.linePoints} fill="none" stroke="#22b07d" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
 
               {chart.points.map((point, index) => {
-                const pointX = chart.points.length === 1 ? 450 : (index / (chart.points.length - 1)) * 900;
+                const pointX = (index / (chart.points.length - 1)) * 900;
                 const pointY = chart.y(point.value);
 
                 return (

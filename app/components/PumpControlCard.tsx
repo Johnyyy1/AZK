@@ -55,13 +55,18 @@ export default function PumpControlCard() {
 	}, []);
 
 	useEffect(() => {
-		void loadStatus();
+		const initialLoad = window.setTimeout(() => {
+			void loadStatus();
+		}, 0);
 
 		const timer = window.setInterval(() => {
 			void loadStatus();
 		}, 5000);
 
-		return () => window.clearInterval(timer);
+		return () => {
+			window.clearTimeout(initialLoad);
+			window.clearInterval(timer);
+		};
 	}, [loadStatus]);
 
 	const sendCommand = useCallback(

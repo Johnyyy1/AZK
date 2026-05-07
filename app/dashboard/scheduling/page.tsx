@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useState } from "react";
+import Icon from "../../components/Icon";
 
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -81,7 +82,7 @@ export default function SchedulingPage() {
                             : "border-ink/8 bg-white/70"
                         }`}
                       >
-                        {value ? <span className="material-symbols-outlined text-[18px] text-forest">water_drop</span> : null}
+                        {value ? <Icon name="water_drop" className="text-[18px] text-forest" /> : null}
                       </div>
                     ))}
                   </div>
