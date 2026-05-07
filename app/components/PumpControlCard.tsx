@@ -113,10 +113,10 @@ export default function PumpControlCard() {
 			<div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
 				<div className="max-w-2xl">
 					<p className="eyebrow text-[8px] text-paper-soft/46">Pump control</p>
-					<h2 className="mt-3 font-display text-4xl text-paper-soft">Manual cerpadlo control from the dashboard.</h2>
+					<h2 className="mt-3 font-display text-4xl text-paper-soft">Manual watering line control from the dashboard.</h2>
 					<p className="mt-4 max-w-xl text-sm leading-7 text-paper-soft/72">
-						This sends a live Modbus command through the local backend. For safety, wire the command to a writable
-						LOGO marker or register that your PLC logic uses as a manual override.
+						This sends a live Modbus command through the local backend. For safety, wire the command to the writable
+						LOGO marker or register that your PLC logic uses as the single plant&apos;s manual override.
 					</p>
 				</div>
 
@@ -160,8 +160,7 @@ export default function PumpControlCard() {
 			) : null}
 			{status && !status.configured ? (
 				<p className="mt-3 text-sm text-paper-soft/72">
-					Set `PUMP_COIL_ADDRESS` or `PUMP_REGISTER_ADDRESS` in `C:\Users\jonas\AZK\backend` before using the
-					button.
+					Set `PUMP_COIL_ADDRESS` or `PUMP_REGISTER_ADDRESS` in the backend environment before using the button.
 				</p>
 			) : null}
 		</section>

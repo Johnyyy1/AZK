@@ -16,55 +16,55 @@ const reveal = {
 const manifestoCards = [
   {
     id: "01",
-    title: "Read the ground before it asks.",
-    body: "Moisture, wind, heat load, and forecast are composed as one field narrative instead of four disconnected dashboards.",
+    title: "Read one pot before it droops.",
+    body: "Moisture, room heat, and the last pump run stay in one readable thread instead of in scattered hobby charts.",
   },
   {
     id: "02",
-    title: "Water by contour, not by habit.",
-    body: "Irrigation zones act like terrain bands, each one tuned to slope, crop personality, and the day ahead.",
+    title: "Water by signal, not by guilt.",
+    body: "AquaSmart triggers one watering line around the plant's actual condition instead of a vague human routine.",
   },
   {
     id: "03",
-    title: "Make the invisible feel legible.",
-    body: "AquaSmart turns every hidden signal into a visual language a grower can trust at a glance.",
+    title: "Make small hardware feel trustworthy.",
+    body: "The dashboard shows exactly what the probe saw, what the pump did, and when the next intervention should happen.",
   },
 ];
 
 const systemChapters = [
   {
     label: "Chapter One",
-    title: "Edge sensing that lives in the field.",
-    text: "Solar-fed nodes collect real conditions every few seconds and stay useful even when the network gets messy.",
+    title: "A soil probe sits right where the roots live.",
+    text: "The system samples one pot directly, so the reading is about the plant you care about and not a guessed average.",
     metric: "30 sec sampling",
   },
   {
     label: "Chapter Two",
-    title: "Decision logic shaped by weather and crop behavior.",
-    text: "The platform blends live telemetry with forecasts and historical response patterns so irrigation timing feels anticipatory.",
-    metric: "72 hr forecast horizon",
+    title: "The controller decides if another sip is actually needed.",
+    text: "Moisture trend, recent watering, and a light room context turn into a recommendation that is small, cautious, and explainable.",
+    metric: "5 min decision loop",
   },
   {
     label: "Chapter Three",
-    title: "Control surfaces growers actually want to open.",
-    text: "Schedules, overrides, and zone health are arranged like an atlas spread rather than a stack of forms.",
-    metric: "12 zones / one view",
+    title: "The operator gets one calm surface to approve or override.",
+    text: "Schedules, manual pump control, and plant history stay in one atlas-like view instead of six hobby panels.",
+    metric: "1 plant / one view",
   },
 ];
 
 const proofStats = [
-  { value: "61%", label: "less wasted water", note: "Compared with timer-based watering across mixed landscapes." },
-  { value: "4.8x", label: "faster issue detection", note: "Pressure drops and offline sensors surface as visible anomalies." },
-  { value: "98.4%", label: "schedule adherence", note: "Autonomy without losing the option for hands-on intervention." },
+  { value: "1", label: "plant in focus", note: "Everything on the interface is centered on a single monitored specimen." },
+  { value: "24/7", label: "watchful loop", note: "Probe readings and pump state stay visible even when nobody is nearby." },
+  { value: "< 5s", label: "manual response", note: "A live override can push the pump faster than walking over with a watering can." },
 ];
 
 const ticker = [
-  "Contour-guided irrigation",
-  "Predictive watering windows",
-  "Zone-level sensor telemetry",
-  "Valve control with audit trail",
-  "Weather-aware automation",
-  "A field atlas for every site",
+  "Single pot moisture telemetry",
+  "One pump with a clear audit trail",
+  "Manual override for one plant",
+  "Calm watering recommendations",
+  "Small hardware, legible status",
+  "A dashboard for one living specimen",
 ];
 
 export default function LandingPage() {
@@ -93,22 +93,22 @@ export default function LandingPage() {
                 className="flex max-w-4xl flex-col items-center"
               >
                 <p className="eyebrow mb-6 text-[10px] text-paper-soft/82 md:text-[11px]">
-                  AquaSmart / A field atlas for water
+                  AquaSmart / Smart watering for one plant
                 </p>
                 <h1 className="max-w-5xl text-center font-body text-[3.4rem] font-semibold leading-[0.98] tracking-[-0.05em] md:text-[6rem] xl:text-[7.25rem]">
-                  Irrigation reimagined as a cinematic map of{" "}
+                  A single plant watering system shown as a calm map of{" "}
                   <span className="serif-accent gradient-accent-text italic tracking-[-0.03em]">
-                    living ground.
+                    one living root zone.
                   </span>
                 </h1>
                 <p className="mt-7 max-w-2xl text-base leading-7 text-paper-soft/88 md:text-xl md:leading-8">
-                  The hero memory is simple: contour lines drifting over real field footage while every watering decision
-                  feels deliberate, technical, and deeply natural.
+                  AquaSmart is not a giant irrigation platform. It is one compact rig that watches one plant, drives one
+                  pump, and makes every watering decision feel deliberate and easy to trust.
                 </p>
 
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                   <Link href="/auth" className="atlas-button rounded-full px-6 py-4 text-sm font-medium md:px-7">
-                    Enter the Atlas
+                    Open the dashboard
                     <Icon name="north_east" className="text-[18px]" />
                   </Link>
                   <Link
@@ -131,19 +131,19 @@ export default function LandingPage() {
               <div>
                 <p className="eyebrow text-[9px] text-paper-soft/66">What visitors remember</p>
                 <p className="mt-2 text-sm leading-6 text-paper-soft/86">
-                  The moving contour lines over the hero footage make AquaSmart feel like an instrument, not a brochure.
+                  The moving contour lines and restrained copy make AquaSmart feel like a real instrument, not a gadget pitch.
                 </p>
               </div>
               <div>
                 <p className="eyebrow text-[9px] text-paper-soft/66">Visual direction</p>
                 <p className="mt-2 text-sm leading-6 text-paper-soft/86">
-                  Nature-tech startup energy: clean sans hierarchy, Playfair accents, brighter contrast, and atmospheric gradients.
+                  Nature-tech calm: clear hierarchy, editorial contrast, and enough atmosphere to make a tiny system feel premium.
                 </p>
               </div>
               <div>
                 <p className="eyebrow text-[9px] text-paper-soft/66">Built for</p>
                 <p className="mt-2 text-sm leading-6 text-paper-soft/86">
-                  Growers, estates, and controlled landscapes that need clarity before they need another control panel.
+                  A single pot, a small pump, and an operator who wants better information before adding more water.
                 </p>
               </div>
             </motion.div>
@@ -167,9 +167,9 @@ export default function LandingPage() {
         <section id="manifesto" className="relative mx-auto max-w-7xl px-5 py-24 md:px-8 md:py-32">
           <motion.div {...reveal} className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="field-line">
-              <p className="eyebrow text-[10px] text-clay">Manifesto</p>
+              <p className="eyebrow text-[10px] text-clay">Story</p>
               <h2 className="display-title mt-5 text-5xl text-forest md:text-7xl">
-                Designed like a landscape section, not a software checklist.
+                Designed like a plant journal, not a bloated control suite.
               </h2>
             </div>
 
@@ -199,13 +199,13 @@ export default function LandingPage() {
             <div className="section-frame contour-paper contour-map relative rounded-[2.25rem] p-7 md:p-10">
               <p className="eyebrow text-[10px] text-clay">Principle</p>
               <p className="mt-8 max-w-3xl font-display text-4xl leading-[1.02] text-forest md:text-6xl">
-                &ldquo;When watering becomes visible as terrain, operators trust the system faster.&rdquo;
+                &ldquo;When one plant&apos;s watering history becomes visible, the hardware feels less mysterious.&rdquo;
               </p>
               <div className="mt-10 grid gap-6 border-t border-ink/10 pt-6 md:grid-cols-3">
                 {[
-                  ["Atlas spread", "Asymmetric sections that read like edited print layouts."],
-                  ["Contour memory", "Topographic line work repeats across pages and interactions."],
-                  ["Field calm", "Motion is measured and atmospheric, never dashboard-noisy."],
+                  ["Small scope", "The copy never pretends this rig manages an estate or greenhouse fleet."],
+                  ["Contour memory", "Topographic line work keeps the interface feeling measured instead of improvised."],
+                  ["Bench calm", "Motion stays restrained so one plant's status reads faster than the decoration."],
                 ].map(([title, copy]) => (
                   <div key={title}>
                     <p className="eyebrow text-[9px] text-ink-soft/60">{title}</p>
@@ -219,9 +219,9 @@ export default function LandingPage() {
               <p className="eyebrow text-[10px] text-paper-soft/50">Atmosphere</p>
               <div className="mt-8 grid gap-7">
                 {[
-                  ["Mineral greens", "Deep forest greens ground the brand in landscape rather than tech cliche."],
-                  ["Parchment light", "Warm paper tones make data feel editorial and human."],
-                  ["Clay accents", "The call-to-action color carries warmth and earth without collapsing into rustic nostalgia."],
+                  ["Mineral greens", "Deep greens still suggest living growth, even though the system scale is deliberately small."],
+                  ["Parchment light", "Warm paper tones make sensor numbers feel like notes from a careful keeper."],
+                  ["Clay accents", "Action states stay warm and tactile instead of looking like industrial alarms."],
                 ].map(([title, copy]) => (
                   <div key={title}>
                     <h3 className="font-display text-3xl">{title}</h3>
@@ -240,12 +240,12 @@ export default function LandingPage() {
               <div>
                 <p className="eyebrow text-[10px] text-paper-soft/56">System architecture</p>
                 <h2 className="display-title mt-5 text-5xl md:text-7xl">
-                  One continuous irrigation narrative from sensor to command.
+                  One continuous watering loop from probe to pump.
                 </h2>
               </div>
               <p className="max-w-2xl text-base leading-8 text-paper-soft/72 md:text-lg">
-                The experience is organized as chapters, so people understand how the platform thinks before they are
-                asked to trust it with automation.
+                The system is simple on purpose. Visitors should understand what the probe saw, what logic ran, and why
+                the pump is about to switch before they are asked to trust automation.
               </p>
             </motion.div>
 
@@ -274,12 +274,12 @@ export default function LandingPage() {
               <div>
                 <p className="eyebrow text-[10px] text-clay">Proof</p>
                 <h2 className="display-title mt-5 text-5xl text-forest md:text-7xl">
-                  Beautiful doesn&apos;t matter unless the decisions get sharper.
+                  Small only works when the decisions stay sharp.
                 </h2>
               </div>
               <p className="max-w-2xl text-base leading-8 text-ink-soft md:text-lg">
-                The redesign does more than look distinct. It organizes value into a sequence that makes AquaSmart feel
-                understandable, premium, and operationally credible.
+                The redesign is not just softer branding. It makes a bench-scale watering rig feel understandable,
+                premium, and operationally credible from the first scroll to the live dashboard.
               </p>
             </motion.div>
 
@@ -305,22 +305,22 @@ export default function LandingPage() {
             >
               <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
                 <div>
-                  <p className="eyebrow text-[10px] text-paper-soft/50">Ready to walk the map?</p>
+                  <p className="eyebrow text-[10px] text-paper-soft/50">Ready to open the rig?</p>
                   <h3 className="display-title mt-5 text-5xl md:text-6xl">
-                    Bring the contour memory into your own landscape.
+                    Step from the story into the live one-plant dashboard.
                   </h3>
                   <p className="mt-5 max-w-2xl text-base leading-8 text-paper-soft/74">
-                    Every public page now speaks the same language: field atlas, contour precision, and grounded elegance.
-                    The next click should take visitors directly into a working product narrative.
+                    Every public page now points at the same thing: one moisture probe, one pump control path, and one
+                    calm interface for keeping a single plant alive without guesswork.
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-4 sm:flex-row lg:flex-col">
                   <Link href="/auth" className="atlas-button rounded-full px-6 py-4 text-sm font-medium">
-                    Start a demo session
+                    Open demo access
                   </Link>
                   <Link href="/technology" className="atlas-button-secondary rounded-full px-6 py-4 text-sm font-medium">
-                    Read the stack
+                    Read the build notes
                   </Link>
                 </div>
               </div>

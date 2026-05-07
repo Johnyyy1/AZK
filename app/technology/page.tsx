@@ -14,28 +14,28 @@ const reveal = {
 
 const layers = [
   {
-    title: "Field layer",
-    metric: "IP67 sensor mesh",
-    text: "Moisture, pressure, light, and canopy temperature are collected directly where irrigation decisions matter.",
+    title: "Probe layer",
+    metric: "Single root-zone sensor",
+    text: "Moisture is collected directly from one pot, so the automation is responding to a real root zone instead of a timer.",
   },
   {
-    title: "Prediction layer",
-    metric: "72-hour horizon",
-    text: "Forecasts, evapotranspiration, and prior watering response are folded into a recommendation window that stays explainable.",
+    title: "Decision layer",
+    metric: "5-minute evaluation loop",
+    text: "Recent readings, the previous watering event, and simple safety rules fold into a recommendation window that stays explainable.",
   },
   {
-    title: "Control layer",
-    metric: "Zone-first orchestration",
-    text: "Schedules, overrides, and safety checks remain visible so automation feels supervised rather than hidden.",
+    title: "Pump layer",
+    metric: "One line, one override path",
+    text: "Schedules, manual overrides, and safety checks remain visible so the pump never feels detached from the person using it.",
   },
 ];
 
 const specRows = [
   ["Telemetry cadence", "30 seconds"],
   ["Typical response latency", "< 200 ms"],
-  ["Supported landscape zones", "1 to 128"],
+  ["Managed plants", "1 specimen"],
   ["Offline continuity", "Local queue + replay"],
-  ["Control logging", "Full event history"],
+  ["Control logging", "Single rig event history"],
 ];
 
 export default function TechnologyPage() {
@@ -50,15 +50,15 @@ export default function TechnologyPage() {
               <div>
                 <p className="eyebrow text-[10px] text-clay">Technology</p>
                 <h1 className="display-title mt-6 text-5xl text-forest md:text-7xl xl:text-[6.2rem]">
-                  The stack is engineered like a survey instrument for water.
+                  The stack is engineered like a careful instrument for one plant.
                 </h1>
               </div>
 
               <div className="section-frame rounded-[2rem] p-6 md:p-8">
                 <p className="eyebrow text-[9px] text-ink-soft/56">Operating idea</p>
                 <p className="mt-4 text-base leading-8 text-ink-soft md:text-lg">
-                  AquaSmart is not a black box. It turns sensing, prediction, and control into one readable chain, so
-                  users see why the system is suggesting a watering decision before they approve or automate it.
+                  AquaSmart is not a black box and it is not a huge estate platform. It turns one sensor, one decision
+                  loop, and one pump path into a readable chain the operator can audit at a glance.
                 </p>
               </div>
             </motion.div>
@@ -69,7 +69,7 @@ export default function TechnologyPage() {
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <motion.div {...reveal} className="mb-12 max-w-3xl">
               <p className="eyebrow text-[10px] text-paper-soft/52">Architecture</p>
-              <h2 className="display-title mt-5 text-5xl md:text-7xl">Three layers. One legible decision path.</h2>
+              <h2 className="display-title mt-5 text-5xl md:text-7xl">Three layers. One legible watering path.</h2>
             </motion.div>
 
             <div className="grid gap-6 lg:grid-cols-3">
@@ -94,14 +94,14 @@ export default function TechnologyPage() {
             <motion.article {...reveal} className="section-frame rounded-[2.25rem] p-7 md:p-10">
               <p className="eyebrow text-[10px] text-clay">Signal choreography</p>
               <h2 className="display-title mt-6 text-5xl text-forest md:text-7xl">
-                Forecasts don’t float on top of telemetry. They bend around it.
+                Recommendations do not float above the pot. They follow what the roots are doing.
               </h2>
               <div className="mt-10 rounded-[1.9rem] border border-ink/10 bg-paper p-5">
                 <div className="grid gap-4 md:grid-cols-3">
                   {[
-                    ["Soil moisture", "68%", "Stable / rising"],
-                    ["Heat load", "31°C", "High exposure"],
-                    ["Wind speed", "9 km/h", "Dropping after dusk"],
+                    ["Soil moisture", "42%", "Below target"],
+                    ["Room temperature", "27C", "Warm shelf"],
+                    ["Last pump run", "14 min ago", "Settling"],
                   ].map(([label, value, note]) => (
                     <div key={label} className="rounded-[1.6rem] bg-paper-soft p-4">
                       <p className="eyebrow text-[8px] text-ink-soft/56">{label}</p>
@@ -115,10 +115,11 @@ export default function TechnologyPage() {
                   <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                     <div>
                       <p className="eyebrow text-[8px] text-paper-soft/46">Decision window</p>
-                      <h3 className="mt-2 font-display text-4xl">20:10 to 22:00</h3>
+                      <h3 className="mt-2 font-display text-4xl">Water in 06 min</h3>
                     </div>
                     <p className="max-w-sm text-sm leading-7 text-paper-soft/70">
-                      Recommended because wind drops, soil remains below target, and the next six hours show no rain risk.
+                      Recommended because the root zone is still drying, the last dose has already settled, and the safety
+                      delay has expired.
                     </p>
                   </div>
 
@@ -155,11 +156,12 @@ export default function TechnologyPage() {
                 ))}
               </div>
 
-              <div className="mt-8 rounded-[1.7rem] bg-clay px-5 py-6 text-paper-soft">
-                <p className="eyebrow text-[8px] text-paper-soft/60">Practical outcome</p>
-                <p className="mt-4 font-display text-3xl">Fewer blind spots. Faster intervention.</p>
+                <div className="mt-8 rounded-[1.7rem] bg-clay px-5 py-6 text-paper-soft">
+                  <p className="eyebrow text-[8px] text-paper-soft/60">Practical outcome</p>
+                <p className="mt-4 font-display text-3xl">Fewer blind spots. Gentler intervention.</p>
                 <p className="mt-4 text-sm leading-7 text-paper-soft/78">
-                  The platform surfaces when a recommendation is based on sensor confidence, weather confidence, or both.
+                  The platform makes it clear when a recommendation comes from the probe alone and when an operator
+                  override changed the plan.
                 </p>
               </div>
             </motion.aside>
@@ -173,17 +175,17 @@ export default function TechnologyPage() {
                 <div>
                   <p className="eyebrow text-[10px] text-paper-soft/48">Next step</p>
                   <h2 className="display-title mt-5 text-5xl md:text-6xl">
-                    See the same logic translated into a working client experience.
+                    See the same logic translated into a working operator dashboard.
                   </h2>
                   <p className="mt-5 max-w-2xl text-base leading-8 text-paper-soft/72">
-                    The public-facing redesign is now consistent from first impression to sign-in. Visitors can move from
-                    atmosphere into architecture without losing the thread.
+                    The public-facing redesign now lines up with the product itself. Visitors can move from the story into
+                    the live single-plant controls without losing the thread.
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-4 sm:flex-row lg:flex-col">
                   <Link href="/auth" className="atlas-button rounded-full px-6 py-4 text-sm font-medium">
-                    Open client access
+                    Open operator access
                   </Link>
                   <Link href="/" className="atlas-button-secondary rounded-full px-6 py-4 text-sm font-medium">
                     Back to landing page

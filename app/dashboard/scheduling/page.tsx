@@ -12,19 +12,37 @@ const reveal = {
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const hours = ["6AM", "8AM", "10AM", "12PM", "2PM", "4PM", "6PM", "8PM"];
 const scheduleData: Record<string, number[]> = {
-  Mon: [1, 1, 0, 0, 0, 1, 1, 0],
-  Tue: [1, 0, 0, 0, 0, 0, 1, 0],
-  Wed: [1, 1, 0, 0, 0, 1, 1, 0],
-  Thu: [1, 0, 0, 0, 0, 0, 1, 0],
-  Fri: [1, 1, 0, 0, 0, 1, 1, 0],
-  Sat: [0, 1, 1, 0, 0, 0, 0, 0],
+  Mon: [0, 1, 0, 0, 0, 0, 1, 0],
+  Tue: [0, 0, 0, 0, 0, 0, 1, 0],
+  Wed: [0, 1, 0, 0, 0, 0, 1, 0],
+  Thu: [0, 0, 0, 0, 0, 0, 1, 0],
+  Fri: [0, 1, 0, 0, 0, 0, 1, 0],
+  Sat: [0, 0, 1, 0, 0, 0, 0, 0],
   Sun: [0, 0, 0, 0, 0, 0, 0, 0],
 };
 
 const rules = [
-  { id: 1, name: "Rain Skip", condition: "Rainfall > 5mm in next 6 hrs", action: "Skip scheduled cycle", active: true },
-  { id: 2, name: "Heat Protection", condition: "Temperature > 35C", action: "Add 10 min to evening cycle", active: true },
-  { id: 3, name: "Frost Guard", condition: "Temperature < 2C at dawn", action: "Cancel morning cycle", active: false },
+  {
+    id: 1,
+    name: "Oversaturation Guard",
+    condition: "Moisture > 58%",
+    action: "Skip the next pulse",
+    active: true,
+  },
+  {
+    id: 2,
+    name: "Dry Shelf Boost",
+    condition: "Moisture < 38% for 20 min",
+    action: "Add a short recovery pulse",
+    active: true,
+  },
+  {
+    id: 3,
+    name: "Night Quiet Window",
+    condition: "22:00 to 06:00",
+    action: "Disable non-critical manual starts",
+    active: false,
+  },
 ];
 
 export default function SchedulingPage() {
@@ -32,10 +50,16 @@ export default function SchedulingPage() {
 
   return (
     <main className="px-5 py-6 md:px-8 md:py-8">
-      <motion.header {...reveal} transition={{ duration: 0.5 }} className="mb-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-end">
+      <motion.header
+        {...reveal}
+        transition={{ duration: 0.5 }}
+        className="mb-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-end"
+      >
         <div>
           <p className="eyebrow text-[9px] text-clay">Scheduling</p>
-          <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">Automation should read like a timetable, not a maze.</h1>
+          <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">
+            One plant schedule, written like a timetable instead of a maze.
+          </h1>
         </div>
         <div className="flex flex-wrap gap-3 xl:justify-end">
           {[
@@ -57,8 +81,12 @@ export default function SchedulingPage() {
       </motion.header>
 
       {activeTab === "calendar" ? (
-        <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.1 }} className="section-frame rounded-[2rem] p-6 md:p-7">
-          <p className="eyebrow text-[8px] text-clay">Weekly schedule</p>
+        <motion.section
+          {...reveal}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="section-frame rounded-[2rem] p-6 md:p-7"
+        >
+          <p className="eyebrow text-[8px] text-clay">Weekly cycle</p>
           <div className="mt-6 overflow-x-auto">
             <div className="min-w-[720px]">
               <div className="grid grid-cols-9 gap-3">

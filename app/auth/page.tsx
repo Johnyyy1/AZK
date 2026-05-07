@@ -9,23 +9,23 @@ type AuthState = "login" | "register" | "reset" | "reset-sent";
 
 const panelCopy: Record<AuthState, { title: string; body: string; button: string }> = {
   login: {
-    title: "Enter the field atlas",
-    body: "Sign in to schedules, alerts, zone logic, and operator notes shaped by the new AquaSmart system.",
+    title: "Enter the plant console",
+    body: "Sign in to moisture history, pump overrides, and the single-plant watering schedule.",
     button: "Enter dashboard",
   },
   register: {
     title: "Create an operator account",
-    body: "Open a new workspace for estates, farms, gardens, or research plots that need calmer control surfaces.",
+    body: "Open access for the person responsible for this one watering rig and its plant care history.",
     button: "Create account",
   },
   reset: {
-    title: "Recover client access",
-    body: "We will route a recovery link to the verified operator email attached to your site.",
+    title: "Recover operator access",
+    body: "We will route a recovery link to the verified operator email attached to this plant rig.",
     button: "Send recovery link",
   },
   "reset-sent": {
     title: "Recovery sent",
-    body: "Check your inbox for the recovery path. The link will return you to this atlas without losing context.",
+    body: "Check your inbox for the recovery path. The link will return you to this console without losing context.",
     button: "Back to login",
   },
 };
@@ -33,7 +33,7 @@ const panelCopy: Record<AuthState, { title: string; body: string; button: string
 function AuthHeader({ state }: { state: AuthState }) {
   return (
     <header>
-      <p className="eyebrow text-[10px] text-clay">Client access</p>
+      <p className="eyebrow text-[10px] text-clay">Operator access</p>
       <h1 className="display-title mt-5 text-5xl text-forest md:text-6xl">{panelCopy[state].title}</h1>
       <p className="mt-5 max-w-lg text-base leading-8 text-ink-soft">{panelCopy[state].body}</p>
     </header>
@@ -63,7 +63,7 @@ export default function AuthPage() {
                 <Icon name="water_lock" className="text-[20px]" />
               </div>
               <div className="leading-none">
-                <p className="eyebrow text-[9px] text-paper-soft/70">Field Atlas</p>
+                <p className="eyebrow text-[9px] text-paper-soft/70">Single Plant Rig</p>
                 <p className="font-display text-[1.4rem] tracking-[-0.08em]">AquaSmart</p>
               </div>
             </Link>
@@ -71,21 +71,21 @@ export default function AuthPage() {
             <div className="max-w-2xl">
               <p className="eyebrow text-[10px] text-paper-soft/52">Operator brief</p>
               <h2 className="display-title mt-6 text-6xl xl:text-[6rem]">
-                Calm enough to trust. Precise enough to act on.
+                Calm enough to trust. Small enough to understand fully.
               </h2>
               <p className="mt-6 max-w-xl text-lg leading-8 text-paper-soft/74">
                 The same contour language from the landing experience continues here, so sign-in feels like entering the
-                product world instead of leaving the brand behind.
+                live plant system instead of leaving the story behind.
               </p>
             </div>
 
             <div className="dark-frame max-w-xl rounded-[2rem] p-6">
-              <p className="eyebrow text-[8px] text-paper-soft/48">Live atlas pulse</p>
+              <p className="eyebrow text-[8px] text-paper-soft/48">Live rig pulse</p>
               <div className="mt-5 grid gap-4 sm:grid-cols-3">
                 {[
-                  ["Active sites", "18"],
+                  ["Managed plants", "1"],
                   ["Alert priority", "Low"],
-                  ["Water saved", "61%"],
+                  ["Pump state", "Idle"],
                 ].map(([label, value]) => (
                   <div key={label} className="rounded-[1.35rem] border border-paper/10 bg-paper-soft/6 p-4">
                     <p className="eyebrow text-[8px] text-paper-soft/46">{label}</p>
@@ -117,7 +117,7 @@ export default function AuthPage() {
                 <form className="mt-10 space-y-5" onSubmit={(event) => event.preventDefault()}>
                   {state === "register" ? (
                     <label className="block">
-                      <span className="eyebrow text-[8px] text-ink-soft/56">Site operator</span>
+                      <span className="eyebrow text-[8px] text-ink-soft/56">Plant operator</span>
                       <input
                         type="text"
                         placeholder="Avery Stone"
@@ -130,7 +130,7 @@ export default function AuthPage() {
                     <span className="eyebrow text-[8px] text-ink-soft/56">Email</span>
                     <input
                       type="email"
-                      placeholder="operator@aquasmart.io"
+                      placeholder="operator@aquasmart.one"
                       className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
                     />
                   </label>

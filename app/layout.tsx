@@ -24,9 +24,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "AquaSmart | Field Atlas for Water",
+  title: "AquaSmart | Smart Watering for One Plant",
   description:
-    "AquaSmart turns irrigation into a living field atlas with sensor-driven watering, predictive control, and cinematic clarity.",
+    "AquaSmart keeps a single plant healthy with sensor-driven watering, readable controls, and calm hardware-aware monitoring.",
 };
 
 export default function RootLayout({

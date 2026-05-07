@@ -9,9 +9,33 @@ const reveal = {
 };
 
 const logs = [
-  { time: "Today, 05:30 AM", sub: "Cycle Complete", zone: "North Orchard", duration: "45 min", volume: "120L", method: "Scheduled", status: "Verified" },
-  { time: "Yesterday, 10:15 PM", sub: "Manual Override", zone: "West Terrace", duration: "12 min", volume: "32L", method: "Manual", status: "Verified" },
-  { time: "Yesterday, 05:30 AM", sub: "Interrupted", zone: "South Lawn", duration: "08 min", volume: "18L", method: "Smart Rain", status: "Low Pressure" },
+  {
+    time: "Today, 06:10 AM",
+    sub: "Pulse Complete",
+    zone: "Monstera Deliciosa",
+    duration: "18 sec",
+    volume: "120 ml",
+    method: "Scheduled",
+    status: "Verified",
+  },
+  {
+    time: "Yesterday, 09:40 PM",
+    sub: "Manual Override",
+    zone: "Monstera Deliciosa",
+    duration: "10 sec",
+    volume: "70 ml",
+    method: "Manual",
+    status: "Verified",
+  },
+  {
+    time: "Yesterday, 07:00 AM",
+    sub: "Skipped",
+    zone: "Monstera Deliciosa",
+    duration: "--",
+    volume: "0 ml",
+    method: "Safety Delay",
+    status: "Protected",
+  },
 ];
 
 const moistureSeries = {
@@ -47,11 +71,11 @@ const moistureSeries = {
 } as const;
 
 const moistureHistory = [
-  { time: "Today, 06:10", zone: "North Orchard", moisture: 49, change: "+4%" },
-  { time: "Today, 03:20", zone: "North Orchard", moisture: 45, change: "-2%" },
-  { time: "Today, 00:15", zone: "North Orchard", moisture: 47, change: "+1%" },
-  { time: "Yesterday, 21:05", zone: "West Terrace", moisture: 44, change: "-3%" },
-  { time: "Yesterday, 18:00", zone: "West Terrace", moisture: 47, change: "+5%" },
+  { time: "Today, 06:10", zone: "Monstera Deliciosa", moisture: 49, change: "+4%" },
+  { time: "Today, 03:20", zone: "Monstera Deliciosa", moisture: 45, change: "-2%" },
+  { time: "Today, 00:15", zone: "Monstera Deliciosa", moisture: 47, change: "+1%" },
+  { time: "Yesterday, 21:05", zone: "Monstera Deliciosa", moisture: 44, change: "-3%" },
+  { time: "Yesterday, 18:00", zone: "Monstera Deliciosa", moisture: 47, change: "+5%" },
 ];
 
 type RangeKey = keyof typeof moistureSeries;
@@ -91,23 +115,30 @@ export default function AnalyticsPage() {
 
   return (
     <main className="px-5 py-6 md:px-8 md:py-8">
-      <motion.header {...reveal} transition={{ duration: 0.5 }} className="mb-8 grid gap-6 xl:grid-cols-[0.9fr_1.1fr] xl:items-end">
+      <motion.header
+        {...reveal}
+        transition={{ duration: 0.5 }}
+        className="mb-8 grid gap-6 xl:grid-cols-[0.9fr_1.1fr] xl:items-end"
+      >
         <div>
           <p className="eyebrow text-[9px] text-clay">Analytics</p>
-          <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">The numbers are readable before they are impressive.</h1>
+          <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">
+            One plant&apos;s history, readable before it becomes a problem.
+          </h1>
         </div>
         <div className="section-frame rounded-[1.8rem] p-5 md:p-6">
           <p className="text-sm leading-7 text-ink-soft">
-            A dashboard should foreground what changed, what matters, and what to do next. This view keeps the pacing consistent with the public site.
+            This view foregrounds the one thing that matters: how the plant responded to the last watering pulse and
+            what that means for the next one.
           </p>
         </div>
       </motion.header>
 
       <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.1 }} className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
-          ["Aggregate moisture", "64%", "Optimal"],
+          ["Current moisture", "49%", "Near target"],
           ["Root temperature", "22.4C", "Stable"],
-          ["Weekly usage", "1,482L", "12% above avg"],
+          ["Weekly usage", "3.4 L", "5% below avg"],
           ["Health score", "92/100", "Strong"],
         ].map(([label, value, note]) => (
           <div key={label} className="atlas-card rounded-[1.8rem] p-5">
@@ -119,12 +150,19 @@ export default function AnalyticsPage() {
       </motion.section>
 
       <div className="mt-8 grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
-        <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.15 }} className="section-frame rounded-[2rem] p-6 md:p-7">
+        <motion.section
+          {...reveal}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="section-frame rounded-[2rem] p-6 md:p-7"
+        >
           <div className="flex flex-col gap-3 border-b border-ink/10 pb-5 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="eyebrow text-[8px] text-clay">Moisture history</p>
-              <h2 className="mt-2 font-display text-3xl text-forest">Soil moisture over time</h2>
-              <p className="mt-3 text-sm text-ink-soft">Current average: {chart.latest}% ({chart.delta >= 0 ? "+" : ""}{chart.delta}% vs previous sample)</p>
+              <h2 className="mt-2 font-display text-3xl text-forest">Root-zone moisture over time</h2>
+              <p className="mt-3 text-sm text-ink-soft">
+                Latest reading: {chart.latest}% ({chart.delta >= 0 ? "+" : ""}
+                {chart.delta}% vs previous sample)
+              </p>
             </div>
             <div className="flex gap-2">
               {(["24H", "7D", "30D"] as const).map((label) => (
@@ -132,7 +170,9 @@ export default function AnalyticsPage() {
                   key={label}
                   type="button"
                   onClick={() => setActiveRange(label)}
-                  className={`rounded-full px-4 py-2 text-xs transition ${activeRange === label ? "atlas-button" : "border border-ink/10 bg-white/70 text-ink-soft hover:bg-white"}`}
+                  className={`rounded-full px-4 py-2 text-xs transition ${
+                    activeRange === label ? "atlas-button" : "border border-ink/10 bg-white/70 text-ink-soft hover:bg-white"
+                  }`}
                 >
                   {label}
                 </button>
@@ -157,7 +197,14 @@ export default function AnalyticsPage() {
               })}
 
               <polygon points={chart.areaPoints} fill="url(#analyticsFill)" opacity="0.22" />
-              <polyline points={chart.linePoints} fill="none" stroke="#22b07d" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              <polyline
+                points={chart.linePoints}
+                fill="none"
+                stroke="#22b07d"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
 
               {chart.points.map((point, index) => {
                 const pointX = (index / (chart.points.length - 1)) * 900;
@@ -195,14 +242,20 @@ export default function AnalyticsPage() {
                     <p className="text-sm text-ink-soft">{entry.zone}</p>
                     <p className="mt-1 font-display text-2xl text-forest">{entry.moisture}%</p>
                   </div>
-                  <p className={`text-sm font-medium ${entry.change.startsWith("+") ? "text-forest" : "text-clay"}`}>{entry.change}</p>
+                  <p className={`text-sm font-medium ${entry.change.startsWith("+") ? "text-forest" : "text-clay"}`}>
+                    {entry.change}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
         </motion.section>
 
-        <motion.section {...reveal} transition={{ duration: 0.5, delay: 0.2 }} className="dark-frame rounded-[2rem] p-6 md:p-7 text-paper-soft">
+        <motion.section
+          {...reveal}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="dark-frame rounded-[2rem] p-6 text-paper-soft md:p-7"
+        >
           <p className="eyebrow text-[8px] text-paper-soft/46">Recent watering logs</p>
           <div className="mt-5 space-y-4">
             {logs.map((log) => (

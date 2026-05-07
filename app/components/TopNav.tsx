@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 import Icon from "./Icon";
 
 const navLinks = [
-  { href: "/#manifesto", label: "Manifesto" },
+  { href: "/#manifesto", label: "Story" },
   { href: "/#system", label: "System" },
-  { href: "/#proof", label: "Proof" },
+  { href: "/#proof", label: "Dashboard" },
   { href: "/technology", label: "Technology" },
 ];
 
@@ -50,7 +50,7 @@ export default function TopNav() {
                 <Icon name="water_lock" className="text-[20px]" />
               </div>
               <div className="leading-none">
-                <p className="eyebrow text-[9px] text-paper-soft/70">Field Atlas</p>
+                <p className="eyebrow text-[9px] text-paper-soft/70">Single Plant Rig</p>
                 <p className="font-display text-[1.35rem] tracking-[-0.08em]">AquaSmart</p>
               </div>
             </Link>
@@ -72,10 +72,10 @@ export default function TopNav() {
                 href="/auth"
                 className="rounded-full border border-paper/18 px-4 py-2 text-sm text-paper-soft/82 transition hover:bg-paper-soft/10 hover:text-paper-soft"
               >
-                Client Access
+                Operator Access
               </Link>
               <Link href="/auth" className="atlas-button rounded-full px-5 py-3 text-sm font-medium">
-                Book a Demo
+                Open Demo
               </Link>
             </div>
 
@@ -128,10 +128,10 @@ export default function TopNav() {
                 href="/auth"
                 className="rounded-[1.4rem] border border-paper/12 px-4 py-4 text-center text-sm"
               >
-                Client Access
+                Operator Access
               </Link>
               <Link href="/auth" className="atlas-button rounded-[1.4rem] px-4 py-4 text-sm font-medium">
-                Book a Demo
+                Open Demo
               </Link>
             </div>
           </motion.div>

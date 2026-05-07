@@ -4,7 +4,7 @@ const footerGroups = [
   {
     title: "Explore",
     links: [
-      { label: "Manifesto", href: "/#manifesto" },
+      { label: "Story", href: "/#manifesto" },
       { label: "System", href: "/#system" },
       { label: "Technology", href: "/technology" },
     ],
@@ -12,17 +12,17 @@ const footerGroups = [
   {
     title: "Operate",
     links: [
-      { label: "Client Access", href: "/auth" },
+      { label: "Operator Access", href: "/auth" },
       { label: "Dashboard", href: "/dashboard" },
-      { label: "Zones", href: "/dashboard/zones" },
+      { label: "Plant Profile", href: "/dashboard/zones" },
     ],
   },
   {
     title: "Contact",
     links: [
-      { label: "Schedule a Demo", href: "/auth" },
-      { label: "Support Desk", href: "/auth" },
-      { label: "Field Notes", href: "/technology" },
+      { label: "Open Demo", href: "/auth" },
+      { label: "Support", href: "/auth" },
+      { label: "Build Notes", href: "/technology" },
     ],
   },
 ];
@@ -34,13 +34,13 @@ export default function Footer() {
       <div className="relative mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="max-w-2xl">
-            <p className="eyebrow mb-5 text-[10px] text-paper-soft/60">AquaSmart / Field Atlas</p>
+            <p className="eyebrow mb-5 text-[10px] text-paper-soft/60">AquaSmart / Single Plant Rig</p>
             <h2 className="display-title text-5xl text-paper-soft md:text-7xl">
-              The irrigation platform people remember because it feels mapped, not marketed.
+              One plant. One pump. One interface that stays readable.
             </h2>
             <p className="mt-6 max-w-xl text-base leading-7 text-paper-soft/72 md:text-lg">
-              We turn every zone, valve, and forecast into one legible landscape. The contour lines are not decoration.
-              They are the visual promise of precision.
+              AquaSmart is not selling a giant irrigation estate. It is a compact watering system that watches one plant,
+              reads one moisture story, and lets one operator intervene without guesswork.
             </p>
           </div>
 
@@ -65,8 +65,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-paper/10 pt-6 text-xs text-paper-soft/46 md:flex-row md:items-center md:justify-between">
-          <p>2026 AquaSmart Systems. Precision watering for cultivated landscapes.</p>
-          <p className="eyebrow text-[9px]">Prague / Brezen / Remote Control Ready</p>
+          <p>2026 AquaSmart Systems. Precision watering for one monitored plant.</p>
+          <p className="eyebrow text-[9px]">Prague / Bench Scale / Remote Control Ready</p>
         </div>
       </div>
     </footer>

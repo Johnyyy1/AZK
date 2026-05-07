@@ -8,9 +8,9 @@ import Icon, { type IconName } from "./Icon";
 
 const navItems = [
   { icon: "dashboard", label: "Dashboard", href: "/dashboard" },
-  { icon: "potted_plant", label: "Zones", href: "/dashboard/zones" },
+  { icon: "potted_plant", label: "Plant", href: "/dashboard/zones" },
   { icon: "leaderboard", label: "Analytics", href: "/dashboard/analytics" },
-  { icon: "calendar_today", label: "Scheduling", href: "/dashboard/scheduling" },
+  { icon: "calendar_today", label: "Cycle", href: "/dashboard/scheduling" },
   { icon: "tune", label: "Controls", href: "/dashboard/controls" },
   { icon: "settings", label: "Settings", href: "/dashboard/settings" },
 ] satisfies Array<{ icon: IconName; label: string; href: string }>;
@@ -23,7 +23,7 @@ function Brand() {
       </div>
       <div className="leading-none">
         <p className="eyebrow text-[8px] text-ink-soft/44">Dashboard</p>
-        <p className="font-display text-[1.3rem] tracking-[-0.07em] text-forest">AquaSmart</p>
+        <p className="font-display text-[1.3rem] tracking-[-0.07em] text-forest">AquaSmart One</p>
       </div>
     </Link>
   );
@@ -94,13 +94,13 @@ export default function Sidebar() {
           </div>
 
           <div className="mt-auto space-y-4">
-            <Link href="/dashboard/zones" className="atlas-button flex w-full rounded-full px-5 py-3 text-sm font-medium">
-              Add a zone
+            <Link href="/dashboard/controls" className="atlas-button flex w-full rounded-full px-5 py-3 text-sm font-medium">
+              Open pump controls
             </Link>
             <div className="rounded-[1.6rem] border border-ink/8 bg-white/70 p-4 text-ink-soft">
-              <p className="eyebrow text-[8px] text-ink-soft/44">Live mode</p>
+              <p className="eyebrow text-[8px] text-ink-soft/44">Live rig</p>
               <p className="mt-3 text-sm leading-7">
-                Responsive dashboard shell aligned with the public site’s nature-tech visual system.
+                One plant, one watering line, and one dashboard aligned with the public visual system.
               </p>
             </div>
           </div>
