@@ -27,7 +27,7 @@ export default async function DashboardLayout({
                     analytics, or pump commands can become live.
                   </p>
                 </div>
-                <Link href="/dashboard/settings" className="shrink-0 rounded-full bg-forest-deep px-5 py-3 text-sm font-medium text-paper-soft transition hover:bg-forest">
+                <Link href="/dashboard/settings" className="shrink-0 rounded-full bg-forest-deep px-5 py-3 text-sm font-medium !text-paper-soft transition hover:bg-forest">
                   Set up PLC
                 </Link>
               </div>
