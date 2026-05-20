@@ -13,11 +13,14 @@ type PumpStatus = {
 		timestamp: number;
 	} | null;
 	lastCommand: {
+		id?: string;
 		enabled: boolean;
 		mode: string;
 		address: number;
+		status?: string;
 		timestamp: number;
 	} | null;
+	message?: string;
 };
 
 const formatTimestamp = (timestamp: number | null | undefined) => {
@@ -115,8 +118,8 @@ export default function PumpControlCard() {
 					<p className="eyebrow text-[8px] text-paper-soft/46">Pump control</p>
 					<h2 className="mt-3 font-display text-4xl text-paper-soft">Manual watering line control from the dashboard.</h2>
 					<p className="mt-4 max-w-xl text-sm leading-7 text-paper-soft/72">
-						This sends a live Modbus command through the local backend. For safety, wire the command to the writable
-						LOGO marker or register that your PLC logic uses as the single plant&apos;s manual override.
+						This queues a pump command in AquaSmart. The local bridge pulls it from the cloud, writes the configured
+						LOGO marker or register, and reports the result back to the dashboard.
 					</p>
 				</div>
 
@@ -142,9 +145,9 @@ export default function PumpControlCard() {
 
 			<div className="mt-6 grid gap-3 md:grid-cols-4">
 				{[
-					["Backend", status?.connected ? "Online" : "Offline"],
+					["Agent", status?.connected ? "Online" : "Waiting"],
 					["Mapping", status?.configured ? `${status.mode} ${status.address}` : "Not configured"],
-					["Command", statusLabel],
+					["Command", status?.lastCommand?.status ?? statusLabel],
 					["Last action", formatTimestamp(status?.lastCommand?.timestamp)],
 				].map(([label, value]) => (
 					<div key={label} className="rounded-[1.3rem] border border-paper-soft/10 bg-paper-soft/6 px-4 py-4">
@@ -160,7 +163,7 @@ export default function PumpControlCard() {
 			) : null}
 			{status && !status.configured ? (
 				<p className="mt-3 text-sm text-paper-soft/72">
-					Set `PUMP_COIL_ADDRESS` or `PUMP_REGISTER_ADDRESS` in the backend environment before using the button.
+					{status.message ?? "Add a PLC and pump mapping in Settings before using the button."}
 				</p>
 			) : null}
 		</section>

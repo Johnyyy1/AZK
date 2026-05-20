@@ -1,61 +1,47 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "motion/react";
+import { formatDateTime, formatTime, getDashboardData, isAgentOnline } from "@/app/lib/dashboard-data";
+import { requireSession } from "@/app/lib/session";
 
-const reveal = {
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
+const moistureNote = (value: number | null) => {
+  if (value === null) return "Waiting for first bridge report";
+  if (value < 40) return "Below working range";
+  if (value > 60) return "Above working range";
+  return "Reading stored from LOGO bridge";
 };
 
-const plantPanels = [
-  { name: "Moisture probe", value: "42%", note: "Below target" },
-  { name: "Pot temperature", value: "24.8C", note: "Stable" },
-  { name: "Reservoir", value: "68%", note: "Enough for today" },
-  { name: "Last watering", value: "14m ago", note: "Settling" },
-];
+export default async function DashboardPage() {
+  const session = await requireSession();
+  const data = await getDashboardData(session.user.id);
+  const plc = data.primaryPlc;
+  const latestMoisture = data.latestReading?.value ?? null;
+  const online = plc ? isAgentOnline(plc.lastHeartbeatAt) : false;
 
-const focusCards = [
-  {
-    label: "Current specimen",
-    title: "Monstera Deliciosa",
-    status: "Observation mode",
-    primaryLabel: "Moisture",
-    primaryValue: "42%",
-    secondaryLabel: "Target",
-    secondaryValue: "48-55%",
-  },
-  {
-    label: "Next action",
-    title: "Prepare a short watering pulse",
-    status: "Recommended in 06 min",
-    primaryLabel: "Dose",
-    primaryValue: "120 ml",
-    secondaryLabel: "Pump time",
-    secondaryValue: "18 sec",
-  },
-];
+  const plantPanels = [
+    { name: "Moisture probe", value: latestMoisture === null ? "--" : `${latestMoisture}`, note: moistureNote(latestMoisture) },
+    { name: "PLC bridges", value: String(data.plcs.length), note: plc ? `${plc.name} selected` : "Add hardware in Settings" },
+    { name: "Agent status", value: plc ? (online ? "Online" : "Waiting") : "No PLC", note: plc ? formatDateTime(plc.lastHeartbeatAt) : "No heartbeat yet" },
+    {
+      name: "Last command",
+      value: data.latestCommand?.status ?? "None",
+      note: data.latestCommand ? formatDateTime(data.latestCommand.requestedAt) : "No pump command queued",
+    },
+  ];
 
-export default function DashboardPage() {
   return (
     <main className="px-5 py-6 md:px-8 md:py-8">
-      <motion.header
-        {...reveal}
-        transition={{ duration: 0.5 }}
-        className="mb-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-end"
-      >
+      <header className="mb-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-end">
         <div>
           <p className="eyebrow text-[9px] text-clay">Plant overview</p>
           <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">
-            A calm operational read of one living system.
+            A live operational read of your AquaSmart workspace.
           </h1>
         </div>
         <div className="section-frame rounded-[1.8rem] p-5 md:p-6">
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              ["System status", "Online"],
-              ["Plant state", "Drying gently"],
-              ["Last sync", "14:02:45"],
+              ["Workspace", data.site.name],
+              ["System status", plc ? (online ? "Agent online" : "Awaiting agent") : "Setup needed"],
+              ["Last sync", plc ? formatTime(plc.lastHeartbeatAt) : "Never"],
             ].map(([label, value]) => (
               <div key={label} className="rounded-[1.3rem] bg-white/60 p-4">
                 <p className="eyebrow text-[8px] text-ink-soft/58">{label}</p>
@@ -64,89 +50,74 @@ export default function DashboardPage() {
             ))}
           </div>
         </div>
-      </motion.header>
+      </header>
 
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1.15fr)_0.85fr]">
         <div className="space-y-8">
-          <motion.section
-            {...reveal}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
-          >
+          <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {plantPanels.map((panel) => (
               <div key={panel.name} className="atlas-card rounded-[1.8rem] p-5">
                 <p className="eyebrow text-[8px] text-clay">{panel.name}</p>
-                <p className="mt-4 font-display text-5xl text-forest">{panel.value}</p>
+                <p className="mt-4 break-words font-display text-5xl text-forest">{panel.value}</p>
                 <p className="mt-3 text-sm text-ink-soft">{panel.note}</p>
               </div>
             ))}
-          </motion.section>
+          </section>
 
-          <motion.section
-            {...reveal}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="section-frame rounded-[2rem] p-6 md:p-7"
-          >
+          <section className="section-frame rounded-[2rem] p-6 md:p-7">
             <div className="mb-6 flex items-center justify-between gap-4">
               <div>
-                <p className="eyebrow text-[8px] text-clay">Plant focus</p>
+                <p className="eyebrow text-[8px] text-clay">Hardware focus</p>
                 <h2 className="mt-2 font-display text-3xl text-forest">
-                  What this plant needs right now
+                  {plc ? plc.name : "No Siemens LOGO has been added yet"}
                 </h2>
               </div>
-              <Link href="/dashboard/zones" className="text-sm text-forest transition hover:text-clay">
-                Open profile
+              <Link href="/dashboard/settings" className="text-sm text-forest transition hover:text-clay">
+                Open settings
               </Link>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              {focusCards.map((card) => (
-                <div key={card.title} className="rounded-[1.6rem] border border-ink/8 bg-white/70 p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-sm font-medium text-ink-soft">{card.label}</p>
-                      <h3 className="mt-2 font-display text-3xl text-forest">{card.title}</h3>
-                      <p className="mt-2 text-sm text-ink-soft">{card.status}</p>
-                    </div>
-                    <button className="atlas-button rounded-full px-4 py-2 text-xs font-medium">
-                      Review
-                    </button>
+            {plc ? (
+              <div className="grid gap-4 md:grid-cols-2">
+                {[
+                  ["LOGO endpoint", `${plc.logoIp}:${plc.logoPort}`],
+                  ["Modbus unit", String(plc.unitId)],
+                  ["Read map", `${plc.registerOffset} / ${plc.registerCount}`],
+                  ["Pump map", `${plc.pumpWriteMode} ${plc.pumpWriteMode === "coil" ? plc.pumpCoilAddress ?? "missing" : plc.pumpRegisterAddress ?? "missing"}`],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-[1.6rem] border border-ink/8 bg-white/70 p-5">
+                    <p className="text-sm font-medium text-ink-soft">{label}</p>
+                    <p className="mt-2 break-words font-display text-3xl text-forest">{value}</p>
                   </div>
-                  <div className="mt-5 grid grid-cols-2 gap-4">
-                    <div className="rounded-[1.2rem] bg-paper p-4">
-                      <p className="eyebrow text-[7px] text-ink-soft/58">{card.primaryLabel}</p>
-                      <p className="mt-2 font-display text-3xl text-forest">{card.primaryValue}</p>
-                    </div>
-                    <div className="rounded-[1.2rem] bg-paper p-4">
-                      <p className="eyebrow text-[7px] text-ink-soft/58">{card.secondaryLabel}</p>
-                      <p className="mt-2 font-display text-3xl text-forest">{card.secondaryValue}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.section>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-[1.6rem] border border-ink/8 bg-white/70 p-5">
+                <p className="text-sm leading-7 text-ink-soft">
+                  Add your LOGO 8.4 in Settings, copy the generated bridge token, then start the local Bun bridge. Once it
+                  reports back, readings and pump history will appear here.
+                </p>
+              </div>
+            )}
+          </section>
         </div>
 
         <div className="space-y-8">
-          <motion.section
-            {...reveal}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="dark-frame rounded-[2rem] p-6 text-paper-soft md:p-7"
-          >
-            <p className="eyebrow text-[8px] text-paper-soft/46">Recommended action</p>
+          <section className="dark-frame rounded-[2rem] p-6 text-paper-soft md:p-7">
+            <p className="eyebrow text-[8px] text-paper-soft/46">Current action</p>
             <h2 className="mt-4 font-display text-4xl">
-              Wait for the pot to settle, then add one short pulse.
+              {plc ? (online ? "Bridge is ready for queued commands." : "Start the local bridge agent.") : "Finish PLC setup first."}
             </h2>
             <p className="mt-4 text-sm leading-7 text-paper-soft/72">
-              Moisture is still falling after the last dose. A small follow-up pulse should land closer to target than a
-              long manual run.
+              {plc
+                ? "AquaSmart will only show recommendations after the bridge sends real readings. Until then, manual controls queue commands for the configured PLC."
+                : "There is no live hardware attached to this account yet, so the dashboard is intentionally empty."}
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
               {[
-                ["Window", "in 06 min"],
-                ["Expected use", "120 ml"],
-                ["Confidence", "92/100"],
+                ["Readings stored", String(data.readings.length)],
+                ["Commands stored", String(data.commands.length)],
+                ["Latest reading", data.latestReading ? formatDateTime(data.latestReading.readAt) : "Never"],
               ].map(([label, value]) => (
                 <div key={label} className="rounded-[1.2rem] border border-paper/10 bg-paper-soft/6 px-4 py-3">
                   <p className="eyebrow text-[7px] text-paper-soft/44">{label}</p>
@@ -154,26 +125,17 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-          </motion.section>
+          </section>
 
-          <motion.section
-            {...reveal}
-            transition={{ duration: 0.5, delay: 0.25 }}
-            className="atlas-card rounded-[2rem] p-6 md:p-7"
-          >
+          <section className="atlas-card rounded-[2rem] p-6 md:p-7">
             <p className="eyebrow text-[8px] text-clay">Alerts</p>
-            <div className="mt-5 space-y-4">
-              {[
-                ["Moisture below target", "The root zone has stayed under 45% for the last 18 minutes."],
-                ["Reservoir check tonight", "Water supply is healthy now, but tomorrow morning will need a refill."],
-              ].map(([title, copy]) => (
-                <div key={title} className="rounded-[1.3rem] bg-white/70 p-4">
-                  <h3 className="font-medium text-forest">{title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-ink-soft">{copy}</p>
-                </div>
-              ))}
+            <div className="mt-5 rounded-[1.3rem] bg-white/70 p-4">
+              <h3 className="font-medium text-forest">{plc?.lastErrorMessage ? "Bridge reported an error" : "No live alerts"}</h3>
+              <p className="mt-2 text-sm leading-7 text-ink-soft">
+                {plc?.lastErrorMessage ?? "AquaSmart has not received any hardware errors for this workspace."}
+              </p>
             </div>
-          </motion.section>
+          </section>
         </div>
       </div>
     </main>

@@ -2,10 +2,12 @@
 
 AquaSmart is a Next.js dashboard plus a small Bun-powered TypeScript backend for communicating with a Siemens LOGO! PLC over Modbus TCP.
 
-This project currently does two main things:
+This project currently does four main things:
 
 - reads moisture data from the LOGO!
-- lets the dashboard manually switch the pump (`Cerpadlo`) on and off
+- lets the dashboard queue manual pump commands (`Cerpadlo`)
+- stores users, sessions, PLC config, telemetry, and command history in Postgres
+- lets a local bridge agent pull work from AquaSmart without exposing the PLC to the public internet
 
 ## How the communication works
 
@@ -19,9 +21,11 @@ Flow:
 
 ```text
 Dashboard button
-  -> Next.js route /api/logo/pump
-  -> local backend http://127.0.0.1:4001/api/pump
+  -> authenticated Next.js route /api/logo/pump
+  -> Postgres pump_commands queue
+  -> local bridge polls /api/agent/sync with AQUASMART_AGENT_TOKEN
   -> Modbus TCP write to LOGO!
+  -> local bridge reports result to /api/agent/report
   -> LOGO! marker M1
   -> OR block B007
   -> output Q1 (Cerpadlo)
@@ -31,9 +35,9 @@ For reading moisture:
 
 ```text
 LOGO! holding register
-  -> backend reads with Modbus TCP
-  -> backend exposes /api/moisture and /api/health
-  -> frontend can show the current state
+  -> local bridge reads with Modbus TCP
+  -> local bridge reports telemetry to /api/agent/report
+  -> frontend shows the latest stored state
 ```
 
 ## Current PLC logic
@@ -69,13 +73,33 @@ This is because the Modbus client uses addressing that ended up needing the `M1`
 
 ## Important files
 
-- `C:\Users\jonas\AZK\app\api\logo\pump\route.ts` - frontend API proxy to the local backend
+- `C:\Users\jonas\AZK\app\api\logo\pump\route.ts` - authenticated pump command queue endpoint
+- `C:\Users\jonas\AZK\app\api\agent\sync\route.ts` - cloud endpoint used by the local bridge to pull config and commands
+- `C:\Users\jonas\AZK\app\api\agent\report\route.ts` - cloud endpoint used by the local bridge to report telemetry and command results
 - `C:\Users\jonas\AZK\app\components\PumpControlCard.tsx` - dashboard pump control card
 - `C:\Users\jonas\AZK\backend\scripts\logoCommunication.ts` - Modbus TCP connection, reading, and pump writes
+- `C:\Users\jonas\AZK\app\db\schema.ts` - Drizzle schema for auth, sites, PLCs, telemetry, and commands
 - `C:\Users\jonas\AZK\backend\.env` - backend runtime configuration
 - `C:\Users\jonas\AZK\.env.local` - frontend runtime configuration
 
 ## Environment configuration
+
+### Database and auth
+
+The frontend requires Postgres and Better Auth configuration:
+
+```env
+DATABASE_URL=postgres://aquasmart:aquasmart@127.0.0.1:5432/aquasmart
+BETTER_AUTH_SECRET=replace-with-a-long-random-secret
+BETTER_AUTH_URL=http://localhost:3000
+```
+
+Generate and apply database migrations with:
+
+```powershell
+bun run db:generate
+bun run db:migrate
+```
 
 ### Backend
 
@@ -93,6 +117,17 @@ REGISTER_COUNT=1
 PUMP_COIL_ADDRESS=8256
 ```
 
+To run the bridge as a cloud agent instead of the legacy local HTTP API, also set:
+
+```env
+AQUASMART_CLOUD_URL=http://localhost:3000
+AQUASMART_AGENT_TOKEN=as_generated_from_dashboard_settings
+AGENT_SYNC_INTERVAL_MS=2000
+```
+
+When those two AquaSmart values are present, the backend does not need to expose a local pump API. It polls the cloud for
+its LOGO configuration and queued pump commands.
+
 ### Frontend
 
 Frontend config is loaded from `C:\Users\jonas\AZK\.env.local`.
@@ -100,7 +135,9 @@ Frontend config is loaded from `C:\Users\jonas\AZK\.env.local`.
 Current value:
 
 ```env
-LOGO_BACKEND_URL=http://127.0.0.1:4001
+DATABASE_URL=postgres://aquasmart:aquasmart@127.0.0.1:5432/aquasmart
+BETTER_AUTH_SECRET=replace-with-a-long-random-secret
+BETTER_AUTH_URL=http://localhost:3000
 ```
 
 ## Docker setup
@@ -109,6 +146,7 @@ The repository now includes a full Docker setup for both services:
 
 - `Dockerfile` - production image for the Next.js frontend
 - `backend/Dockerfile` - Bun image for the Modbus bridge
+- `db` service - Postgres for auth, PLC configuration, telemetry, and command queue
 - `compose.yaml` - runs both containers together
 - `docker.env.example` - example Compose environment file
 
@@ -126,19 +164,18 @@ cd C:\Users\jonas\AZK
 Copy-Item docker.env.example .env
 ```
 
-Set at least the PLC connection values in `.env`:
+Set at least the database/auth values in `.env`:
 
 ```env
-LOGO_IP=192.168.0.3
-LOGO_PORT=502
-UNIT_ID=1
-PUMP_COIL_ADDRESS=8256
+DATABASE_URL=postgres://aquasmart:aquasmart@db:5432/aquasmart
+BETTER_AUTH_SECRET=replace-with-a-long-random-secret
+BETTER_AUTH_URL=http://localhost:3000
 ```
 
 Notes:
 
-- `LOGO_BACKEND_URL` should stay `http://backend:4000` when the frontend runs inside Compose
 - `BACKEND_PORT` only affects the host port mapping; inside the Docker network the backend still listens on `4000`
+- after Postgres starts for the first time, run `bun run db:migrate` from the project root with `DATABASE_URL` pointing at the database
 
 ### Start with Docker Compose
 
@@ -152,7 +189,7 @@ Then open:
 - [http://localhost:3000](http://localhost:3000)
 - [http://localhost:3000/dashboard/controls](http://localhost:3000/dashboard/controls)
 
-The backend will also be available on the host at:
+If the backend is running in legacy local mode, it will also be available on the host at:
 
 - [http://localhost:4000/api/health](http://localhost:4000/api/health)
 - [http://localhost:4000/api/pump](http://localhost:4000/api/pump)
@@ -172,22 +209,39 @@ cd C:\Users\jonas\AZK
 bun install
 ```
 
-Open two terminals.
+Open three terminals.
 
-### Terminal 1 - backend
+### Terminal 1 - database
+
+Start Postgres, then run migrations:
+
+```powershell
+cd C:\Users\jonas\AZK
+docker compose up -d db
+$env:DATABASE_URL="postgres://aquasmart:aquasmart@127.0.0.1:5432/aquasmart"
+bun run db:migrate
+```
+
+### Terminal 2 - backend bridge
 
 ```powershell
 cd C:\Users\jonas\AZK
 bun run backend:start
 ```
 
-Expected output:
+Without `AQUASMART_CLOUD_URL` and `AQUASMART_AGENT_TOKEN`, this starts the legacy local HTTP backend. Expected output:
 
 - `HTTP API ready on port 4001`
 - `Connected to LOGO at 192.168.0.3:502`
 - periodic moisture read logs
 
-### Terminal 2 - frontend
+With cloud-agent env values from Dashboard Settings, expected output starts with:
+
+```powershell
+[logo-backend] Cloud agent mode enabled. Syncing with http://localhost:3000
+```
+
+### Terminal 3 - frontend
 
 ```powershell
 cd C:\Users\jonas\AZK
@@ -200,38 +254,41 @@ Then open:
 
 ## How to use the pump control
 
+On the dashboard Settings page:
+
+- create an account
+- add a Siemens LOGO 8.4 PLC
+- copy the one-time `AQUASMART_AGENT_TOKEN`
+- start the bridge with `AQUASMART_CLOUD_URL` and `AQUASMART_AGENT_TOKEN`
+
 On the dashboard controls page:
 
-- click `Turn pump on` to write `true` to the configured pump coil
-- click `Turn pump off` to write `false` to the configured pump coil
+- click `Turn pump on` to queue a `true` command for the selected PLC
+- click `Turn pump off` to queue a `false` command for the selected PLC
 
 The dashboard calls:
 
 - `GET /api/logo/pump` for status
 - `POST /api/logo/pump` for commands
 
-The backend then calls Modbus:
+The local bridge then polls and calls Modbus:
 
 - `writeCoil(8256, true)` for ON
 - `writeCoil(8256, false)` for OFF
 
-## Backend API
+## Bridge APIs
 
-The local backend exposes:
+Cloud-agent endpoints:
+
+- `GET /api/agent/sync` - authenticated with `Authorization: Bearer AQUASMART_AGENT_TOKEN`; returns PLC config and the next queued command
+- `POST /api/agent/report` - authenticated bridge report for heartbeat, readings, errors, and command results
+
+Legacy local backend mode still exposes:
 
 - `GET /api/health` - connection state, latest error, latest reading
 - `GET /api/moisture` - full monitor state including moisture data
 - `GET /api/pump` - pump control configuration and last pump command
 - `POST /api/pump` - sends pump ON/OFF command
-
-Example:
-
-```powershell
-Invoke-RestMethod -Uri "http://127.0.0.1:4001/api/pump" `
-  -Method POST `
-  -ContentType "application/json" `
-  -Body '{"enabled":true}'
-```
 
 ## Common problems
 
@@ -327,5 +384,4 @@ bun run backend:test:logo
 ## Notes for future changes
 
 - If you change the manual override bit in LOGO! from `M1` to another marker, update `PUMP_COIL_ADDRESS` in `backend\.env`
-- If backend port changes, also update `LOGO_BACKEND_URL` in `.env.local`
 - If you move from coil control to holding register control, replace `PUMP_COIL_ADDRESS` with `PUMP_REGISTER_ADDRESS`

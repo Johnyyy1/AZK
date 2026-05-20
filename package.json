@@ -11,20 +11,29 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "backend:start": "bun --cwd backend run start",
     "backend:test:logo": "bun --cwd backend run test:logo"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.6.11",
+    "better-auth": "^1.6.11",
+    "drizzle-orm": "^0.45.2",
     "motion": "12.38.0",
     "next": "16.2.1",
+    "pg": "^8.21.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.2.4",
     "@types/node": "20.19.39",
+    "@types/pg": "^8.20.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "drizzle-kit": "^0.31.10",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "4.2.4",

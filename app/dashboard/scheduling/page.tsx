@@ -1,140 +1,70 @@
-"use client";
+import Link from "next/link";
+import { formatDateTime, getDashboardData } from "@/app/lib/dashboard-data";
+import { requireSession } from "@/app/lib/session";
 
-import { motion } from "motion/react";
-import { useState } from "react";
-import Icon from "../../components/Icon";
-
-const reveal = {
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
-};
-
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const hours = ["6AM", "8AM", "10AM", "12PM", "2PM", "4PM", "6PM", "8PM"];
-const scheduleData: Record<string, number[]> = {
-  Mon: [0, 1, 0, 0, 0, 0, 1, 0],
-  Tue: [0, 0, 0, 0, 0, 0, 1, 0],
-  Wed: [0, 1, 0, 0, 0, 0, 1, 0],
-  Thu: [0, 0, 0, 0, 0, 0, 1, 0],
-  Fri: [0, 1, 0, 0, 0, 0, 1, 0],
-  Sat: [0, 0, 1, 0, 0, 0, 0, 0],
-  Sun: [0, 0, 0, 0, 0, 0, 0, 0],
-};
-
-const rules = [
-  {
-    id: 1,
-    name: "Oversaturation Guard",
-    condition: "Moisture > 58%",
-    action: "Skip the next pulse",
-    active: true,
-  },
-  {
-    id: 2,
-    name: "Dry Shelf Boost",
-    condition: "Moisture < 38% for 20 min",
-    action: "Add a short recovery pulse",
-    active: true,
-  },
-  {
-    id: 3,
-    name: "Night Quiet Window",
-    condition: "22:00 to 06:00",
-    action: "Disable non-critical manual starts",
-    active: false,
-  },
-];
-
-export default function SchedulingPage() {
-  const [activeTab, setActiveTab] = useState<"calendar" | "rules">("calendar");
+export default async function SchedulingPage() {
+  const session = await requireSession();
+  const data = await getDashboardData(session.user.id);
+  const plc = data.primaryPlc;
 
   return (
     <main className="px-5 py-6 md:px-8 md:py-8">
-      <motion.header
-        {...reveal}
-        transition={{ duration: 0.5 }}
-        className="mb-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-end"
-      >
+      <header className="mb-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr] xl:items-end">
         <div>
           <p className="eyebrow text-[9px] text-clay">Scheduling</p>
           <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">
-            One plant schedule, written like a timetable instead of a maze.
+            Automation rules will stay empty until they are real.
           </h1>
         </div>
-        <div className="flex flex-wrap gap-3 xl:justify-end">
-          {[
-            ["calendar", "Weekly calendar"],
-            ["rules", "Smart rules"],
-          ].map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => setActiveTab(value as "calendar" | "rules")}
-              className={`rounded-full px-5 py-3 text-sm ${
-                activeTab === value ? "atlas-button" : "border border-ink/10 bg-white/75 text-ink-soft"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="section-frame rounded-[1.8rem] p-5 text-sm leading-7 text-ink-soft">
+          AquaSmart currently supports authenticated manual pump commands and bridge telemetry. Timed schedules and smart
+          rules need their own database model before this page should show active automation.
         </div>
-      </motion.header>
+      </header>
 
-      {activeTab === "calendar" ? (
-        <motion.section
-          {...reveal}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="section-frame rounded-[2rem] p-6 md:p-7"
-        >
-          <p className="eyebrow text-[8px] text-clay">Weekly cycle</p>
-          <div className="mt-6 overflow-x-auto">
-            <div className="min-w-[720px]">
-              <div className="grid grid-cols-9 gap-3">
-                <div />
-                {hours.map((hour) => (
-                  <div key={hour} className="eyebrow text-center text-[7px] text-ink-soft/58">
-                    {hour}
-                  </div>
-                ))}
+      <div className="grid gap-8 xl:grid-cols-[1fr_1fr]">
+        <section className="section-frame rounded-[2rem] p-6 md:p-7">
+          <p className="eyebrow text-[8px] text-clay">Automation status</p>
+          <h2 className="mt-4 font-display text-4xl text-forest">No schedule rules configured.</h2>
+          <p className="mt-4 text-sm leading-7 text-ink-soft">
+            There is no `schedules` table yet, so this page intentionally avoids fake weekly calendars. Commands are
+            created only from the manual controls and then pulled by the bridge.
+          </p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {[
+              ["Selected PLC", plc?.name ?? "No PLC"],
+              ["Last command", data.latestCommand ? formatDateTime(data.latestCommand.requestedAt) : "Never"],
+              ["Command status", data.latestCommand?.status ?? "None"],
+              ["Telemetry samples", String(data.readings.length)],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-[1.2rem] bg-white/70 p-4">
+                <p className="eyebrow text-[7px] text-ink-soft/58">{label}</p>
+                <p className="mt-2 break-words text-sm text-forest">{value}</p>
               </div>
-              <div className="mt-4 space-y-3">
-                {days.map((day) => (
-                  <div key={day} className="grid grid-cols-9 gap-3">
-                    <div className="flex items-center font-display text-2xl text-forest">{day}</div>
-                    {scheduleData[day].map((value, index) => (
-                      <div
-                        key={`${day}-${index}`}
-                        className={`flex h-12 items-center justify-center rounded-[1rem] border ${
-                          value
-                            ? "border-mint/30 bg-[linear-gradient(135deg,rgba(103,243,200,0.18),rgba(127,212,255,0.16))]"
-                            : "border-ink/8 bg-white/70"
-                        }`}
-                      >
-                        {value ? <Icon name="water_drop" className="text-[18px] text-forest" /> : null}
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
-        </motion.section>
-      ) : (
-        <div className="grid gap-5 lg:grid-cols-3">
-          {rules.map((rule, index) => (
-            <motion.section
-              key={rule.id}
-              {...reveal}
-              transition={{ duration: 0.45, delay: index * 0.05 }}
-              className={`${rule.active ? "dark-frame text-paper-soft" : "atlas-card text-ink"} rounded-[2rem] p-6`}
+        </section>
+
+        <section className="dark-frame rounded-[2rem] p-6 text-paper-soft md:p-7">
+          <p className="eyebrow text-[8px] text-paper-soft/46">Next implementation step</p>
+          <h2 className="mt-4 font-display text-4xl">Add a scheduling schema before enabling automation.</h2>
+          <p className="mt-4 text-sm leading-7 text-paper-soft/72">
+            A safe version should store rule ownership, PLC scope, windows, dry-run preview, and command generation
+            history before it ever writes to real hardware.
+          </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Link href="/dashboard/controls" className="atlas-button rounded-full px-5 py-3 text-sm font-medium">
+              Use manual controls
+            </Link>
+            <Link
+              href="/dashboard/settings"
+              className="rounded-full border border-paper-soft/18 bg-paper-soft/8 px-5 py-3 text-sm text-paper-soft"
             >
-              <p className={`eyebrow text-[8px] ${rule.active ? "text-paper-soft/44" : "text-clay"}`}>{rule.name}</p>
-              <p className={`mt-4 font-display text-3xl ${rule.active ? "text-paper-soft" : "text-forest"}`}>{rule.condition}</p>
-              <p className={`mt-4 text-sm leading-7 ${rule.active ? "text-paper-soft/72" : "text-ink-soft"}`}>{rule.action}</p>
-            </motion.section>
-          ))}
-        </div>
-      )}
+              Check bridge setup
+            </Link>
+          </div>
+        </section>
+      </div>
     </main>
   );
 }

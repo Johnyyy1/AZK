@@ -1,31 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Icon from "../components/Icon";
+import { authClient } from "../lib/auth-client";
 
-type AuthState = "login" | "register" | "reset" | "reset-sent";
+type AuthState = "login" | "register" | "reset-sent";
 
 const panelCopy: Record<AuthState, { title: string; body: string; button: string }> = {
   login: {
     title: "Enter the plant console",
-    body: "Sign in to moisture history, pump overrides, and the single-plant watering schedule.",
+    body: "Sign in to moisture history, pump overrides, and your Siemens LOGO bridge.",
     button: "Enter dashboard",
   },
   register: {
     title: "Create an operator account",
-    body: "Open access for the person responsible for this one watering rig and its plant care history.",
+    body: "Create your workspace, then add the local bridge that talks to your LOGO 8.4 in the same network.",
     button: "Create account",
   },
-  reset: {
-    title: "Recover operator access",
-    body: "We will route a recovery link to the verified operator email attached to this plant rig.",
-    button: "Send recovery link",
-  },
   "reset-sent": {
-    title: "Recovery sent",
-    body: "Check your inbox for the recovery path. The link will return you to this console without losing context.",
+    title: "Recovery not wired yet",
+    body: "Password reset email is reserved for the next mail-provider pass. For now, use sign in or create a new local test account.",
     button: "Back to login",
   },
 };
@@ -41,7 +38,51 @@ function AuthHeader({ state }: { state: AuthState }) {
 }
 
 export default function AuthPage() {
+  const router = useRouter();
   const [state, setState] = useState<AuthState>("login");
+  const [message, setMessage] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMessage(null);
+    setPending(true);
+
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("email") ?? "");
+    const password = String(formData.get("password") ?? "");
+    const name = String(formData.get("name") ?? "");
+
+    try {
+      if (state === "register") {
+        const result = await authClient.signUp.email({
+          email,
+          password,
+          name: name || email,
+        });
+
+        if (result.error) {
+          throw new Error(result.error.message ?? "Account creation failed.");
+        }
+      } else {
+        const result = await authClient.signIn.email({
+          email,
+          password,
+        });
+
+        if (result.error) {
+          throw new Error(result.error.message ?? "Sign in failed.");
+        }
+      }
+
+      router.push("/dashboard/settings");
+      router.refresh();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Authentication failed.");
+    } finally {
+      setPending(false);
+    }
+  };
 
   return (
     <main className="site-shell min-h-screen bg-paper text-ink">
@@ -63,7 +104,7 @@ export default function AuthPage() {
                 <Icon name="water_lock" className="text-[20px]" />
               </div>
               <div className="leading-none">
-                <p className="eyebrow text-[9px] text-paper-soft/70">Single Plant Rig</p>
+                <p className="eyebrow text-[9px] text-paper-soft/70">LOGO 8.4 Bridge</p>
                 <p className="font-display text-[1.4rem] tracking-[-0.08em]">AquaSmart</p>
               </div>
             </Link>
@@ -71,21 +112,21 @@ export default function AuthPage() {
             <div className="max-w-2xl">
               <p className="eyebrow text-[10px] text-paper-soft/52">Operator brief</p>
               <h2 className="display-title mt-6 text-6xl xl:text-[6rem]">
-                Calm enough to trust. Small enough to understand fully.
+                Cloud account. Local hardware agent. No exposed PLC.
               </h2>
               <p className="mt-6 max-w-xl text-lg leading-8 text-paper-soft/74">
-                The same contour language from the landing experience continues here, so sign-in feels like entering the
-                live plant system instead of leaving the story behind.
+                AquaSmart stores accounts and command history in the cloud while the Bun bridge stays beside the PLC and
+                pulls work safely from your workspace.
               </p>
             </div>
 
             <div className="dark-frame max-w-xl rounded-[2rem] p-6">
-              <p className="eyebrow text-[8px] text-paper-soft/48">Live rig pulse</p>
+              <p className="eyebrow text-[8px] text-paper-soft/48">Access model</p>
               <div className="mt-5 grid gap-4 sm:grid-cols-3">
                 {[
-                  ["Managed plants", "1"],
-                  ["Alert priority", "Low"],
-                  ["Pump state", "Idle"],
+                  ["Auth", "Email"],
+                  ["PLC link", "Agent"],
+                  ["Access", "Approved"],
                 ].map(([label, value]) => (
                   <div key={label} className="rounded-[1.35rem] border border-paper/10 bg-paper-soft/6 p-4">
                     <p className="eyebrow text-[8px] text-paper-soft/46">{label}</p>
@@ -114,11 +155,12 @@ export default function AuthPage() {
               <AuthHeader state={state} />
 
               {state !== "reset-sent" ? (
-                <form className="mt-10 space-y-5" onSubmit={(event) => event.preventDefault()}>
+                <form className="mt-10 space-y-5" onSubmit={submit}>
                   {state === "register" ? (
                     <label className="block">
                       <span className="eyebrow text-[8px] text-ink-soft/56">Plant operator</span>
                       <input
+                        name="name"
                         type="text"
                         placeholder="Avery Stone"
                         className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
@@ -129,77 +171,60 @@ export default function AuthPage() {
                   <label className="block">
                     <span className="eyebrow text-[8px] text-ink-soft/56">Email</span>
                     <input
+                      name="email"
                       type="email"
+                      required
                       placeholder="operator@aquasmart.one"
                       className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
                     />
                   </label>
 
-                  {state !== "reset" ? (
-                    <label className="block">
-                      <div className="flex items-center justify-between gap-4">
-                        <span className="eyebrow text-[8px] text-ink-soft/56">Password</span>
-                        {state === "login" ? (
-                          <button
-                            type="button"
-                            onClick={() => setState("reset")}
-                            className="text-xs text-clay transition hover:text-forest"
-                          >
-                            Forgot access?
-                          </button>
-                        ) : null}
-                      </div>
-                      <input
-                        type="password"
-                        placeholder="••••••••"
-                        className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
-                      />
-                    </label>
-                  ) : null}
+                  <label className="block">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="eyebrow text-[8px] text-ink-soft/56">Password</span>
+                      {state === "login" ? (
+                        <button
+                          type="button"
+                          onClick={() => setState("reset-sent")}
+                          className="text-xs text-clay transition hover:text-forest"
+                        >
+                          Forgot access?
+                        </button>
+                      ) : null}
+                    </div>
+                    <input
+                      name="password"
+                      type="password"
+                      minLength={8}
+                      required
+                      placeholder="Password"
+                      className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
+                    />
+                  </label>
 
-                  {state === "register" ? (
-                    <label className="block">
-                      <span className="eyebrow text-[8px] text-ink-soft/56">Confirm password</span>
-                      <input
-                        type="password"
-                        placeholder="••••••••"
-                        className="mt-2 w-full rounded-[1.35rem] border border-ink/10 bg-paper px-4 py-4 outline-none transition focus:border-clay"
-                      />
-                    </label>
-                  ) : null}
-
-                  {state === "reset" ? (
-                    <button
-                      type="button"
-                      onClick={() => setState("reset-sent")}
-                      className="atlas-button mt-3 flex w-full rounded-full px-6 py-4 text-sm font-medium"
-                    >
-                      {panelCopy[state].button}
-                    </button>
-                  ) : (
-                    <Link
-                      href="/dashboard"
-                      className="atlas-button mt-3 flex w-full rounded-full px-6 py-4 text-sm font-medium"
-                    >
-                      {panelCopy[state].button}
-                    </Link>
-                  )}
+                  <button
+                    type="submit"
+                    disabled={pending}
+                    className="atlas-button mt-3 flex w-full rounded-full px-6 py-4 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {pending ? "Working..." : panelCopy[state].button}
+                  </button>
                 </form>
               ) : (
                 <div className="mt-10 rounded-[1.7rem] bg-forest-deep px-5 py-6 text-paper-soft">
-                  <p className="eyebrow text-[8px] text-paper-soft/48">Inbox status</p>
-                  <p className="mt-4 text-sm leading-7 text-paper-soft/76">
-                    Your recovery note is on the way. When you are ready, return to sign-in and continue where you left off.
-                  </p>
+                  <p className="eyebrow text-[8px] text-paper-soft/48">Recovery status</p>
+                  <p className="mt-4 text-sm leading-7 text-paper-soft/76">{panelCopy[state].body}</p>
                   <button
                     type="button"
                     onClick={() => setState("login")}
                     className="atlas-button mt-6 rounded-full px-5 py-3 text-sm font-medium"
                   >
-                    Back to login
+                    {panelCopy[state].button}
                   </button>
                 </div>
               )}
+
+              {message ? <p className="mt-5 text-sm text-clay">{message}</p> : null}
 
               <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-ink-soft">
                 {state === "login" ? (
@@ -210,11 +235,6 @@ export default function AuthPage() {
                 {state === "register" ? (
                   <button type="button" onClick={() => setState("login")} className="transition hover:text-forest">
                     Already have access?
-                  </button>
-                ) : null}
-                {state === "reset" ? (
-                  <button type="button" onClick={() => setState("login")} className="transition hover:text-forest">
-                    Return to login
                   </button>
                 ) : null}
                 <Link href="/technology" className="transition hover:text-forest">

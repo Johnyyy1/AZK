@@ -378,10 +378,12 @@ class LogoMonitor {
 	}
 }
 
-const monitor = new LogoMonitor(config);
-monitor.start()?.catch((error: unknown) => {
-	log("Monitor failed:", getErrorMessage(error));
-});
+const cloudBaseUrl = process.env.AQUASMART_CLOUD_URL;
+const cloudAgentToken = process.env.AQUASMART_AGENT_TOKEN;
+const agentSyncIntervalMs = Math.max(
+	1000,
+	toNumber(process.env.AGENT_SYNC_INTERVAL_MS, 2000),
+);
 
 const jsonResponse = (
 	response: ServerResponse,
@@ -418,8 +420,8 @@ const readJsonBody = (
 		request.on("error", reject);
 	});
 
-const server = http.createServer(
-	async (request: IncomingMessage, response: ServerResponse) => {
+const createLocalServer = (monitor: LogoMonitor) =>
+	http.createServer(async (request: IncomingMessage, response: ServerResponse) => {
 		const requestUrl = new URL(
 			request.url || "/",
 			`http://${request.headers.host || "localhost"}`,
@@ -487,18 +489,53 @@ const server = http.createServer(
 		}
 
 		jsonResponse(response, 404, { message: "Not found" });
-	},
-);
+	});
 
-server.listen(config.apiPort, () => {
-	log(`HTTP API ready on port ${config.apiPort}`);
-});
+type CloudPumpControl = {
+	mode: PumpControlMode;
+	address: number | null;
+	registerOnValue: number;
+	registerOffValue: number;
+};
+
+type CloudPlcConfig = {
+	id: string;
+	logoIp: string;
+	logoPort: number;
+	unitId: number;
+	readIntervalMs: number;
+	registerOffset: number;
+	registerCount: number;
+	pumpControl: CloudPumpControl;
+};
+
+type CloudCommand = {
+	id: string;
+	enabled: boolean;
+};
+
+type CloudSyncResponse = {
+	ok: boolean;
+	message?: string;
+	plc?: CloudPlcConfig;
+	command?: CloudCommand | null;
+};
+
+let activeMonitor: LogoMonitor | null = null;
+let activeServer: http.Server | null = null;
+let activeMonitorKey: string | null = null;
+let cloudAgentRunning = false;
 
 let shuttingDown = false;
 
 const closeServer = (): Promise<void> =>
 	new Promise((resolve, reject) => {
-		server.close((error) => {
+		if (!activeServer) {
+			resolve();
+			return;
+		}
+
+		activeServer.close((error) => {
 			if (error) {
 				reject(error);
 				return;
@@ -511,10 +548,13 @@ const closeServer = (): Promise<void> =>
 const shutdown = async (): Promise<void> => {
 	if (shuttingDown) return;
 	shuttingDown = true;
+	cloudAgentRunning = false;
 	log("Shutting down backend...");
 
 	try {
-		await monitor.stop();
+		if (activeMonitor) {
+			await activeMonitor.stop();
+		}
 		await closeServer();
 		log("Shutdown complete.");
 		process.exit(0);
@@ -523,6 +563,164 @@ const shutdown = async (): Promise<void> => {
 		process.exit(1);
 	}
 };
+
+const configFromCloud = (plc: CloudPlcConfig): MonitorConfig => ({
+	logoIp: plc.logoIp,
+	logoPort: plc.logoPort,
+	unitId: plc.unitId,
+	readIntervalMs: Math.max(100, plc.readIntervalMs),
+	apiPort: config.apiPort,
+	registerOffset: plc.registerOffset,
+	registerCount: Math.max(1, plc.registerCount),
+	pumpControl: {
+		mode: plc.pumpControl.mode,
+		address: plc.pumpControl.address,
+		registerOnValue: plc.pumpControl.registerOnValue,
+		registerOffValue: plc.pumpControl.registerOffValue,
+	},
+	baseReconnectDelayMs: config.baseReconnectDelayMs,
+	maxReconnectDelayMs: config.maxReconnectDelayMs,
+});
+
+const monitorKeyFor = (plc: CloudPlcConfig): string =>
+	JSON.stringify({
+		logoIp: plc.logoIp,
+		logoPort: plc.logoPort,
+		unitId: plc.unitId,
+		readIntervalMs: plc.readIntervalMs,
+		registerOffset: plc.registerOffset,
+		registerCount: plc.registerCount,
+		pumpControl: plc.pumpControl,
+	});
+
+const cloudFetch = async (path: string, init?: RequestInit): Promise<Response> => {
+	if (!cloudBaseUrl || !cloudAgentToken) {
+		throw new Error("Cloud agent is missing AQUASMART_CLOUD_URL or AQUASMART_AGENT_TOKEN");
+	}
+
+	return fetch(new URL(path, cloudBaseUrl), {
+		...init,
+		headers: {
+			Authorization: `Bearer ${cloudAgentToken}`,
+			"Content-Type": "application/json",
+			...(init?.headers ?? {}),
+		},
+	});
+};
+
+const postCloudReport = async (payload: unknown): Promise<void> => {
+	const response = await cloudFetch("/api/agent/report", {
+		method: "POST",
+		body: JSON.stringify(payload),
+	});
+
+	if (!response.ok) {
+		throw new Error(`Cloud report failed with ${response.status}: ${await response.text()}`);
+	}
+};
+
+const syncCloud = async (): Promise<CloudSyncResponse> => {
+	const response = await cloudFetch("/api/agent/sync");
+	const payload = (await response.json()) as CloudSyncResponse;
+
+	if (!response.ok || !payload.ok) {
+		throw new Error(payload.message ?? `Cloud sync failed with ${response.status}`);
+	}
+
+	return payload;
+};
+
+const ensureCloudMonitor = async (plc: CloudPlcConfig): Promise<LogoMonitor> => {
+	const nextKey = monitorKeyFor(plc);
+
+	if (activeMonitor && activeMonitorKey === nextKey) return activeMonitor;
+
+	if (activeMonitor) {
+		await activeMonitor.stop();
+	}
+
+	activeMonitor = new LogoMonitor(configFromCloud(plc));
+	activeMonitorKey = nextKey;
+	activeMonitor.start()?.catch((error: unknown) => {
+		log("Cloud monitor failed:", getErrorMessage(error));
+	});
+
+	return activeMonitor;
+};
+
+const runCloudAgentMode = async (): Promise<void> => {
+	cloudAgentRunning = true;
+	log(`Cloud agent mode enabled. Syncing with ${cloudBaseUrl}`);
+
+	while (cloudAgentRunning && !shuttingDown) {
+		try {
+			const sync = await syncCloud();
+
+			if (!sync.plc) {
+				throw new Error("Cloud sync did not include PLC configuration");
+			}
+
+			const monitor = await ensureCloudMonitor(sync.plc);
+
+			if (sync.command) {
+				try {
+					await monitor.writePumpState(sync.command.enabled);
+					await postCloudReport({
+						command: {
+							id: sync.command.id,
+							status: "acknowledged",
+						},
+					});
+				} catch (error) {
+					await postCloudReport({
+						command: {
+							id: sync.command.id,
+							status: "failed",
+							error: getErrorMessage(error),
+						},
+					});
+				}
+			}
+
+			const state = monitor.getState();
+			await postCloudReport({
+				reading: state.latestReading
+					? {
+							value: state.latestReading.value,
+							raw: state.latestReading.raw,
+							timestamp: state.latestReading.timestamp,
+						}
+					: undefined,
+				error: state.lastError,
+			});
+		} catch (error) {
+			log("Cloud agent sync failed:", getErrorMessage(error));
+		}
+
+		await delay(agentSyncIntervalMs);
+	}
+};
+
+const runLocalMode = (): void => {
+	activeMonitor = new LogoMonitor(config);
+	activeMonitor.start()?.catch((error: unknown) => {
+		log("Monitor failed:", getErrorMessage(error));
+	});
+
+	activeServer = createLocalServer(activeMonitor);
+	activeServer.listen(config.apiPort, () => {
+		log(`HTTP API ready on port ${config.apiPort}`);
+	});
+};
+
+if (cloudBaseUrl && cloudAgentToken) {
+	runCloudAgentMode().catch((error: unknown) => {
+		log("Cloud agent failed:", getErrorMessage(error));
+		void shutdown();
+	});
+} else {
+	runLocalMode();
+}
 
 process.on("SIGINT", () => {
 	void shutdown();

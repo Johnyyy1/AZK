@@ -5,9 +5,12 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - backend
+      - db
     environment:
       NODE_ENV: production
-      LOGO_BACKEND_URL: ${LOGO_BACKEND_URL:-http://backend:4000}
+      DATABASE_URL: ${DATABASE_URL:-postgres://aquasmart:aquasmart@db:5432/aquasmart}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-change-me-in-production}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     restart: unless-stopped
@@ -30,6 +33,24 @@ services:
       PUMP_REGISTER_ADDRESS: ${PUMP_REGISTER_ADDRESS:-}
       PUMP_REGISTER_ON_VALUE: ${PUMP_REGISTER_ON_VALUE:-1}
       PUMP_REGISTER_OFF_VALUE: ${PUMP_REGISTER_OFF_VALUE:-0}
+      AQUASMART_CLOUD_URL: ${AQUASMART_CLOUD_URL:-}
+      AQUASMART_AGENT_TOKEN: ${AQUASMART_AGENT_TOKEN:-}
+      AGENT_SYNC_INTERVAL_MS: ${AGENT_SYNC_INTERVAL_MS:-2000}
     ports:
       - "${BACKEND_PORT:-4000}:4000"
     restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-aquasmart}
+      POSTGRES_USER: ${POSTGRES_USER:-aquasmart}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aquasmart}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - aquasmart-db:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  aquasmart-db:
