@@ -240,6 +240,9 @@ export default function AuthPage() {
                 <Link href="/technology" className="transition hover:text-forest">
                   Read the technology notes
                 </Link>
+                <Link href="/privacy" className="transition hover:text-forest">
+                  Privacy & terms
+                </Link>
               </div>
             </motion.div>
           </div>

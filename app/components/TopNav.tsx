@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/#system", label: "System" },
   { href: "/#proof", label: "Dashboard" },
   { href: "/technology", label: "Technology" },
+  { href: "/requirements", label: "Requirements" },
 ];
 
 export default function TopNav() {

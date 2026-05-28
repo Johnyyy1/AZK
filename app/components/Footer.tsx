@@ -18,10 +18,10 @@ const footerGroups = [
     ],
   },
   {
-    title: "Contact",
+    title: "Project",
     links: [
-      { label: "Open Demo", href: "/auth" },
-      { label: "Support", href: "/auth" },
+      { label: "Requirements", href: "/requirements" },
+      { label: "Privacy & Terms", href: "/privacy" },
       { label: "Build Notes", href: "/technology" },
     ],
   },

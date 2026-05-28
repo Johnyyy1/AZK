@@ -9,6 +9,19 @@ This project currently does four main things:
 - stores users, sessions, PLC config, telemetry, and command history in Postgres
 - lets a local bridge agent pull work from AquaSmart without exposing the PLC to the public internet
 
+## Kontrolní seznam školních požadavků
+
+AquaSmart je odevzdávaný v kategorii `Webová aplikace`, ne jako samostatné hardwarové zařízení.
+
+- vhodný framework: Next.js 16, React 19, TypeScript, Tailwind CSS v4
+- databáze: PostgreSQL s Drizzle schématem pro uživatele, PLC, telemetrii, bridge tokeny a příkazy čerpadla
+- kontejnerizace: frontend `Dockerfile`, backend `backend/Dockerfile` a `compose.yaml`
+- responzivní UI: marketingové stránky, přihlášení i dashboard jsou připravené pro mobil i desktop
+- ochrana citlivých údajů: Better Auth spravuje hesla; bridge tokeny se ukládají jako SHA-256 hash
+- aplikace připravená k nasazení: standalone Next build běží v Dockeru a konfiguruje se přes proměnné prostředí
+- podmínky používání / privacy policy: veřejná route `/privacy`
+- kontrola pro obhajobu: veřejná route `/requirements` mapuje cíle zadání na hotové funkce aplikace
+
 ## How the communication works
 
 There are three layers:
