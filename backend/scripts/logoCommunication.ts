@@ -663,6 +663,8 @@ const runCloudAgentMode = async (): Promise<void> => {
 			const monitor = await ensureCloudMonitor(sync.plc);
 
 			if (sync.command) {
+				log("COMMAND RECEIVED", sync.command);
+
 				try {
 					await monitor.writePumpState(sync.command.enabled);
 					await postCloudReport({
