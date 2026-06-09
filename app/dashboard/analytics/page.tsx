@@ -14,9 +14,9 @@ const buildChart = (readings: Awaited<ReturnType<typeof getDashboardData>>["read
 
   const minValue = Math.min(...points.map((point) => point.value));
   const maxValue = Math.max(...points.map((point) => point.value));
-  const padding = 4;
+  const padding = Math.max(4, Math.round((maxValue - minValue) * 0.12));
   const domainMin = Math.max(0, minValue - padding);
-  const domainMax = Math.min(100, maxValue + padding);
+  const domainMax = maxValue + padding;
   const domain = Math.max(1, domainMax - domainMin);
   const x = (index: number) => (index / (points.length - 1)) * 900;
   const y = (value: number) => 30 + (1 - (value - domainMin) / domain) * 150;
@@ -29,6 +29,11 @@ const buildChart = (readings: Awaited<ReturnType<typeof getDashboardData>>["read
     areaPoints: `0,190 ${points.map((point, index) => `${x(index)},${y(point.value)}`).join(" ")} 900,190`,
     y,
   };
+};
+
+const shouldShowTick = (index: number, total: number) => {
+  if (total <= 8) return true;
+  return index === 0 || index === total - 1 || index % Math.ceil(total / 6) === 0;
 };
 
 export default async function AnalyticsPage() {
@@ -63,9 +68,9 @@ export default async function AnalyticsPage() {
           ["Pump commands", String(data.commands.length), data.latestCommand?.status ?? "No command history"],
           ["Last telemetry", data.latestReading ? formatDateTime(data.latestReading.readAt) : "Never", "Bridge report time"],
         ].map(([label, value, note]) => (
-          <div key={label} className="atlas-card rounded-[1.8rem] p-5">
+          <div key={label} className="atlas-card min-h-48 rounded-[1.8rem] p-5">
             <p className="eyebrow text-[8px] text-clay">{label}</p>
-            <p className="mt-4 break-words font-display text-5xl text-forest">{value}</p>
+            <p className="mt-4 break-words font-display text-4xl leading-none text-forest md:text-5xl">{value}</p>
             <p className="mt-3 text-sm text-ink-soft">{note}</p>
           </div>
         ))}
@@ -84,47 +89,49 @@ export default async function AnalyticsPage() {
           </div>
 
           {chart ? (
-            <div className="mt-8 h-72">
-              <svg className="h-full w-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 900 210">
-                {[0, 1, 2, 3].map((index) => {
-                  const value = chart.domainMin + ((chart.domainMax - chart.domainMin) / 3) * index;
-                  const lineY = chart.y(value);
+            <div className="mt-8 rounded-[1.5rem] border border-ink/8 bg-white/70 p-4">
+              <div className="h-72 overflow-hidden">
+                <svg className="h-full w-full" preserveAspectRatio="none" viewBox="0 0 900 210">
+                  {[0, 1, 2, 3].map((index) => {
+                    const value = chart.domainMin + ((chart.domainMax - chart.domainMin) / 3) * index;
+                    const lineY = chart.y(value);
 
-                  return (
-                    <g key={index}>
-                      <line x1="0" y1={lineY} x2="900" y2={lineY} stroke="rgba(11,22,32,0.08)" strokeWidth="1" />
-                      <text x="0" y={lineY - 6} fontSize="10" fill="#48606a">
-                        {Math.round(value)}
-                      </text>
-                    </g>
-                  );
-                })}
+                    return (
+                      <g key={index}>
+                        <line x1="0" y1={lineY} x2="900" y2={lineY} stroke="rgba(11,22,32,0.08)" strokeWidth="1" />
+                        <text x="0" y={lineY - 6} fontSize="10" fill="#48606a">
+                          {Math.round(value).toLocaleString("cs-CZ")}
+                        </text>
+                      </g>
+                    );
+                  })}
 
-                <polygon points={chart.areaPoints} fill="url(#analyticsFill)" opacity="0.22" />
-                <polyline
-                  points={chart.linePoints}
-                  fill="none"
-                  stroke="#22b07d"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                {chart.points.map((point, index) => {
-                  const pointX = (index / (chart.points.length - 1)) * 900;
-                  const pointY = chart.y(point.value);
-                  return <circle key={`${point.label}-${index}`} cx={pointX} cy={pointY} r="5" fill="#22b07d" />;
-                })}
-                <defs>
-                  <linearGradient id="analyticsFill" x1="0%" x2="0%" y1="0%" y2="100%">
-                    <stop offset="0%" stopColor="#7fd4ff" />
-                    <stop offset="100%" stopColor="#67f3c8" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
+                  <polygon points={chart.areaPoints} fill="url(#analyticsFill)" opacity="0.22" />
+                  <polyline
+                    points={chart.linePoints}
+                    fill="none"
+                    stroke="#22b07d"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {chart.points.map((point, index) => {
+                    const pointX = (index / (chart.points.length - 1)) * 900;
+                    const pointY = chart.y(point.value);
+                    return <circle key={`${point.label}-${index}`} cx={pointX} cy={pointY} r="5" fill="#22b07d" />;
+                  })}
+                  <defs>
+                    <linearGradient id="analyticsFill" x1="0%" x2="0%" y1="0%" y2="100%">
+                      <stop offset="0%" stopColor="#7fd4ff" />
+                      <stop offset="100%" stopColor="#67f3c8" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
               <div className="mt-2 flex items-center justify-between text-xs text-ink-soft/74">
-                {chart.points.map((point, index) => (
-                  <span key={`${point.label}-${index}`}>{point.label}</span>
-                ))}
+                {chart.points.map((point, index) =>
+                  shouldShowTick(index, chart.points.length) ? <span key={`${point.label}-${index}`}>{point.label}</span> : null,
+                )}
               </div>
             </div>
           ) : (

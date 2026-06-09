@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import {
   createPlcAction,
+  deletePlcAction,
   regenerateAgentTokenAction,
   revokeAgentTokensAction,
+  updatePlcAction,
   type PlcActionState,
 } from "@/app/actions/plcs";
 import { authClient } from "@/app/lib/auth-client";
@@ -22,7 +24,10 @@ export type SettingsPlcRow = {
   registerOffset: number;
   registerCount: number;
   pumpWriteMode: "coil" | "register";
-  pumpAddress: number | null;
+  pumpCoilAddress: number | null;
+  pumpRegisterAddress: number | null;
+  pumpRegisterOnValue: number;
+  pumpRegisterOffValue: number;
   lastHeartbeatAt: string | null;
   lastReadingAt: string | null;
   lastErrorMessage: string | null;
@@ -37,6 +42,8 @@ const reveal = {
 };
 
 const initialActionState: PlcActionState = {};
+const inputClass = "mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay";
+const smallButtonClass = "rounded-full px-5 py-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-60";
 
 const formatDate = (value: string | null) => {
   if (!value) return "Never";
@@ -63,6 +70,43 @@ function ActionMessage({ state }: { state: PlcActionState }) {
   );
 }
 
+function Field({
+  label,
+  name,
+  type = "text",
+  defaultValue,
+  placeholder,
+  required = false,
+  className = "block",
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  defaultValue?: string | number;
+  placeholder?: string;
+  required?: boolean;
+  className?: string;
+}) {
+  return (
+    <label className={className}>
+      <span className="eyebrow text-[7px] text-ink-soft/58">{label}</span>
+      <input
+        name={name}
+        type={type}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        required={required}
+        className={inputClass}
+      />
+    </label>
+  );
+}
+
+const pumpAddressLabel = (plc: SettingsPlcRow) =>
+  plc.pumpWriteMode === "coil"
+    ? `coil ${plc.pumpCoilAddress ?? "missing"}`
+    : `register ${plc.pumpRegisterAddress ?? "missing"}`;
+
 export default function SettingsClient({
   user,
   site,
@@ -74,6 +118,8 @@ export default function SettingsClient({
 }) {
   const router = useRouter();
   const [createState, createAction, createPending] = useActionState(createPlcAction, initialActionState);
+  const [updateState, updateAction, updatePending] = useActionState(updatePlcAction, initialActionState);
+  const [deleteState, deleteAction, deletePending] = useActionState(deletePlcAction, initialActionState);
   const [tokenState, tokenAction, tokenPending] = useActionState(regenerateAgentTokenAction, initialActionState);
   const [revokeState, revokeAction, revokePending] = useActionState(revokeAgentTokensAction, initialActionState);
 
@@ -115,54 +161,31 @@ export default function SettingsClient({
         >
           <p className="eyebrow text-[8px] text-clay">Add Siemens LOGO 8.4</p>
           <form action={createAction} className="mt-6 grid gap-4">
-            <label className="block">
-              <span className="eyebrow text-[7px] text-ink-soft/58">PLC name</span>
-              <input name="name" placeholder="Greenhouse LOGO" className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-            </label>
+            <Field name="name" label="PLC name" placeholder="Greenhouse LOGO" />
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="block sm:col-span-2">
-                <span className="eyebrow text-[7px] text-ink-soft/58">LOGO IP for local bridge</span>
-                <input name="logoIp" required placeholder="192.168.0.3" className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-              </label>
-              <label className="block">
-                <span className="eyebrow text-[7px] text-ink-soft/58">Port</span>
-                <input name="logoPort" type="number" defaultValue={502} className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-              </label>
+              <Field name="logoIp" label="LOGO IP for local bridge" placeholder="192.168.0.3" required className="block sm:col-span-2" />
+              <Field name="logoPort" label="Port" type="number" defaultValue={502} />
             </div>
             <div className="grid gap-4 sm:grid-cols-4">
-              <label className="block">
-                <span className="eyebrow text-[7px] text-ink-soft/58">Unit ID</span>
-                <input name="unitId" type="number" defaultValue={1} className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-              </label>
-              <label className="block">
-                <span className="eyebrow text-[7px] text-ink-soft/58">Register offset</span>
-                <input name="registerOffset" type="number" defaultValue={0} className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-              </label>
-              <label className="block">
-                <span className="eyebrow text-[7px] text-ink-soft/58">Register count</span>
-                <input name="registerCount" type="number" defaultValue={1} className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-              </label>
-              <label className="block">
-                <span className="eyebrow text-[7px] text-ink-soft/58">Read ms</span>
-                <input name="readIntervalMs" type="number" defaultValue={2000} className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-              </label>
+              <Field name="unitId" label="Unit ID" type="number" defaultValue={1} />
+              <Field name="registerOffset" label="Register offset" type="number" defaultValue={0} />
+              <Field name="registerCount" label="Register count" type="number" defaultValue={1} />
+              <Field name="readIntervalMs" label="Read ms" type="number" defaultValue={2000} />
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <label className="block">
                 <span className="eyebrow text-[7px] text-ink-soft/58">Pump mode</span>
-                <select name="pumpWriteMode" defaultValue="coil" className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay">
+                <select name="pumpWriteMode" defaultValue="coil" className={inputClass}>
                   <option value="coil">Coil</option>
                   <option value="register">Register</option>
                 </select>
               </label>
-              <label className="block">
-                <span className="eyebrow text-[7px] text-ink-soft/58">Coil address</span>
-                <input name="pumpCoilAddress" type="number" defaultValue={8256} className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-              </label>
-              <label className="block">
-                <span className="eyebrow text-[7px] text-ink-soft/58">Register address</span>
-                <input name="pumpRegisterAddress" type="number" className="mt-2 w-full rounded-[1.15rem] border border-ink/10 bg-white/70 px-4 py-3 outline-none transition focus:border-clay" />
-              </label>
+              <Field name="pumpCoilAddress" label="Coil address" type="number" defaultValue={8256} />
+              <Field name="pumpRegisterAddress" label="Register address" type="number" />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field name="pumpRegisterOnValue" label="Register ON value" type="number" defaultValue={1} />
+              <Field name="pumpRegisterOffValue" label="Register OFF value" type="number" defaultValue={0} />
             </div>
             <button disabled={createPending} className="atlas-button mt-2 rounded-full px-6 py-4 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-60">
               {createPending ? "Adding..." : "Add PLC and generate bridge token"}
@@ -192,6 +215,8 @@ export default function SettingsClient({
 
           <ActionMessage state={tokenState} />
           <ActionMessage state={revokeState} />
+          <ActionMessage state={updateState} />
+          <ActionMessage state={deleteState} />
 
           {plcs.length === 0 ? (
             <motion.section
@@ -230,7 +255,7 @@ export default function SettingsClient({
                   {[
                     ["Heartbeat", formatDate(plc.lastHeartbeatAt)],
                     ["Latest reading", plc.latestReadingValue === null ? "No data" : `${plc.latestReadingValue}`],
-                    ["Pump mapping", `${plc.pumpWriteMode} ${plc.pumpAddress ?? "missing"}`],
+                    ["Pump mapping", pumpAddressLabel(plc)],
                     ["Token", plc.tokenPrefix ? `${plc.tokenPrefix}...` : "No active token"],
                     ["Token used", formatDate(plc.tokenLastUsedAt)],
                     ["Read map", `${plc.registerOffset} / ${plc.registerCount}`],
@@ -244,17 +269,63 @@ export default function SettingsClient({
 
                 {plc.lastErrorMessage ? <p className="mt-5 text-sm text-clay">{plc.lastErrorMessage}</p> : null}
 
+                <form action={updateAction} className="mt-6 grid gap-4 border-t border-forest/10 pt-6">
+                  <input type="hidden" name="plcId" value={plc.id} />
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <Field name="name" label="PLC name" defaultValue={plc.name} className="block sm:col-span-3" />
+                    <Field name="logoIp" label="LOGO IP" defaultValue={plc.logoIp} required className="block sm:col-span-2" />
+                    <Field name="logoPort" label="Port" type="number" defaultValue={plc.logoPort} />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-4">
+                    <Field name="unitId" label="Unit ID" type="number" defaultValue={plc.unitId} />
+                    <Field name="registerOffset" label="Register offset" type="number" defaultValue={plc.registerOffset} />
+                    <Field name="registerCount" label="Register count" type="number" defaultValue={plc.registerCount} />
+                    <Field name="readIntervalMs" label="Read ms" type="number" defaultValue={plc.readIntervalMs} />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <label className="block">
+                      <span className="eyebrow text-[7px] text-ink-soft/58">Pump mode</span>
+                      <select name="pumpWriteMode" defaultValue={plc.pumpWriteMode} className={inputClass}>
+                        <option value="coil">Coil</option>
+                        <option value="register">Register</option>
+                      </select>
+                    </label>
+                    <Field name="pumpCoilAddress" label="Coil address" type="number" defaultValue={plc.pumpCoilAddress ?? undefined} />
+                    <Field name="pumpRegisterAddress" label="Register address" type="number" defaultValue={plc.pumpRegisterAddress ?? undefined} />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field name="pumpRegisterOnValue" label="Register ON value" type="number" defaultValue={plc.pumpRegisterOnValue} />
+                    <Field name="pumpRegisterOffValue" label="Register OFF value" type="number" defaultValue={plc.pumpRegisterOffValue} />
+                  </div>
+                  <button disabled={updatePending} className={`atlas-button justify-self-start ${smallButtonClass}`}>
+                    {updatePending ? "Saving..." : "Save PLC settings"}
+                  </button>
+                </form>
+
                 <div className="mt-6 flex flex-wrap gap-3">
                   <form action={tokenAction}>
                     <input type="hidden" name="plcId" value={plc.id} />
-                    <button disabled={tokenPending} className="atlas-button rounded-full px-5 py-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-60">
+                    <button disabled={tokenPending} className={`atlas-button ${smallButtonClass}`}>
                       Regenerate token
                     </button>
                   </form>
                   <form action={revokeAction}>
                     <input type="hidden" name="plcId" value={plc.id} />
-                    <button disabled={revokePending} className="rounded-full border border-clay/30 bg-white/80 px-5 py-3 text-sm text-clay disabled:cursor-not-allowed disabled:opacity-60">
+                    <button disabled={revokePending} className={`border border-clay/30 bg-white/80 text-clay ${smallButtonClass}`}>
                       Revoke tokens
+                    </button>
+                  </form>
+                  <form
+                    action={deleteAction}
+                    onSubmit={(event) => {
+                      if (!confirm(`Delete ${plc.name}?`)) {
+                        event.preventDefault();
+                      }
+                    }}
+                  >
+                    <input type="hidden" name="plcId" value={plc.id} />
+                    <button disabled={deletePending} className={`border border-clay/40 bg-clay/10 text-clay ${smallButtonClass}`}>
+                      Delete PLC
                     </button>
                   </form>
                 </div>
