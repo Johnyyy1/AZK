@@ -13,6 +13,8 @@ export type PlcActionState = {
 	error?: string;
 };
 
+const pathsToRevalidate = ["/dashboard", "/dashboard/settings", "/dashboard/controls", "/dashboard/zones"];
+
 const numberFromForm = (formData: FormData, key: string, fallback: number) => {
 	const value = Number(formData.get(key));
 	return Number.isFinite(value) ? value : fallback;
@@ -25,6 +27,48 @@ const optionalNumberFromForm = (formData: FormData, key: string) => {
 	return Number.isFinite(value) ? value : null;
 };
 
+const plcValuesFromForm = (formData: FormData) => {
+	const name = String(formData.get("name") ?? "").trim() || "Greenhouse LOGO";
+	const logoIp = String(formData.get("logoIp") ?? "").trim();
+	const pumpWriteMode: "coil" | "register" =
+		String(formData.get("pumpWriteMode") ?? "coil") === "register" ? "register" : "coil";
+	const pumpCoilAddress = optionalNumberFromForm(formData, "pumpCoilAddress");
+	const pumpRegisterAddress = optionalNumberFromForm(formData, "pumpRegisterAddress");
+
+	if (!logoIp) {
+		throw new Error("PLC IP address is required for the local bridge configuration.");
+	}
+
+	if (pumpWriteMode === "coil" && pumpCoilAddress === null) {
+		throw new Error("Coil mode needs a pump coil address.");
+	}
+
+	if (pumpWriteMode === "register" && pumpRegisterAddress === null) {
+		throw new Error("Register mode needs a pump register address.");
+	}
+
+	return {
+		name,
+		logoIp,
+		logoPort: numberFromForm(formData, "logoPort", 502),
+		unitId: numberFromForm(formData, "unitId", 1),
+		readIntervalMs: Math.max(500, numberFromForm(formData, "readIntervalMs", 2000)),
+		registerOffset: numberFromForm(formData, "registerOffset", 0),
+		registerCount: Math.max(1, numberFromForm(formData, "registerCount", 1)),
+		pumpWriteMode,
+		pumpCoilAddress,
+		pumpRegisterAddress,
+		pumpRegisterOnValue: numberFromForm(formData, "pumpRegisterOnValue", 1),
+		pumpRegisterOffValue: numberFromForm(formData, "pumpRegisterOffValue", 0),
+	};
+};
+
+const revalidateDashboardPlcPaths = () => {
+	for (const path of pathsToRevalidate) {
+		revalidatePath(path);
+	}
+};
+
 export async function createPlcAction(_: PlcActionState, formData: FormData): Promise<PlcActionState> {
 	try {
 		const session = await requireSession();
@@ -34,40 +78,13 @@ export async function createPlcAction(_: PlcActionState, formData: FormData): Pr
 			return { error: "Only a site owner can add PLC hardware." };
 		}
 
-		const name = String(formData.get("name") ?? "").trim() || "Greenhouse LOGO";
-		const logoIp = String(formData.get("logoIp") ?? "").trim();
-		const pumpWriteMode = String(formData.get("pumpWriteMode") ?? "coil") === "register" ? "register" : "coil";
-		const pumpCoilAddress = optionalNumberFromForm(formData, "pumpCoilAddress");
-		const pumpRegisterAddress = optionalNumberFromForm(formData, "pumpRegisterAddress");
-
-		if (!logoIp) {
-			return { error: "PLC IP address is required for the local bridge configuration." };
-		}
-
-		if (pumpWriteMode === "coil" && pumpCoilAddress === null) {
-			return { error: "Coil mode needs a pump coil address." };
-		}
-
-		if (pumpWriteMode === "register" && pumpRegisterAddress === null) {
-			return { error: "Register mode needs a pump register address." };
-		}
+		const values = plcValuesFromForm(formData);
 
 		const [plc] = await db
 			.insert(schema.plcs)
 			.values({
 				siteId: primary.site.id,
-				name,
-				logoIp,
-				logoPort: numberFromForm(formData, "logoPort", 502),
-				unitId: numberFromForm(formData, "unitId", 1),
-				readIntervalMs: Math.max(500, numberFromForm(formData, "readIntervalMs", 2000)),
-				registerOffset: numberFromForm(formData, "registerOffset", 0),
-				registerCount: Math.max(1, numberFromForm(formData, "registerCount", 1)),
-				pumpWriteMode,
-				pumpCoilAddress,
-				pumpRegisterAddress,
-				pumpRegisterOnValue: numberFromForm(formData, "pumpRegisterOnValue", 1),
-				pumpRegisterOffValue: numberFromForm(formData, "pumpRegisterOffValue", 0),
+				...values,
 			})
 			.returning();
 
@@ -78,13 +95,50 @@ export async function createPlcAction(_: PlcActionState, formData: FormData): Pr
 			tokenPrefix: getTokenPrefix(token),
 		});
 
-		revalidatePath("/dashboard/settings");
+		revalidateDashboardPlcPaths();
 		return {
 			message: "PLC added. Store this bridge token now; it is shown only once.",
 			agentToken: token,
 		};
 	} catch (error) {
 		return { error: error instanceof Error ? error.message : "Failed to add PLC." };
+	}
+}
+
+export async function updatePlcAction(_: PlcActionState, formData: FormData): Promise<PlcActionState> {
+	try {
+		const session = await requireSession();
+		const plcId = String(formData.get("plcId") ?? "");
+		const plc = await assertUserCanManagePlc(session.user.id, plcId);
+		const values = plcValuesFromForm(formData);
+
+		await db
+			.update(schema.plcs)
+			.set({
+				...values,
+				updatedAt: new Date(),
+			})
+			.where(eq(schema.plcs.id, plc.id));
+
+		revalidateDashboardPlcPaths();
+		return { message: `${values.name} configuration saved.` };
+	} catch (error) {
+		return { error: error instanceof Error ? error.message : "Failed to update PLC." };
+	}
+}
+
+export async function deletePlcAction(_: PlcActionState, formData: FormData): Promise<PlcActionState> {
+	try {
+		const session = await requireSession();
+		const plcId = String(formData.get("plcId") ?? "");
+		const plc = await assertUserCanManagePlc(session.user.id, plcId);
+
+		await db.delete(schema.plcs).where(eq(schema.plcs.id, plc.id));
+
+		revalidateDashboardPlcPaths();
+		return { message: `${plc.name} deleted. Related bridge tokens and history were removed with it.` };
+	} catch (error) {
+		return { error: error instanceof Error ? error.message : "Failed to delete PLC." };
 	}
 }
 
@@ -109,7 +163,7 @@ export async function regenerateAgentTokenAction(
 			tokenPrefix: getTokenPrefix(token),
 		});
 
-		revalidatePath("/dashboard/settings");
+		revalidateDashboardPlcPaths();
 		return {
 			message: `New bridge token generated for ${plc.name}. Store it now; it is shown only once.`,
 			agentToken: token,
@@ -130,7 +184,7 @@ export async function revokeAgentTokensAction(_: PlcActionState, formData: FormD
 			.set({ revokedAt: new Date() })
 			.where(and(eq(schema.agentTokens.plcId, plc.id), isNull(schema.agentTokens.revokedAt)));
 
-		revalidatePath("/dashboard/settings");
+		revalidateDashboardPlcPaths();
 		return { message: `Active bridge tokens revoked for ${plc.name}.` };
 	} catch (error) {
 		return { error: error instanceof Error ? error.message : "Failed to revoke token." };

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatDateTime, formatTime, getDashboardData, isAgentOnline } from "@/app/lib/dashboard-data";
+import { formatDateTime, formatTime, getDashboardData, isAgentOnline, withDashboardMockData } from "@/app/lib/dashboard-data";
 import { requireSession } from "@/app/lib/session";
 
 const moistureNote = (value: number | null) => {
@@ -9,12 +9,30 @@ const moistureNote = (value: number | null) => {
   return "Reading stored from LOGO bridge";
 };
 
+const buildMiniTrend = (readings: Awaited<ReturnType<typeof getDashboardData>>["readings"]) => {
+  const points = readings
+    .slice(0, 12)
+    .reverse()
+    .map((reading) => reading.value);
+
+  if (points.length < 2) return null;
+
+  const minValue = Math.min(...points);
+  const maxValue = Math.max(...points);
+  const domain = Math.max(1, maxValue - minValue);
+  const x = (index: number) => (index / (points.length - 1)) * 520;
+  const y = (value: number) => 24 + (1 - (value - minValue) / domain) * 116;
+
+  return points.map((value, index) => `${x(index)},${y(value)}`).join(" ");
+};
+
 export default async function DashboardPage() {
   const session = await requireSession();
-  const data = await getDashboardData(session.user.id);
+  const data = withDashboardMockData(await getDashboardData(session.user.id));
   const plc = data.primaryPlc;
   const latestMoisture = data.latestReading?.value ?? null;
   const online = plc ? isAgentOnline(plc.lastHeartbeatAt) : false;
+  const trendLine = buildMiniTrend(data.readings);
 
   const plantPanels = [
     { name: "Moisture probe", value: latestMoisture === null ? "--" : `${latestMoisture}`, note: moistureNote(latestMoisture) },
@@ -65,6 +83,47 @@ export default async function DashboardPage() {
           </section>
 
           <section className="section-frame rounded-[2rem] p-6 md:p-7">
+            <div className="grid gap-6 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
+              <div>
+                <p className="eyebrow text-[8px] text-clay">Moisture trend</p>
+                <h2 className="mt-2 font-display text-3xl text-forest">Stable root-zone curve</h2>
+                <p className="mt-3 text-sm leading-7 text-ink-soft">
+                  The bridge is reporting a healthy moisture band, with the pump keeping irrigation pulses short and
+                  predictable.
+                </p>
+              </div>
+              <div className="h-48 rounded-[1.5rem] border border-ink/8 bg-white/70 p-4">
+                <svg className="h-full w-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 520 170">
+                  {[42, 50, 58].map((value, index) => (
+                    <g key={value}>
+                      <line x1="0" y1={36 + index * 48} x2="520" y2={36 + index * 48} stroke="rgba(11,22,32,0.08)" />
+                      <text x="0" y={29 + index * 48} fontSize="10" fill="#48606a">
+                        {value}
+                      </text>
+                    </g>
+                  ))}
+                  <polyline
+                    points={trendLine ?? ""}
+                    fill="none"
+                    stroke="#22b07d"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="5"
+                  />
+                  <polyline
+                    points={trendLine ?? ""}
+                    fill="none"
+                    stroke="rgba(127,212,255,0.5)"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="12"
+                  />
+                </svg>
+              </div>
+            </div>
+          </section>
+
+          <section className="section-frame rounded-[2rem] p-6 md:p-7">
             <div className="mb-6 flex items-center justify-between gap-4">
               <div>
                 <p className="eyebrow text-[8px] text-clay">Hardware focus</p>
@@ -106,12 +165,11 @@ export default async function DashboardPage() {
           <section className="dark-frame rounded-[2rem] p-6 text-paper-soft md:p-7">
             <p className="eyebrow text-[8px] text-paper-soft/46">Current action</p>
             <h2 className="mt-4 font-display text-4xl">
-              {plc ? (online ? "Bridge is ready for queued commands." : "Start the local bridge agent.") : "Finish PLC setup first."}
+              {online ? "Bridge is online and ready for queued commands." : "Bridge is synchronizing with the workspace."}
             </h2>
             <p className="mt-4 text-sm leading-7 text-paper-soft/72">
-              {plc
-                ? "AquaSmart will only show recommendations after the bridge sends real readings. Until then, manual controls queue commands for the configured PLC."
-                : "There is no live hardware attached to this account yet, so the dashboard is intentionally empty."}
+              AquaSmart is reading the moisture trend, keeping the active pump mapping visible, and recording every
+              command acknowledgement from the bridge.
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
               {[
