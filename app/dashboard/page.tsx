@@ -9,6 +9,19 @@ const moistureNote = (value: number | null) => {
   return "Reading stored from LOGO bridge";
 };
 
+const commandStatusLabel = (status: string | null | undefined) => {
+  if (!status) return "None";
+
+  const labels: Record<string, string> = {
+    acknowledged: "Acked",
+    queued: "Queued",
+    sent: "Sent",
+    failed: "Failed",
+  };
+
+  return labels[status] ?? status;
+};
+
 const buildMiniTrend = (readings: Awaited<ReturnType<typeof getDashboardData>>["readings"]) => {
   const points = readings
     .slice(0, 12)
@@ -51,7 +64,7 @@ export default async function DashboardPage() {
     { name: "Agent status", value: plc ? (online ? "Online" : "Waiting") : "No PLC", note: plc ? formatDateTime(plc.lastHeartbeatAt) : "No heartbeat yet" },
     {
       name: "Last command",
-      value: data.latestCommand?.status ?? "None",
+      value: commandStatusLabel(data.latestCommand?.status),
       note: data.latestCommand ? formatDateTime(data.latestCommand.requestedAt) : "No pump command queued",
     },
   ];
@@ -83,18 +96,18 @@ export default async function DashboardPage() {
 
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1.15fr)_0.85fr]">
         <div className="space-y-8">
-          <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <section className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-4">
             {plantPanels.map((panel) => (
-              <div key={panel.name} className="atlas-card rounded-[1.8rem] p-5">
+              <div key={panel.name} className="atlas-card min-h-44 min-w-0 rounded-[1.8rem] p-5">
                 <p className="eyebrow text-[8px] text-clay">{panel.name}</p>
-                <p className="mt-4 break-words font-display text-5xl text-forest">{panel.value}</p>
-                <p className="mt-3 text-sm text-ink-soft">{panel.note}</p>
+                <p className="mt-4 min-w-0 whitespace-nowrap font-display text-4xl leading-none text-forest md:text-5xl">{panel.value}</p>
+                <p className="mt-3 text-sm leading-6 text-ink-soft">{panel.note}</p>
               </div>
             ))}
           </section>
 
           <section className="section-frame rounded-[2rem] p-6 md:p-7">
-            <div className="grid gap-6 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
+            <div className="grid gap-6 2xl:grid-cols-[0.72fr_1.28fr] 2xl:items-center">
               <div>
                 <p className="eyebrow text-[8px] text-clay">Moisture trend</p>
                 <h2 className="mt-2 font-display text-3xl text-forest">
