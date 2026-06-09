@@ -77,6 +77,8 @@ export const siteRole = pgEnum("site_role", ["owner", "operator"]);
 export const siteMemberStatus = pgEnum("site_member_status", ["active", "pending"]);
 export const pumpControlMode = pgEnum("pump_control_mode", ["coil", "register"]);
 export const pumpCommandStatus = pgEnum("pump_command_status", ["queued", "sent", "acknowledged", "failed"]);
+export const scheduleAction = pgEnum("schedule_action", ["pump_on", "pump_off"]);
+export const scheduleRunStatus = pgEnum("schedule_run_status", ["previewed", "queued", "skipped", "failed"]);
 
 export const sites = pgTable("sites", {
 	id: uuid("id").defaultRandom().primaryKey(),
@@ -192,6 +194,57 @@ export const pumpCommands = pgTable(
 	],
 );
 
+export const scheduleRules = pgTable(
+	"schedule_rules",
+	{
+		id: uuid("id").defaultRandom().primaryKey(),
+		plcId: uuid("plc_id")
+			.notNull()
+			.references(() => plcs.id, { onDelete: "cascade" }),
+		createdByUserId: text("created_by_user_id").references(() => user.id, { onDelete: "set null" }),
+		name: text("name").notNull(),
+		enabled: boolean("enabled").notNull().default(true),
+		dryRun: boolean("dry_run").notNull().default(true),
+		daysOfWeek: jsonb("days_of_week").$type<number[]>().notNull().default([1, 2, 3, 4, 5]),
+		startMinute: integer("start_minute").notNull(),
+		durationMinutes: integer("duration_minutes").notNull().default(5),
+		timezone: text("timezone").notNull().default("Europe/Prague"),
+		lastGeneratedAt: timestamp("last_generated_at", { withTimezone: true }),
+		createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+	},
+	(table) => [
+		index("schedule_rules_plc_enabled_idx").on(table.plcId, table.enabled),
+		index("schedule_rules_created_by_idx").on(table.createdByUserId),
+	],
+);
+
+export const scheduleRuns = pgTable(
+	"schedule_runs",
+	{
+		id: uuid("id").defaultRandom().primaryKey(),
+		scheduleRuleId: uuid("schedule_rule_id")
+			.notNull()
+			.references(() => scheduleRules.id, { onDelete: "cascade" }),
+		plcId: uuid("plc_id")
+			.notNull()
+			.references(() => plcs.id, { onDelete: "cascade" }),
+		pumpCommandId: uuid("pump_command_id").references(() => pumpCommands.id, { onDelete: "set null" }),
+		action: scheduleAction("action").notNull(),
+		status: scheduleRunStatus("status").notNull(),
+		dueAt: timestamp("due_at", { withTimezone: true }).notNull(),
+		message: text("message"),
+		createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+	},
+	(table) => [
+		index("schedule_runs_plc_due_idx").on(table.plcId, table.dueAt),
+		index("schedule_runs_rule_idx").on(table.scheduleRuleId),
+		uniqueIndex("schedule_runs_rule_due_action_idx").on(table.scheduleRuleId, table.dueAt, table.action),
+	],
+);
+
 export type Plc = typeof plcs.$inferSelect;
 export type Site = typeof sites.$inferSelect;
 export type PumpCommand = typeof pumpCommands.$inferSelect;
+export type ScheduleRule = typeof scheduleRules.$inferSelect;
+export type ScheduleRun = typeof scheduleRuns.$inferSelect;

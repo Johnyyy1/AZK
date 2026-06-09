@@ -1,6 +1,7 @@
 import { and, asc, eq } from "drizzle-orm";
 import { db, schema } from "@/app/db";
 import { getAgentContext } from "@/app/lib/agent-auth";
+import { evaluateDueSchedulesForPlc } from "@/app/lib/scheduling";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,8 @@ export async function GET(request: Request) {
 	if (!context) {
 		return Response.json({ ok: false, message: "Invalid or revoked agent token." }, { status: 401 });
 	}
+
+	await evaluateDueSchedulesForPlc(context.plc);
 
 	const [queuedCommand] = await db
 		.select()
