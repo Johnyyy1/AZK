@@ -306,6 +306,7 @@ class LogoMonitor {
 
 		await this.queueClientOperation("write", async (client) => {
 			if (mode === "coil") {
+				console.log("WRITING COIL:", resolvedAddress);
 				await client.writeCoil(resolvedAddress, enabled);
 				return;
 			}
