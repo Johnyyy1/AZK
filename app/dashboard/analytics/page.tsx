@@ -6,7 +6,7 @@ const buildChart = (readings: Awaited<ReturnType<typeof getDashboardData>>["read
     .slice()
     .reverse()
     .map((reading) => ({
-      label: new Intl.DateTimeFormat("cs-CZ", { hour: "2-digit", minute: "2-digit" }).format(reading.readAt),
+      label: new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit" }).format(reading.readAt),
       value: reading.value,
     }));
 
@@ -50,7 +50,7 @@ export default async function AnalyticsPage() {
         <div>
           <p className="eyebrow text-[9px] text-clay">Analytics</p>
           <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">
-            Real LOGO readings and pump commands, without demo history.
+            Real LOGO readings and pump commands from the deployed bridge.
           </h1>
         </div>
         <div className="section-frame rounded-[1.8rem] p-5 md:p-6">
@@ -100,7 +100,7 @@ export default async function AnalyticsPage() {
                       <g key={index}>
                         <line x1="0" y1={lineY} x2="900" y2={lineY} stroke="rgba(11,22,32,0.08)" strokeWidth="1" />
                         <text x="0" y={lineY - 6} fontSize="10" fill="#48606a">
-                          {Math.round(value).toLocaleString("cs-CZ")}
+                          {Math.round(value).toLocaleString("en-US")}
                         </text>
                       </g>
                     );
@@ -137,7 +137,7 @@ export default async function AnalyticsPage() {
           ) : (
             <div className="mt-8 rounded-[1.6rem] border border-ink/8 bg-white/70 p-6">
               <p className="text-sm leading-7 text-ink-soft">
-                At least two readings are needed to draw a trend. Start the local bridge agent and this area will fill
+                At least two readings are needed to draw a trend. Start or check the local bridge agent and this area will fill
                 from `plc_readings`.
               </p>
             </div>
@@ -171,7 +171,7 @@ export default async function AnalyticsPage() {
               <div className="rounded-[1.4rem] border border-paper/10 bg-paper-soft/6 p-4">
                 <h3 className="font-display text-3xl">No commands yet</h3>
                 <p className="mt-2 text-sm leading-7 text-paper-soft/72">
-                  Pump commands will appear here after you use the manual controls.
+                  Pump commands will appear here after you use the manual controls or an armed schedule queues a write.
                 </p>
               </div>
             )}

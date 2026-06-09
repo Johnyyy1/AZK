@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatDateTime, formatTime, getDashboardData, isAgentOnline, withDashboardMockData } from "@/app/lib/dashboard-data";
+import { formatDateTime, formatTime, getDashboardData, isAgentOnline } from "@/app/lib/dashboard-data";
 import { requireSession } from "@/app/lib/session";
 
 const moistureNote = (value: number | null) => {
@@ -28,11 +28,22 @@ const buildMiniTrend = (readings: Awaited<ReturnType<typeof getDashboardData>>["
 
 export default async function DashboardPage() {
   const session = await requireSession();
-  const data = withDashboardMockData(await getDashboardData(session.user.id));
+  const data = await getDashboardData(session.user.id);
   const plc = data.primaryPlc;
   const latestMoisture = data.latestReading?.value ?? null;
   const online = plc ? isAgentOnline(plc.lastHeartbeatAt) : false;
   const trendLine = buildMiniTrend(data.readings);
+  const trendReady = trendLine !== null;
+  const heroCopy = plc
+    ? online
+      ? "The local bridge is online. This dashboard is showing only database records reported by your deployed LOGO setup."
+      : "The PLC configuration is saved. Start or check the local bridge to refresh telemetry and command acknowledgements."
+    : "Add the deployed Siemens LOGO bridge in Settings before live telemetry and pump commands can appear here.";
+  const actionTitle = !plc
+    ? "Set up the LOGO bridge before issuing commands."
+    : online
+      ? "Bridge is online and ready for queued commands."
+      : "Bridge is waiting for the local agent heartbeat.";
 
   const plantPanels = [
     { name: "Moisture probe", value: latestMoisture === null ? "--" : `${latestMoisture}`, note: moistureNote(latestMoisture) },
@@ -58,7 +69,7 @@ export default async function DashboardPage() {
           <div className="grid gap-4 sm:grid-cols-3">
             {[
               ["Workspace", data.site.name],
-              ["System status", plc ? (online ? "Agent online" : "Awaiting agent") : "Setup needed"],
+              ["System status", plc ? (online ? "Agent online" : "Awaiting heartbeat") : "Setup needed"],
               ["Last sync", plc ? formatTime(plc.lastHeartbeatAt) : "Never"],
             ].map(([label, value]) => (
               <div key={label} className="rounded-[1.3rem] bg-white/60 p-4">
@@ -86,39 +97,48 @@ export default async function DashboardPage() {
             <div className="grid gap-6 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
               <div>
                 <p className="eyebrow text-[8px] text-clay">Moisture trend</p>
-                <h2 className="mt-2 font-display text-3xl text-forest">Stable root-zone curve</h2>
+                <h2 className="mt-2 font-display text-3xl text-forest">
+                  {trendReady ? "Root-zone curve from live telemetry" : "Waiting for enough live telemetry"}
+                </h2>
                 <p className="mt-3 text-sm leading-7 text-ink-soft">
-                  The bridge is reporting a healthy moisture band, with the pump keeping irrigation pulses short and
-                  predictable.
+                  {trendReady
+                    ? "The curve is drawn from the latest LOGO bridge readings stored for this workspace."
+                    : "AquaSmart needs at least two stored moisture readings before it draws a production trend."}
                 </p>
               </div>
               <div className="h-48 rounded-[1.5rem] border border-ink/8 bg-white/70 p-4">
-                <svg className="h-full w-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 520 170">
-                  {[42, 50, 58].map((value, index) => (
-                    <g key={value}>
-                      <line x1="0" y1={36 + index * 48} x2="520" y2={36 + index * 48} stroke="rgba(11,22,32,0.08)" />
-                      <text x="0" y={29 + index * 48} fontSize="10" fill="#48606a">
-                        {value}
-                      </text>
-                    </g>
-                  ))}
-                  <polyline
-                    points={trendLine ?? ""}
-                    fill="none"
-                    stroke="#22b07d"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="5"
-                  />
-                  <polyline
-                    points={trendLine ?? ""}
-                    fill="none"
-                    stroke="rgba(127,212,255,0.5)"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="12"
-                  />
-                </svg>
+                {trendReady ? (
+                  <svg className="h-full w-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 520 170">
+                    {[42, 50, 58].map((value, index) => (
+                      <g key={value}>
+                        <line x1="0" y1={36 + index * 48} x2="520" y2={36 + index * 48} stroke="rgba(11,22,32,0.08)" />
+                        <text x="0" y={29 + index * 48} fontSize="10" fill="#48606a">
+                          {value}
+                        </text>
+                      </g>
+                    ))}
+                    <polyline
+                      points={trendLine}
+                      fill="none"
+                      stroke="rgba(127,212,255,0.5)"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="12"
+                    />
+                    <polyline
+                      points={trendLine}
+                      fill="none"
+                      stroke="#22b07d"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="5"
+                    />
+                  </svg>
+                ) : (
+                  <div className="flex h-full items-center justify-center rounded-[1.2rem] border border-dashed border-ink/12 text-center text-sm leading-7 text-ink-soft">
+                    Live chart will appear after the bridge reports more samples.
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -164,12 +184,9 @@ export default async function DashboardPage() {
         <div className="space-y-8">
           <section className="dark-frame rounded-[2rem] p-6 text-paper-soft md:p-7">
             <p className="eyebrow text-[8px] text-paper-soft/46">Current action</p>
-            <h2 className="mt-4 font-display text-4xl">
-              {online ? "Bridge is online and ready for queued commands." : "Bridge is synchronizing with the workspace."}
-            </h2>
+            <h2 className="mt-4 font-display text-4xl">{actionTitle}</h2>
             <p className="mt-4 text-sm leading-7 text-paper-soft/72">
-              AquaSmart is reading the moisture trend, keeping the active pump mapping visible, and recording every
-              command acknowledgement from the bridge.
+              {heroCopy}
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
               {[

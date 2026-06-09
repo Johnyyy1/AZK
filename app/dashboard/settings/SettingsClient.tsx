@@ -48,7 +48,7 @@ const smallButtonClass = "rounded-full px-5 py-3 text-sm font-medium disabled:cu
 const formatDate = (value: string | null) => {
   if (!value) return "Never";
 
-  return new Intl.DateTimeFormat("cs-CZ", {
+  return new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
@@ -139,13 +139,13 @@ export default function SettingsClient({
         <div>
           <p className="eyebrow text-[9px] text-clay">Settings</p>
           <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">
-            Accounts, PLC bridges, and tokens stay in one operational panel.
+            Accounts, deployed LOGO bridges, and tokens stay in one operational panel.
           </h1>
         </div>
         <div className="section-frame rounded-[1.8rem] p-5 text-sm leading-7 text-ink-soft">
           <p>
             {site.name} is running in {site.role} mode for {user.name}. The cloud stores configuration and queue state;
-            the local bridge pulls work beside the PLC.
+            the deployed local bridge pulls work beside the PLC.
           </p>
           <button type="button" onClick={signOut} className="mt-4 text-sm text-clay transition hover:text-forest">
             Sign out

@@ -13,12 +13,12 @@ export default async function ZonesPage() {
         <div>
           <p className="eyebrow text-[9px] text-clay">Plant profile</p>
           <h1 className="display-title mt-4 text-5xl text-forest md:text-6xl">
-            Hardware and plant context should come from your setup, not demo copy.
+            Hardware and plant context come from the deployed LOGO setup.
           </h1>
         </div>
         <div className="section-frame rounded-[1.8rem] p-5 text-sm leading-7 text-ink-soft">
-          This page now reflects the PLC attached to your workspace. Plant-specific fields can be added later; for now,
-          the verified source of truth is the LOGO bridge configuration and telemetry.
+          This page reflects the PLC attached to your workspace. Plant-specific fields can be added later; for now, the
+          verified source of truth is the LOGO bridge configuration and telemetry.
         </div>
       </header>
 

@@ -224,7 +224,7 @@ export default async function SchedulingPage({ searchParams }: SchedulingPagePro
 							<div className="mt-5 rounded-[1.4rem] bg-white/70 p-5">
 								<h2 className="font-display text-4xl text-forest">No schedule rules configured.</h2>
 								<p className="mt-4 text-sm leading-7 text-ink-soft">
-									The first saved rule will create a durable database record instead of a demo calendar.
+									The first saved rule will create a durable database record for the deployed LOGO bridge.
 								</p>
 							</div>
 						) : (

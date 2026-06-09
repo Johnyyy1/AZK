@@ -20,7 +20,6 @@ const footerGroups = [
   {
     title: "Project",
     links: [
-      { label: "Requirements", href: "/requirements" },
       { label: "Privacy & Terms", href: "/privacy" },
       { label: "Build Notes", href: "/technology" },
     ],

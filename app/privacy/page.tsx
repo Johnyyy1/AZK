@@ -1,37 +1,36 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Footer from "../components/Footer";
 import TopNav from "../components/TopNav";
 
 export const metadata: Metadata = {
-  title: "Podmínky a soukromí | AquaSmart",
-  description: "Podmínky používání a ochrana osobních údajů pro webovou aplikaci AquaSmart.",
+  title: "Privacy & Terms | AquaSmart",
+  description: "Privacy policy and terms of use for the AquaSmart web application.",
 };
 
 const privacySections = [
   {
-    title: "Účel aplikace",
-    body: "AquaSmart slouží k přihlášení operátora, konfiguraci Siemens LOGO bridge, zobrazení vlhkosti půdy, historii měření a ručnímu zapínání nebo vypínání čerpadla přes webové rozhraní.",
+    title: "Application purpose",
+    body: "AquaSmart lets an operator sign in, configure a Siemens LOGO bridge, view soil-moisture telemetry, inspect measurement history, and manually queue pump on/off commands from the web dashboard.",
   },
   {
-    title: "Ukládaná data",
-    body: "Aplikace ukládá uživatelský účet, relace přihlášení, konfiguraci PLC, hash agent tokenu, naměřené hodnoty vlhkosti a historii příkazů čerpadla. Data jsou ukládána do PostgreSQL databáze.",
+    title: "Data we store",
+    body: "The application stores user accounts, authentication sessions, PLC configuration, a hashed agent token, moisture readings, and pump command history. Operational data is stored in the PostgreSQL database used by the deployment.",
   },
   {
-    title: "Citlivé údaje",
-    body: "Hesla spravuje Better Auth a bridge tokeny se v databázi ukládají pouze jako SHA-256 hash s krátkým prefixem pro rozpoznání. Veřejné stránky nezobrazují tajné hodnoty ani obsah .env souborů.",
+    title: "Sensitive values",
+    body: "Passwords are handled by Better Auth. Bridge tokens are stored only as SHA-256 hashes with a short prefix for recognition. Public pages do not expose secret values, environment variables, or full agent tokens.",
   },
   {
-    title: "Přístup k hardwaru",
-    body: "Webová aplikace nepřistupuje přímo k PLC z prohlížeče. Příkazy se ukládají do fronty a lokální Bun bridge je načítá přes ověřený agent token, aby PLC nemuselo být vystavené internetu.",
+    title: "Hardware access",
+    body: "The browser does not talk directly to the PLC. Pump commands are queued in AquaSmart, then the local Bun bridge pulls them with an authenticated agent token and writes to the configured LOGO marker or register.",
   },
   {
-    title: "Odpovědnost operátora",
-    body: "Operátor zodpovídá za správné nastavení PLC adres, síťové dostupnosti, připojení čerpadla a bezpečné provozní podmínky. Manuální příkazy v dashboardu mají být používány jen při kontrolovaném provozu.",
+    title: "Operator responsibility",
+    body: "The operator is responsible for correct PLC addresses, network reachability, pump wiring, safe operating conditions, and any physical irrigation effect caused by queued commands. Manual controls should only be used during supervised operation.",
   },
   {
-    title: "Archivace a provoz",
-    body: "Projekt je připravený pro spuštění v Dockeru a má zůstat dostupný pro školní archivaci. Při veřejném nasazení má být použit HTTPS, silný BETTER_AUTH_SECRET a produkční databázové heslo.",
+    title: "Operations and retention",
+    body: "The project is prepared for Docker-based deployment and can be archived as a school web application project. Public deployments should use HTTPS, a strong BETTER_AUTH_SECRET, production database credentials, and restricted access to local hardware networks.",
   },
 ];
 
@@ -46,11 +45,11 @@ export default function PrivacyPage() {
             <div className="max-w-4xl">
               <p className="eyebrow text-[10px] text-clay">AquaSmart / Legal</p>
               <h1 className="display-title mt-6 text-5xl text-forest md:text-7xl">
-                Podmínky používání a ochrana soukromí.
+                Privacy policy and terms of use.
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-8 text-ink-soft md:text-lg">
-                Tato stránka popisuje, jaká data webová aplikace zpracovává, jak chrání přístup k účtu a jak odděluje
-                veřejnou webovou část od lokálního PLC bridge.
+                This page explains what the AquaSmart web application processes, how account and bridge access are
+                protected, and how the public web surface stays separated from the local PLC bridge.
               </p>
             </div>
           </div>
@@ -67,16 +66,13 @@ export default function PrivacyPage() {
           </div>
 
           <div className="mt-10 rounded-[2.2rem] bg-forest-deep p-7 text-paper-soft md:p-10">
-            <p className="eyebrow text-[9px] text-paper-soft/50">Školní projekt</p>
-            <h2 className="mt-4 font-display text-4xl md:text-5xl">Hodnocená část je webová aplikace.</h2>
+            <p className="eyebrow text-[9px] text-paper-soft/50">School project</p>
+            <h2 className="mt-4 font-display text-4xl md:text-5xl">The assessed deliverable is the web application.</h2>
             <p className="mt-5 max-w-3xl text-sm leading-7 text-paper-soft/74">
-              Hardware zůstává součástí celého systému, ale tato aplikace prokazuje požadavky kategorie webová aplikace:
-              přihlášení, databázi, Docker, responzivní rozhraní, zpracování citlivých údajů, nasazení a podmínky
-              používání.
+              Hardware is part of the complete AquaSmart system, while this application demonstrates the web application
+              requirements: authentication, database-backed state, Docker deployment, responsive UI, sensitive-data
+              handling, production deployment, and terms of use.
             </p>
-            <Link href="/requirements" className="atlas-button mt-7 inline-flex rounded-full px-5 py-3 text-sm font-medium">
-              Otevřít splnění požadavků
-            </Link>
           </div>
         </section>
       </main>

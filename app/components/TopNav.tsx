@@ -11,7 +11,6 @@ const navLinks = [
   { href: "/#system", label: "System" },
   { href: "/#proof", label: "Dashboard" },
   { href: "/technology", label: "Technology" },
-  { href: "/requirements", label: "Requirements" },
 ];
 
 export default function TopNav() {
@@ -68,15 +67,9 @@ export default function TopNav() {
               ))}
             </nav>
 
-            <div className="hidden items-center gap-3 lg:flex">
-              <Link
-                href="/auth"
-                className="rounded-full border border-paper/18 px-4 py-2 text-sm text-paper-soft/82 transition hover:bg-paper-soft/10 hover:text-paper-soft"
-              >
-                Operator Access
-              </Link>
-              <Link href="/auth" className="atlas-button rounded-full px-5 py-3 text-sm font-medium">
-                Open Demo
+            <div className="hidden items-center lg:flex">
+              <Link href="/dashboard" className="atlas-button rounded-full px-5 py-3 text-sm font-medium">
+                Open Dashboard
               </Link>
             </div>
 
@@ -124,15 +117,9 @@ export default function TopNav() {
               ))}
             </nav>
 
-            <div className="mt-5 grid grid-cols-1 gap-3">
-              <Link
-                href="/auth"
-                className="rounded-[1.4rem] border border-paper/12 px-4 py-4 text-center text-sm"
-              >
-                Operator Access
-              </Link>
-              <Link href="/auth" className="atlas-button rounded-[1.4rem] px-4 py-4 text-sm font-medium">
-                Open Demo
+            <div className="mt-5">
+              <Link href="/dashboard" className="atlas-button rounded-[1.4rem] px-4 py-4 text-sm font-medium">
+                Open Dashboard
               </Link>
             </div>
           </motion.div>

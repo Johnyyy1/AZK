@@ -26,7 +26,7 @@ type PumpStatus = {
 const formatTimestamp = (timestamp: number | null | undefined) => {
 	if (!timestamp) return "No command sent yet";
 
-	return new Intl.DateTimeFormat("cs-CZ", {
+	return new Intl.DateTimeFormat("en-US", {
 		hour: "2-digit",
 		minute: "2-digit",
 		second: "2-digit",
@@ -118,8 +118,8 @@ export default function PumpControlCard() {
 					<p className="eyebrow text-[8px] text-paper-soft/46">Pump control</p>
 					<h2 className="mt-3 font-display text-4xl text-paper-soft">Manual watering line control from the dashboard.</h2>
 					<p className="mt-4 max-w-xl text-sm leading-7 text-paper-soft/72">
-						This queues a pump command in AquaSmart. The local bridge pulls it from the cloud, writes the configured
-						LOGO marker or register, and reports the result back to the dashboard.
+						This queues a pump command in AquaSmart. The deployed local bridge pulls it from the cloud, writes the
+						configured LOGO marker or register, and reports the result back to the dashboard.
 					</p>
 				</div>
 
@@ -145,7 +145,7 @@ export default function PumpControlCard() {
 
 			<div className="mt-6 grid gap-3 md:grid-cols-4">
 				{[
-					["Agent", status?.connected ? "Online" : "Waiting"],
+					["Bridge", status?.connected ? "Online" : "Waiting"],
 					["Mapping", status?.configured ? `${status.mode} ${status.address}` : "Not configured"],
 					["Command", status?.lastCommand?.status ?? statusLabel],
 					["Last action", formatTimestamp(status?.lastCommand?.timestamp)],

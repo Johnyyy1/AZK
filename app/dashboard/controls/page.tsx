@@ -47,8 +47,8 @@ export default async function ControlsPage() {
           <p className="eyebrow text-[8px] text-clay">Setup needed</p>
           <h2 className="mt-3 font-display text-4xl text-forest">Add your Siemens LOGO bridge first.</h2>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-ink-soft">
-            The old demo water lines have been removed. This screen now only works against the PLC configuration owned by
-            your account.
+            This screen only works against the PLC configuration owned by your account. Add the deployed LOGO bridge
+            before queueing manual pump commands.
           </p>
           <Link href="/dashboard/settings" className="atlas-button mt-6 inline-flex rounded-full px-5 py-3 text-sm font-medium">
             Open settings

@@ -317,7 +317,7 @@ export default function LandingPage() {
 
                 <div className="flex flex-col gap-4 sm:flex-row lg:flex-col">
                   <Link href="/auth" className="atlas-button rounded-full px-6 py-4 text-sm font-medium">
-                    Open demo access
+                    Open dashboard access
                   </Link>
                   <Link href="/technology" className="atlas-button-secondary rounded-full px-6 py-4 text-sm font-medium">
                     Read the build notes
